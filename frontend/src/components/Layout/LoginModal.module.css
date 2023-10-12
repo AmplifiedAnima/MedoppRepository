@@ -1,0 +1,112 @@
+/* General styles */
+.loginOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Light Mode */
+.loginModal {
+  font-weight: bold;
+  background-color: #3da6e732;
+  overflow: hidden;
+  width: auto;
+  height: auto;
+
+}
+
+/* Dark Mode */
+.darkMode.loginModal {
+  background-color: #0074004b;
+}
+
+.loginTitle {
+  background-color: #002d49;
+  color: #e3e3e3;
+  align-items: center;
+  font-size: 24px;
+  text-align: center;
+  font-weight: bold;
+  padding: 16px;
+  width: auto;
+}
+
+.inputLabel {
+  color: #3da6e7;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.loginInput {
+  color:white;
+  background-color: #0076ac00; /* Light gray background color for inputs */
+}
+.darkMode .inputLabel {
+  color: greenyellow;
+  background-color: greenyellow;
+  background: greenyellow;
+}
+.loginButton {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #1643ca;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.loginButton:hover {
+  background-color: #1dc01d;
+  color: #f0f0f0;
+}
+
+.darkMode .loginTitle {
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #444;
+  color: rgb(1, 219, 1);
+}
+
+.darkMode.loginInput {
+  background-color: #2a2a2a; /* Darker background color for inputs in dark mode */
+  color: rgb(1, 219, 1); /* Light green text color for inputs in dark mode */
+}
+
+.darkMode .loginButton {
+  background-color: rgb(217, 230, 217);
+  color: black;
+}
+
+.darkMode .loginButton:hover {
+  background-color: #64fa00;
+}
+
+
+/* Error Message */
+.errorMessage {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .loginTitle {
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  .loginInput {
+    padding: 10px;
+  }
+
+  .loginButton {
+    padding: 8px 15px;
+  }
+
+  .errorMessage {
+    font-size: 12px;
+  }
+}

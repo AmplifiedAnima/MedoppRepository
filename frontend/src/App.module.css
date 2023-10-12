@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0%;
+  right: 40%;
+  transform: translateX(-0%);
+  z-index: 1;
+}
+
+.button {
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.button:hover {
+  background-color: #060e2c;
+}
+
+.dark-mode.button {
+  background-color: #26ff00;
+  color: black;
+}
+
+.dark-mode.button:hover {
+  background-color: #21db00;
+  color: white;
+}
+
+.container.dark-mode {
+  background-color: #121a26;
+}
