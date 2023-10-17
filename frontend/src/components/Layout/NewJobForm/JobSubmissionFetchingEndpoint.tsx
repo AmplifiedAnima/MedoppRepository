@@ -16,7 +16,7 @@ export interface HandleSubmitFunction {
     latitude: number,
     longitude: number,
     dispatch: Dispatch<any>,
-    navigate: NavigateFunction
+
   ): Promise<void>;
 }
 
@@ -32,7 +32,7 @@ export const handleSubmit: HandleSubmitFunction = async (
   latitude,
   longitude,
   dispatch,
-  navigate
+
 ) => {
   const offer: Offer = {
     id: uuidv4(),
@@ -60,10 +60,6 @@ export const handleSubmit: HandleSubmitFunction = async (
     });
     console.log(JSON.stringify(offer));
     if (response.ok) {
-      dispatch({
-        type: "SHOW_SUCCESS",
-        payload: "The Job offer has been created",
-      });
       const data = await response.json();
       console.log("Response from the backend:", data);
     }
@@ -76,5 +72,4 @@ export const handleSubmit: HandleSubmitFunction = async (
   setTimeout(() => {
     dispatch({ type: "CLEAR_ALERTS" });
   }, 3500);
-  navigate("/");
 };

@@ -1,5 +1,5 @@
-import { MedoppIcons } from "../components/IconsIconFinder";
-import { FilterState } from "./FilterContext";
+import { MedoppIcons } from "../../components/IconsIconFinder";
+import { FilterState } from "../FilterContext";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 export const getOfferIconUrl =(

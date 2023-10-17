@@ -14,28 +14,22 @@ import {
   Stepper,
   Step,
   StepLabel,
-  List,
-  ListItem,
-  ListItemText,
 } from "@mui/material";
-import { ThemeContext } from "../../../styles/ThemeProvider";
+import { ThemeContext } from "../../../styles/ThemeProviderContext";
 import HeaderForOtherRoutes from "../../Header/HeaderForOtherRoutes";
 import "react-quill/dist/quill.snow.css";
-import {
-  getPaperStyling,
-  getButtonStyling,
-} from "../inputStylingForFormLoginRegistration";
+import { getPaperStyling, getButtonStyling } from "../../../styles/formStyling";
 import { useAlertContext } from "../../../utlis/AlertHandlingContext";
 import AlertLayout from "../../../utlis/Alerts";
 import { useNavigate } from "react-router";
-import GeoCodingPlaceComponent from "../../../utlis/GeoCodingPlaceComponent";
+import GeoCodingPlaceComponent from "../../../utlis/GoogleMapsApi/GeoCodingPlaceComponent";
 import { GOOGLE_API_KEY } from "../../..";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
 
 import NewJobCreationFormInputs from "./NewJobCreationFormInputs";
-import { NewJobFormReducer } from "../../../utlis/FormReducer";
+import { NewJobFormReducer } from "../../../utlis/Form Reducers/FormReducer";
 import { handleSubmit } from "./JobSubmissionFetchingEndpoint";
-import { initialStateNewJobForm } from "../../../utlis/initialStatesForForms";
+import { initialStateNewJobForm } from "../../../utlis/Form Reducers/initialStatesForForms";
 
 import {
   handleInputFieldForNewJobForm,
@@ -105,24 +99,26 @@ const NewJobCreationForm: React.FC = () => {
     console.log(lat, lng, location);
   };
 
-  // useEffect(() => {
-  //   if (!isEmployer || !isLoggedIn) {
-  //     dispatch({
-  //       type: "SHOW_WARNING",
-  //       payload: "You are not authorized to be here!",
-  //     });
-  //     setTimeout(() => {
-  //       navigate("/");
-  //     }, 4500);
-  //   }
-  // }, [isEmployer, isLoggedIn, dispatch, navigate]);
+  useEffect(() => {
+    if (!isEmployer || !isLoggedIn) {
+      dispatch({
+        type: "SHOW_WARNING",
+        payload: "You are not authorized to be here!",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 4500);
+    }
+  }, [isEmployer, dispatch, navigate]);
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (!isStep1Complete) {
       setStepError("Please fill in all required fields in Step I");
-      return; // Don't proceed further
+      return;
     }
+
     handleSubmit(
       formState.title,
       formState.company,
@@ -134,12 +130,21 @@ const NewJobCreationForm: React.FC = () => {
       formState.description,
       formState.latitude,
       formState.longitude,
-      formDispatch,
-      navigate
+      formDispatch
     );
     console.log(formState);
     setIsSubmitted(true);
-    formDispatch({ type: "CLEAR_FIELDS" });
+
+    dispatch({
+      type: "SHOW_SUCCESS",
+      payload: "The Job offer has been created",
+    });
+    setTimeout(() => {
+      navigate("/");
+      dispatch({
+        type: "CLEAR_ALERTS",
+      });
+    }, 4500);
   };
 
   const [activeStep, setActiveStep] = useState(0);
@@ -201,7 +206,8 @@ const NewJobCreationForm: React.FC = () => {
             formState,
             formDispatch,
             value,
-            200
+            800,
+            100
           )
         }
         onLabelChange={(value) =>
@@ -227,17 +233,20 @@ const NewJobCreationForm: React.FC = () => {
       />
     </>
   );
+
   const GeoCodingPlaceComponentVariable = (
     <>
       <GeoCodingPlaceComponent
         apiKey={GOOGLE_API_KEY}
         onLocationChanged={handleLocationChange}
-        initialLat={formState.latitude || 52.1183303}
-        initialLng={formState.longitude || 19.0677357}
-        initialLocation={formState.location || "Poland"}
+        initialLat={!isSubmitted ? formState.latitude : 0}
+        initialLng={!isSubmitted ? formState.longitude : 0}
+        initialLocation={!isSubmitted ? formState.location : "Poland"}
+        readOnly={secondStepIsOnDisableInputs}
       />
     </>
   );
+
   return (
     <Box
       sx={{
@@ -255,7 +264,7 @@ const NewJobCreationForm: React.FC = () => {
         sx={{
           marginTop: "25px",
           width: "auto",
-          height: "auto",
+          height: isSubmitted ? "774px" : "auto",
           "@media (max-width: 600px)": {
             width: "auto",
             marginRight: "15px",
@@ -282,10 +291,18 @@ const NewJobCreationForm: React.FC = () => {
                   <Stepper
                     activeStep={activeStep}
                     alternativeLabel
+                    color="inherit"
                     sx={{
                       width: "100%",
                       marginLeft: "auto",
                       marginRight: "auto",
+                      "& .MuiStepIcon-root": {
+                        borderColor: themeMode === "dark" ? "#02f016" : "black", // Change the border color to green
+                        color: themeMode === "dark" ? "#02f016" : "black", // Change the color to green
+                      },
+                      "& .MuiStepLabel-label": {
+                        color: themeMode === "dark" ? "#02f016" : "black",
+                      },
                     }}
                   >
                     {steps.map((label) => (
@@ -296,16 +313,9 @@ const NewJobCreationForm: React.FC = () => {
                   </Stepper>
                   {activeStep === 0 && (
                     <>
-                      {InputsForSteps}
+                      {!isSubmitted && InputsForSteps}
 
-                      <GeoCodingPlaceComponent
-                        apiKey={GOOGLE_API_KEY}
-                        onLocationChanged={handleLocationChange}
-                        initialLat={formState.latitude || 52.1183303}
-                        initialLng={formState.longitude || 19.0677357}
-                        initialLocation={formState.location || "Poland"}
-                      />
-
+                      {!isSubmitted && GeoCodingPlaceComponentVariable}
                       {stepError && (
                         <Typography variant="body2" color="error">
                           {stepError}
@@ -338,15 +348,8 @@ const NewJobCreationForm: React.FC = () => {
                   {activeStep === 1 && (
                     <>
                       <Typography variant="h6">Confirmation</Typography>
-                      {formState && (
-                        <>
-                          {InputsForSteps}
-                          <Typography variant="h4">
-                            Location : {formState.location}{" "}
-                          </Typography>
-                        </>
-                      )}
-
+                      {!isSubmitted && InputsForSteps}
+                      {!isSubmitted && GeoCodingPlaceComponentVariable}
                       {!isSubmitted && (
                         <>
                           <Button
@@ -379,6 +382,11 @@ const NewJobCreationForm: React.FC = () => {
                         </>
                       )}
                     </>
+                  )}
+                  {isSubmitted && (
+                    <Typography variant="h6" sx={{ color: "green" }}>
+                      Job offer has been created
+                    </Typography>
                   )}
                 </Paper>
               </form>

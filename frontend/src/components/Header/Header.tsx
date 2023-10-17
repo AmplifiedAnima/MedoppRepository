@@ -4,16 +4,19 @@ import SearchBar from "./SearchBar";
 import ButtonSection from "./ButtonSection";
 import Dashboard from "./Dashboard";
 import specialities from "../Specialities";
-import { ThemeContext } from "../../styles/ThemeProvider";
-import styles from "./Header.module.css";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Switcher } from "./HeaderMenuElements";
 import { HeaderMenuItem } from "./HeaderMenuElements";
-import { ProfileIcon, ProfileIconDarkMode } from "../IconsIconFinder";
-import { useNavigate } from "react-router-dom";
+import {
+  ProfileIcon,
+  ProfileIconDarkMode,
+  filterWhiteIcon,
+  filterGreenIcon,
+} from "../IconsIconFinder";
 import PowerIcon1Green from "./PowerIcon1Green.png";
 import PowerIcon2Blue from "./PowerIcon2Blue.png";
 import FilterModal from "../Layout/FilterModal";
-import { FilterOptions, useFilterContext } from "../../utlis/FilterContext";
+import { useSearchHook } from "../Layout/SearchFunctionalityHook";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
 import LoginModal from "../Layout/LoginModal";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
@@ -22,24 +25,14 @@ import AlertLayout from "../../utlis/Alerts";
 const Header: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
+
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
   const { isLoggedIn, setIsLoggedIn, isLoginModalOpen, setIsLoginModalOpen } =
     useContext(IsLoggedInContext);
-  const { themeMode, toggleTheme } = useContext(ThemeContext);
+
+  const { themeMode } = useContext(ThemeContext);
   const { dispatch } = useAlertContext();
-  const { state: filterState, dispatch: filterDispatch } = useFilterContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const handleProfileToggle = () => {
     setIsProfileOpen((prevOpen) => !prevOpen);
@@ -53,21 +46,29 @@ const Header: React.FC = () => {
     setIsFilterModalOpen(false);
   };
 
-  const handleButtonSearch = (specialty: string) => {
-    filterDispatch({ type: "SET_SPECIALTIES", payload: specialty });
-  };
+  const {
+    handleResetAllSearchQueries,
+    handleFilterOptionsApply,
+    handleSpecialtyReset,
+    handleLocationReset,
+    handleTypeOfEmploymentReset,
+    handlePriceRangeReset,
+    handleButtonSearch,
+    handleInputChange,
+    handleSearchSubmit,
+    searchQuery,
+  } = useSearchHook(handleFilterModalClose);
 
-  const handleFilterOptionsApply = (filterOptions: FilterOptions) => {
-    filterDispatch({
-      type: "SET_PRICE_RANGE",
-      payload: { min: filterOptions.minPrice, max: filterOptions.maxPrice },
-    });
-    filterDispatch({ type: "SET_LOCATION", payload: filterOptions.location });
-    filterDispatch({
-      type: "SET_EMPLOYMENT_TYPE",
-      payload: filterOptions.typeOfEmployment,
-    });
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleLoginModalOpen = () => {
     setIsLoginModalOpen(true);
@@ -79,7 +80,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false); // Update the login state to "not logged in"
+    setIsLoggedIn(false);
     setIsProfileOpen(false);
     dispatch({ type: "SHOW_SUCCESS", payload: "Sucessfully logged out!" });
     setTimeout(() => {
@@ -89,21 +90,34 @@ const Header: React.FC = () => {
 
   return (
     <>
+      <style>
+        {
+        `@media (min-width: 1480px) {
+          ::-webkit-scrollbar {
+            display: none;}}`
+        }
+      </style>
       <AppBar position="static">
         <Toolbar
-          className={`${styles["app-bar"]} ${
-            themeMode === "dark" ? styles["dark-mode"] : ""
-          }`}
+          sx={{
+            backgroundColor: themeMode === "dark" ? "#000000" : "#001b45",
+            color: "#ffffff",
+            padding: "0px 20px",
+            margin: "0px",
+          }}
         >
           <HeaderMenuItem />
-          <IconButton
-            color="inherit"
-            className={styles["filter-button"]}
-            onClick={handleFilterModalOpen}
-          ></IconButton>
-          <SearchBar />
+          <Box sx={{ padding: "0 2px" }} />
+          <IconButton color="inherit" onClick={handleFilterModalOpen}>
+            {themeMode === "dark" ? filterGreenIcon() : filterWhiteIcon()}
+          </IconButton>
+          <Box sx={{ padding: "0 6px" }} />
+          <SearchBar
+            onHandleSearchSubmit={handleSearchSubmit}
+            onHandleInputChange={handleInputChange}
+            searchQuery={searchQuery}
+          />
           <Box
-            className={styles["buttons-container"]}
             style={{
               width: "100%",
               display: isMobile ? "none" : "block",
@@ -120,7 +134,6 @@ const Header: React.FC = () => {
           <Switcher />
           <IconButton
             color="inherit"
-            className={styles["profile-button"]}
             onClick={isLoggedIn ? handleProfileToggle : handleLoginModalOpen}
             sx={{ paddingLeft: "10px" }}
           >
@@ -134,13 +147,13 @@ const Header: React.FC = () => {
               <img
                 src={PowerIcon1Green}
                 alt="PowerIcon"
-                style={{ width: "45px", height: "45px" }}
+                style={{ width: "40px", height: "40px" }}
               />
             ) : (
               <img
                 src={PowerIcon2Blue}
                 alt="PowerIcon"
-                style={{ width: "45px", height: "45px" }}
+                style={{ width: "40px", height: "40px" }}
               />
             )}
           </IconButton>
@@ -155,9 +168,15 @@ const Header: React.FC = () => {
         open={isFilterModalOpen}
         onClose={handleFilterModalClose}
         onApply={handleFilterOptionsApply}
+        resetAllQueries={handleResetAllSearchQueries}
       />
       <LoginModal open={isLoginModalOpen} onClose={handleLoginModalClose} />
-      <AlertLayout />
+      <AlertLayout
+        onSpecialtyClose={handleSpecialtyReset}
+        onLocationClose={handleLocationReset}
+        onEmploymentTypeClose={handleTypeOfEmploymentReset}
+        onPriceRangeClose={handlePriceRangeReset}
+      />
     </>
   );
 };

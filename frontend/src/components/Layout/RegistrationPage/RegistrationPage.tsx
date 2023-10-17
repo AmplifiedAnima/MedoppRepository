@@ -1,26 +1,16 @@
-import React, { FormEvent, useContext, useState, useReducer } from "react";
-import {
-  TextField,
-  Button,
-  Container,
-  Paper,
-  Box,
-  Typography,
-} from "@mui/material";
-import { ThemeContext } from "../../../styles/ThemeProvider";
+import { FormEvent, useContext, useState, useReducer } from "react";
+import { Button, Container, Paper, Box, Typography } from "@mui/material";
+import { ThemeContext } from "../../../styles/ThemeProviderContext";
 import HeaderForOtherRoutes from "../../Header/HeaderForOtherRoutes";
-import {
-  getPaperStyling,
-  getButtonStyling,
-} from "../inputStylingForFormLoginRegistration";
+import { getPaperStyling, getButtonStyling } from "../../../styles/formStyling";
 import { useAlertContext } from "../../../utlis/AlertHandlingContext";
 import AlertLayout from "../../../utlis/Alerts";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
 import MyDropzoneForCV, {
   MyDropzoneForAvatarImage,
 } from "../../../utlis/MyDropzone";
-import { registrationFormReducer } from "../../../utlis/FormReducer";
-import { initialRegistrationState } from "../../../utlis/initialStatesForForms";
+import { registrationFormReducer } from "../../../utlis/Form Reducers/FormReducer";
+import { initialRegistrationState } from "../../../utlis/Form Reducers/initialStatesForForms";
 import { NewRegistrationFormInput } from "./RegistrationPageInputFields";
 import {
   handleInputForRegistrationForm,
@@ -80,27 +70,6 @@ const RegistrationPage = () => {
       formData.append("avatarImage", selectedImagesForAvatar[0]);
     }
 
-    console.log(
-      "username :",
-      formData.get("username"),
-      "first name : ",
-      formData.get("firstName"),
-      "last name : ",
-      formData.get("lastName"),
-      "email : ",
-      formData.get("email"),
-      "address : ",
-      formData.get("address"),
-      "city : ",
-      formData.get("city"),
-      "role : ",
-      formData.get("role"),
-      "cv : ",
-      formData.get("cv"),
-      "avatar image : ",
-      formData.get("avatarImage")
-    );
-
     dispatch({ type: "CLEAR_ALERTS" });
 
     try {
@@ -131,11 +100,9 @@ const RegistrationPage = () => {
       } else {
         dispatch({ type: "SHOW_ERROR", payload: response.statusText });
         console.error("Registration failed:", response.statusText, response);
-        // Handle failed registration, e.g., show an error message
       }
     } catch (error) {
       console.error("Error during registration:", error);
-      // Handle any other errors that may occur during registration
     }
   };
 
@@ -203,6 +170,16 @@ const RegistrationPage = () => {
                     formState,
                     formDispatch,
                     "password",
+                    value,
+                    25,
+                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                  )
+                }
+                onConfirmPasswordChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "confirmPassword",
                     value,
                     25,
                     /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/

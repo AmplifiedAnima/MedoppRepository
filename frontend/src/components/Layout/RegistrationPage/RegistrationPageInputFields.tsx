@@ -2,18 +2,18 @@ import { FormHelperText, MenuItem, TextField } from "@mui/material";
 import {
   RegistrationFormState,
   initialRegistrationState,
-} from "../../../utlis/initialStatesForForms";
-import { useContext, useReducer } from "react";
-import { ThemeContext } from "../../../styles/ThemeProvider";
-import { getInputPlaceholdersStyling } from "../inputStylingForFormLoginRegistration";
-import { registrationFormReducer } from "../../../utlis/FormReducer";
+} from "../../../utlis/Form Reducers/initialStatesForForms";
+import { useContext, useReducer, useState } from "react";
+import { ThemeContext } from "../../../styles/ThemeProviderContext";
+import { getInputPlaceholdersStyling } from "../../../styles/formStyling";
+import { registrationFormReducer } from "../../../utlis/Form Reducers/FormReducer";
 
 interface NewRegistrationFormInputProps {
   onUserNameChange: (value: string) => void;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
-  // onConfirmPasswordChange: (value: string) => void;
+  onConfirmPasswordChange: (value: string) => void;
   onEmailChange: (value: string) => void;
   onCitychange: (value: string) => void;
   onPhoneNumberChange: (value: string) => void;
@@ -29,7 +29,7 @@ export const NewRegistrationFormInput: React.FC<
   onFirstNameChange,
   onLastNameChange,
   onPasswordChange,
-  // onConfirmPasswordChange,
+  onConfirmPasswordChange,
   onEmailChange,
   onCitychange,
   onPhoneNumberChange,
@@ -44,6 +44,19 @@ export const NewRegistrationFormInput: React.FC<
     registrationFormReducer,
     initialRegistrationState
   );
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value);
+
+    if (formState.password !== value) {
+      setPasswordMatchError(true);
+    } else {
+      setPasswordMatchError(false);
+    }
+  };
 
   return (
     <>
@@ -96,19 +109,19 @@ export const NewRegistrationFormInput: React.FC<
         error={!!formState.errorMessages.password}
         helperText={formState.errorMessages.password}
       />
-      {/* <TextField
+      <TextField
         label="Confirm Password"
         fullWidth
         type="password"
-        value={formState.confirmPassword}
+        value={confirmPassword}
         variant="outlined"
         margin="normal"
         sx={inputPlaceholdersStyling}
-        onChange={(e) => onConfirmPasswordChange(e.target.value)}
-        onBlur={() => onConfirmPasswordChange(formState.confirmPassword)}
-        error={!!formState.errorMessages.confirmPassword}
-        helperText={formState.errorMessages.confirmPassword}
-      /> */}
+        onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+        error={passwordMatchError}
+        helperText={passwordMatchError ? "Passwords do not match" : ""}
+      />
+
       <TextField
         label="Phone Number"
         fullWidth

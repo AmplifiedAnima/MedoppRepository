@@ -30,8 +30,8 @@ export const initialStateNewJobForm: NewJobFormState = {
   salary: "",
   selectedTypeOfEmployment: "",
   description: "",
-  latitude: 0,
-  longitude: 0,
+  latitude: 52.237,
+  longitude: 21.0176,
   errorMessages: {
     title: "",
     selectedLabel: "",

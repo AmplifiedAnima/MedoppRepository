@@ -8,6 +8,7 @@ import { Offer } from 'src/offer/offer.entity';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config/dist';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
+import { ApplicationToBeFetchedToFrontend } from './jobApplication.interface';
 
 @Injectable()
 export class JobApplicationService {
@@ -29,6 +30,54 @@ export class JobApplicationService {
       },
     });
   }
+  async getAllUserApplications(
+    user: User,
+  ): Promise<ApplicationToBeFetchedToFrontend[]> {
+    const userApplications = await this.offerRepository
+      .createQueryBuilder('offer')
+      .leftJoinAndSelect('offer.applications', 'application')
+      .where('application.user = :userId', { userId: user.id })
+      .getMany();
+
+    const applicants: ApplicationToBeFetchedToFrontend[] = [];
+
+    userApplications.forEach((offer) => {
+      offer.applications.forEach((application) => {
+        const applicationDto: ApplicationToBeFetchedToFrontend = {
+          ...application,
+          offerId: offer.id,
+        };
+        applicants.push(applicationDto);
+      });
+    });
+
+    return applicants;
+  }
+
+  async getApplicantsForUserOffers(
+    user: User,
+  ): Promise<ApplicationToBeFetchedToFrontend[]> {
+    const userOffers = await this.offerRepository
+      .createQueryBuilder('offer')
+      .leftJoinAndSelect('offer.applications', 'application')
+      .leftJoinAndSelect('application.user', 'user')
+      .where('offer.user = :userId', { userId: user.id })
+      .getMany();
+
+    const applicants: ApplicationToBeFetchedToFrontend[] = [];
+
+    userOffers.forEach((offer) => {
+      offer.applications.forEach((application) => {
+        const applicationDto: ApplicationToBeFetchedToFrontend = {
+          ...application,
+          offerId: offer.id,
+        };
+        applicants.push(applicationDto);
+      });
+    });
+
+    return applicants;
+  }
 
   async getAllApplications(user: User): Promise<JobApplication[]> {
     return this.jobApplicationRepository.find({
@@ -37,6 +86,7 @@ export class JobApplicationService {
       },
     });
   }
+
   async createJobApplication(
     createJobApplicationDto: CreateJobApplicationDto,
     user: User,
@@ -46,11 +96,11 @@ export class JobApplicationService {
     const offer = await this.offerRepository.findOne({
       where: { id: offerId },
     });
-
-    let cvFilePath = createJobApplicationDto.cvFilePath; // Use provided cvFilePath if available
+    if (this.jobApplicationRepository.find({})) {
+    }
+    let cvFilePath = createJobApplicationDto.cvFilePath;
 
     if (!cvFilePath) {
-      // If cvFilePath is not provided, use the file upload service
       cvFilePath = await this.fileUploadService.uploadFileCv(
         createJobApplicationDto.cvFileName,
         createJobApplicationDto.cvFileBuffer,

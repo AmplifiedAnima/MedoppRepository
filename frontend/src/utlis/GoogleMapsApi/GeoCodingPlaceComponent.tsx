@@ -1,20 +1,17 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 import { TextField, Box } from "@mui/material";
-import { getInputPlaceholdersStyling } from "../components/Layout/inputStylingForFormLoginRegistration";
-import { ThemeContext } from "../styles/ThemeProvider";
+import { getInputPlaceholdersStyling } from "../../styles/formStyling";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 
-// Map component
 const MapComponent: React.FC<{ lat: number; lng: number, }> = ({ lat, lng, }) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Initialize the map
     const map = new window.google.maps.Map(mapRef.current!, {
       center: { lat, lng },
-      zoom: 6, // Adjust the zoom level to fit the entire country
+      zoom: 6, 
     });
 
-    // Create a marker for the map
     new window.google.maps.Marker({
       position: { lat, lng },
       map,
@@ -30,6 +27,7 @@ interface GeoCodingPlaceComponentProps {
   initialLat:number,
   initialLng:number,
   initialLocation: string
+  readOnly?: boolean
 }
 
 const GeoCodingPlaceComponent: React.FC<GeoCodingPlaceComponentProps> = ({
@@ -37,13 +35,14 @@ const GeoCodingPlaceComponent: React.FC<GeoCodingPlaceComponentProps> = ({
   onLocationChanged,
   initialLat,
   initialLng,
-  initialLocation
+  initialLocation,
+  readOnly
 }) => {
   const { themeMode } = useContext(ThemeContext);
   const inputPlaceholdersStyling = getInputPlaceholdersStyling(themeMode);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [lat, setLat] = useState<number>(initialLat); // Set the initial lat to the center of Poland
-  const [lng, setLng] = useState<number>(initialLng); // Set the initial lng to the center of Poland
+  const [lat, setLat] = useState<number>(initialLat); 
+  const [lng, setLng] = useState<number>(initialLng);
   
   useEffect(() => {
     const searchBox = new window.google.maps.places.SearchBox(
@@ -71,6 +70,7 @@ const GeoCodingPlaceComponent: React.FC<GeoCodingPlaceComponentProps> = ({
         placeholder={initialLocation}
         inputRef={inputRef}
         sx={{ ...inputPlaceholdersStyling, marginBottom: "25px" }}
+        disabled={readOnly}
       />
 
       <MapComponent lat={lat} lng={lng} />

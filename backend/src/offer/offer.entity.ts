@@ -43,8 +43,8 @@ export class Offer {
   @Column('numeric')
   longitude: number;
 
-  @Column('simple-array', { nullable: true })
-  applicants: string[];
+  // @Column('simple-array', { nullable: true })
+  // applicants: string[];
 
   @OneToMany(() => JobApplication, (application) => application.offer, {
     cascade: true,

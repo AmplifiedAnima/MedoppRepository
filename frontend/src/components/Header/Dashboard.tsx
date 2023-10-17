@@ -10,7 +10,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
-import { ThemeContext } from "../../styles/ThemeProvider"; // Update the path to your ThemeContext file
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Link } from "react-router-dom";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
 
@@ -38,7 +38,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
           backgroundColor: themeMode === "dark" ? "#242f3e" : "white",
           color: itemTextColor,
           zIndex: 10000,
-          transition: "left 0.3s ease",
+          transition: "left 0.7s ease",
         }}
       >
         {isOpen && (
@@ -56,16 +56,16 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
             {avatarImage && (
               <Avatar src={avatarImage} sx={{ width: 60, height: 60 }} />
             )}
-            {firstName && lastName && (
+            {!avatarImage && firstName && lastName && (
               <Avatar>{`${firstName[0]}${lastName[0].toUpperCase()}`}</Avatar>
             )}
-            {username && !firstName && !lastName && (
+            {!avatarImage && username && !firstName && !lastName && (
               <Avatar>{`${username[0].toUpperCase()}`}</Avatar>
             )}
             <Box>
               <Typography variant="subtitle1">
-                User : {username}
-                { '  '} {roles.toString().toUpperCase()}
+                {username}
+                {"  "} {roles}
               </Typography>
             </Box>
             <IconButton color="inherit" onClick={onClose}>
@@ -93,17 +93,19 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
             <ListItem>
               <Link to="/job-applications">
                 <Button style={{ color: itemTextColor }}>
-                  {isEmployer ? "JOB APPLICATIONS (Who applied?)" : "WHERE I APPLIED"}
+                  {isEmployer
+                    ? "JOB APPLICATIONS (Who applied?)"
+                    : "WHERE I APPLIED"}
                 </Button>
               </Link>
             </ListItem>
-            <ListItem>
-              <Link to="/user-offers">
-                <Button style={{ color: itemTextColor }}>
-                  {isEmployer && "My Offers"}
-                </Button>
-              </Link>
-            </ListItem>
+            {isEmployer && (
+              <ListItem>
+                <Link to="/user-offers">
+                  <Button style={{ color: itemTextColor }}>My Offers</Button>
+                </Link>
+              </ListItem>
+            )}
             <ListItem>
               <Button onClick={onLogout} style={{ color: itemTextColor }}>
                 LOGOUT

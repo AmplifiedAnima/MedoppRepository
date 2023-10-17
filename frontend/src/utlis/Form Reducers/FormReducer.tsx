@@ -21,19 +21,20 @@ export const NewJobFormReducer = (
         title: "",
         company: "",
         location: "",
+        latitude: 52.237,
+        longitude: 21.0176,
         salary: "",
         selectedTypeOfEmployment: "",
         description: "",
         selectedSpecialty: "",
       };
     case "UPDATE_FIELD":
-      // Clear the error message for the field when its value changes
       return {
         ...state,
         [action.fieldName]: action.fieldValue,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
     case "UPDATE_ERROR_MESSAGE":
@@ -49,7 +50,7 @@ export const NewJobFormReducer = (
         ...state,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
     case "CLEAR_ALL_ERRORS_NEWJOBFORM":
@@ -91,13 +92,12 @@ export const JobApplicationViewReducer = (
         cvFile: null,
       };
     case "UPDATE_FIELD":
-      // Clear the error message for the field when its value changes
       return {
         ...state,
         [action.fieldName]: action.fieldValue,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
     case "UPDATE_ERROR_MESSAGE":
@@ -113,7 +113,7 @@ export const JobApplicationViewReducer = (
         ...state,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
     case "CLEAR_ALL_ERRORS":
@@ -149,24 +149,21 @@ export const registrationFormReducer = (
 ): RegistrationFormState => {
   switch (action.type) {
     case "CLEAR_FIELDS":
-      // Clear all form fields and error messages
       return {
-        ...initialRegistrationState, // Use your initial state to reset the fields
+        ...initialRegistrationState,
       };
 
     case "UPDATE_FIELD":
-      // Update a specific field value and clear its error message
       return {
         ...state,
         [action.fieldName]: action.fieldValue,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
 
     case "UPDATE_ERROR_MESSAGE":
-      // Update the error message for a specific field
       return {
         ...state,
         errorMessages: {
@@ -176,22 +173,19 @@ export const registrationFormReducer = (
       };
 
     case "CLEAR_ERROR_MESSAGE":
-      // Clear the error message for a specific field
       return {
         ...state,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
 
     case "SUBMIT_FORM":
-      // Handle form submission (you can add your submission logic here)
       console.log("Form data submitted:", action.formData);
       return state;
 
     case "CONFIRM_PASSWORD_CHANGE":
-      // Validate password and confirmation password match
       if (action.value !== state.password) {
         return {
           ...state,
@@ -205,7 +199,7 @@ export const registrationFormReducer = (
           ...state,
           errorMessages: {
             ...state.errorMessages,
-            confirmPassword: "", // Clear the error message
+            confirmPassword: "",
           },
         };
       }
@@ -223,16 +217,14 @@ export const EditProfileFormReducer = (
     case "CLEAR_FIELDS":
       return {
         ...state,
-        // Define how you want to clear the fields for Edit Profile
       };
     case "UPDATE_FIELD":
-      // Clear the error message for the field when its value changes
       return {
         ...state,
         [action.fieldName]: action.fieldValue,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
     case "UPDATE_ERROR_MESSAGE":
@@ -248,11 +240,10 @@ export const EditProfileFormReducer = (
         ...state,
         errorMessages: {
           ...state.errorMessages,
-          [action.fieldName]: "", // Clear the error message
+          [action.fieldName]: "",
         },
       };
     case "CLEAR_ALL_ERRORS":
-      // Clear all error messages
       const clearedErrorMessagesEditProfile = {
         username: "",
         password: "",
@@ -263,7 +254,6 @@ export const EditProfileFormReducer = (
         cv: "",
         address: "",
         city: "",
-        // Define the structure of your error messages based on the fields in your EditProfileFormState
       };
 
       return {

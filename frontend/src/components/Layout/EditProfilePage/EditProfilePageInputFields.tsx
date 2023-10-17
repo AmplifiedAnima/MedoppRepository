@@ -1,13 +1,12 @@
-import { EditProfileFormState } from "../../../utlis/initialStatesForForms";
+import { EditProfileFormState } from "../../../utlis/Form Reducers/initialStatesForForms";
 import { TextField } from "@mui/material";
-import React, { useContext } from "react";
-import { ThemeContext } from "../../../styles/ThemeProvider";
-import { getInputPlaceholdersStyling } from "../inputStylingForFormLoginRegistration";
+import React, { useContext, useState } from "react";
+import { ThemeContext } from "../../../styles/ThemeProviderContext";
+import { getInputPlaceholdersStyling } from "../../../styles/formStyling";
 
 interface EditProfileFormInputProps {
   onUserNameChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
-//   onNewPasswordChange: (value: string) => void;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
   onPhoneNumberChange: (value: string) => void;
@@ -20,7 +19,6 @@ interface EditProfileFormInputProps {
 export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
   onUserNameChange,
   onPasswordChange,
-//   onNewPasswordChange,
   onFirstNameChange,
   onLastNameChange,
   onPhoneNumberChange,
@@ -31,6 +29,19 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
 }) => {
   const { themeMode } = useContext(ThemeContext);
   const inputPlaceholdersStyling = getInputPlaceholdersStyling(themeMode);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value);
+
+    if (formState.password !== value) {
+      setPasswordMatchError(true);
+    } else {
+      setPasswordMatchError(false);
+    }
+  };
 
   return (
     <>
@@ -59,24 +70,23 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         error={!!formState.errorMessages.password}
         helperText={formState.errorMessages.password}
       />
-      {/*on New Password */}
-      {/* <TextField
-        label="New Password"
+     <TextField
+        label="Confirm Password"
         fullWidth
+        type="password"
+        value={confirmPassword}
         variant="outlined"
         margin="normal"
         sx={inputPlaceholdersStyling}
-        onChange={(e) => onPasswordChange(e.target.value)}
-        onBlur={() => onPasswordChange(formState.password)}
-        value={formState.password}
-        error={!!formState.errorMessages.password}
-        helperText={formState.errorMessages.password}
-      /> */}
+        onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+        error={passwordMatchError}
+        helperText={passwordMatchError ? "Passwords do not match" : ""}
+      />
       <TextField
         label="First name"
         fullWidth
         variant="outlined"
-        margin="normal"
+        margin="normal" 
         sx={inputPlaceholdersStyling}
         onChange={(e) => onFirstNameChange(e.target.value)}
         onBlur={() => onFirstNameChange(formState.firstName)}

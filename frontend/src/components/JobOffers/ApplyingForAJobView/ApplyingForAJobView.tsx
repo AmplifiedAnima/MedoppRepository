@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect, useReducer } from "react";
 import {
-  TextField,
   Link,
   Button,
   Box,
@@ -9,16 +8,15 @@ import {
   DialogContent,
   DialogActions,
   Typography,
-  FormHelperText,
 } from "@mui/material";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
-import { ThemeContext } from "../../../styles/ThemeProvider";
-import { getButtonStyling } from "../../Layout/inputStylingForFormLoginRegistration";
+import { ThemeContext } from "../../../styles/ThemeProviderContext";
+import { getButtonStyling } from "../../../styles/formStyling";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utlis/AlertHandlingContext";
 import AlertLayout from "../../../utlis/Alerts";
-import { JobApplicationViewReducer } from "../../../utlis/FormReducer";
-import { initialApplicationViewState } from "../../../utlis/initialStatesForForms";
+import { JobApplicationViewReducer } from "../../../utlis/Form Reducers/FormReducer";
+import { initialApplicationViewState } from "../../../utlis/Form Reducers/initialStatesForForms";
 import { handleInputFieldForJobApplication } from "./FunctionToHandleInputJobApplication";
 import JobApplicationFormInputs from "./ApplyingForAJobViewInputs";
 import MyDropzoneForCV from "../../../utlis/MyDropzone";
@@ -41,18 +39,8 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-  const {
-    isLoggedIn,
-    roles,
-    username,
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    address,
-    city,
-    cv,
-  } = useContext(IsLoggedInContext); // Get the user's login status from the context
+  const { isLoggedIn, roles, firstName, lastName, email, phoneNumber, cv: CvFilePath } =
+    useContext(IsLoggedInContext); // Get the user's login status from the context
   const { themeMode } = useContext(ThemeContext); // Get the themeMode from the context
   const [hideButton, setHideButton] = useState(false);
 
@@ -86,23 +74,20 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
       });
     }
   }, [isLoggedIn, isEmployee, firstName, lastName, email, phoneNumber]);
+
   const handleSubmit = async () => {
     const formData = new FormData();
 
-    // Append form field values to the FormData
     formData.append("firstName", formState.firstName || "");
     formData.append("lastName", formState.lastName || "");
     formData.append("email", formState.email || "");
     formData.append("phoneNumber", formState.phoneNumber || "");
     formData.append("coverLetter", formState.coverLetter || "");
 
-    // Append the selected file (cv) to the FormData
     if (selectedFiles.length > 0) {
       formData.append("cv", selectedFiles[0]);
-
-    } else if (cv) {
-      // If cv is available, send it as a string (URL or file path)
-      formData.append("cv", cv);
+    } else if (CvFilePath) {
+      formData.append("cv", CvFilePath);
     }
 
     console.log(
@@ -111,8 +96,8 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
       formState.email,
       formState.phoneNumber,
       formState.coverLetter,
-      cv,
-    )
+      CvFilePath
+    );
     try {
       const token = localStorage.getItem("token");
 
@@ -121,7 +106,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formData, // Send the FormData object with all form data and the file
+        body: formData,
       });
 
       if (response.ok) {
@@ -176,9 +161,8 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
 
   return (
     <>
-      <Dialog open={isOpen} onClose={onClose} maxWidth="xl">
+      <Dialog open={isOpen} onClose={onClose} maxWidth='md'>
         <DialogTitle
-          maxWidth="xl"
           sx={{
             backgroundColor: themeMode === "dark" ? "black" : "white",
             color: themeMode === "dark" ? "#2feb00" : "black",
@@ -200,7 +184,11 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
               sx={{
                 backgroundColor: themeMode === "dark" ? "black" : "white",
                 color: themeMode === "dark" ? "#2feb00" : "black",
-                paddingRight: "20px",
+                paddingRight: "0px",
+                width: "400px",
+                "@media (max-width: 768px)": {
+                  width: "350px",
+                },
               }}
             >
               <JobApplicationFormInputs
@@ -210,7 +198,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                     formDispatch,
                     "firstName",
                     value,
-                    30, // Max length for "First Name" is 30 characters.
+                    30,
                     /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/,
                     formState.errorMessages.firstName
                   )
@@ -221,8 +209,8 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                     formDispatch,
                     "lastName",
                     value,
-                    30, // Max length for "Last Name" is 30 characters.
-                    /[^a-zA-Z0-9\s/-żźćńó]/, // Updated regex pattern
+                    30, 
+                    /[^a-zA-Z0-9\s/-żźćńó]/,
                     formState.errorMessages.lastName
                   )
                 }
@@ -232,8 +220,8 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                     formDispatch,
                     "email",
                     value,
-                    40, // Max length for "Email" is 40 characters.
-                    /[^a-zA-Z0-9\s@._/-]/, // Updated regex pattern for Email
+                    40,
+                    /[^a-zA-Z0-9\s@._/-]/, 
                     formState.errorMessages.email
                   )
                 }
@@ -254,17 +242,17 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                     formDispatch,
                     "coverLetter",
                     value,
-                    400, // Max length for "Cover Letter" is 200 characters.
-                    /[^a-zA-Z0-9\s.,?!/@$#%^&*()-]/, // Updated regex pattern for Cover Letter
+                    400,
+                    /[^a-zA-Z0-9\s.,?!/@$#%^&*()-]/,
                     formState.errorMessages.coverLetter
                   )
                 }
-                formState={formState} // Replace with your actual form state
+                formState={formState}
               />
-              {cv ? (
+              {CvFilePath ? (
                 <Box>
                   <Typography>Uploaded CV:</Typography>
-                  <Link href={cv} target="_blank" rel="noopener noreferrer">
+                  <Link href={CvFilePath} target="_blank" rel="noopener noreferrer">
                     View CV
                   </Link>
                 </Box>

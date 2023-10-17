@@ -1,57 +1,80 @@
 import React, { useState, useEffect, useContext } from "react";
 import styles from "./SearchBar.module.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { ThemeContext } from "../../styles/ThemeProvider";
-import { useFilterContext } from "../../utlis/FilterContext";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
+import { Box, Button, Input } from "@mui/material";
 
-interface SearchBarProps {}
+interface SearchBarProps {
+  onHandleSearchSubmit: () => void;
+  onHandleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  searchQuery: string;
+}
 
-const SearchBar: React.FC<SearchBarProps> = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const { themeMode, toggleTheme } = useContext(ThemeContext);
-  const { state: filterState, dispatch: filterDispatch } = useFilterContext();
-
-  const handleSearchSubmit = () => {
-    filterDispatch({ type: "SET_QUERY", payload: searchQuery });
-    filterDispatch({ type: "SET_SPECIALTIES", payload: "" });
-    filterDispatch({ type: "SET_LOCATION", payload: "" });
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchQuery(value);
-  };
+const SearchBar: React.FC<SearchBarProps> = ({
+  onHandleSearchSubmit,
+  onHandleInputChange,
+  searchQuery,
+}) => {
+  const { themeMode } = useContext(ThemeContext);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      handleSearchSubmit();
+      onHandleSearchSubmit();
     }
   };
+
+  const inputStyle = {
+    width: "370px",
+    padding: "2.5px 10px",
+    fontSize: "17px",
+    borderRadius: "4px",
+    border: themeMode ==='dark' ? " 1px solid #36d336" : '',
+    backgroundColor: themeMode === "dark" ? "#000000" : "#e9f2ed",
+    color: themeMode === "dark" ? "#36d336" : "#000000",
+    fontWeight: "bold",
+    position: "relative",
+    zIndex: 1,
+    boxShadow: "none",
+
+    "@media (max-width: 768px)": {
+      width: "100%",
+    },
+  };
   return (
-    <div className={styles["search-bar-container"]}>
-      <div
-        className={`${styles["input-container"]} ${
-          themeMode === "dark" ? styles["dark-mode"] : ""
-        }`}
+    <Box
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+        }}
       >
-        <input
+        <Input
           type="text"
-          className={`${styles["search-input"]} ${
-            themeMode === "dark" ? styles["dark-mode"] : ""
-          }`}
+          disableUnderline={true}
+          sx={inputStyle}
           placeholder={"Search here..."}
           value={searchQuery}
-          onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
+          onChange={onHandleInputChange}
+          onKeyUp={handleKeyPress}
         />
-        <button
-          className={styles["search-button"]}
-          onClick={handleSearchSubmit}
+        <Button
+          sx={{
+            background: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            marginLeft: "5px",
+          }}
+          onClick={onHandleSearchSubmit}
         >
           <SearchIcon sx={{ color: "white", fontSize: "30px" }} />
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

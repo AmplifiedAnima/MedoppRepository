@@ -18,7 +18,6 @@ import { ConfigModule } from '@nestjs/config';
     OfferModule,
     MulterModule,
     ConfigModule.forRoot({isGlobal: true}),
-    // FileUploadModule,
     JobApplicationModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -31,7 +30,6 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    // Register Multer with your configuration
   ],
   controllers: [AppController],
   providers: [AppService],

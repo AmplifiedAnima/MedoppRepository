@@ -1,4 +1,5 @@
-import { IsString, MinLength, MaxLength, Matches } from 'class-validator';
+import { IsString, MinLength, MaxLength, Matches, IsOptional } from 'class-validator';
+import { Buffer } from 'buffer';
 
 export class EditProfileDto {
   @IsString()
@@ -12,7 +13,15 @@ export class EditProfileDto {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'password is too weak',
   })
-  password?: string;
+  password: string;
+
+  @IsString()
+  avatarImage: string;
+
+  avatarImageFileBuffer: Buffer;
+
+  @IsString()
+  avatarImageName: string;
 
   @IsString()
   firstName: string;
@@ -21,17 +30,22 @@ export class EditProfileDto {
   lastName: string;
 
   @IsString()
-  email: string;
+  email?: string;
 
   @IsString()
-  cv?: string;
+  cv: string;
 
   @IsString()
   phoneNumber: string;
+
+  cvFileBuffer: Buffer;
+
+  @IsString()
+  cvFileName: string;
 
   @IsString()
   address: string;
 
   @IsString()
-  city: string;
+  city: string;      
 }

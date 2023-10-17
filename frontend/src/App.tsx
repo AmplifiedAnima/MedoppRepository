@@ -1,13 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-  useLocation,
-} from "react-router-dom";
-import MapComponent from "./utlis/MapComponent";
+import React, { useEffect, useRef, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import MapComponent from "./utlis/GoogleMapsApi/MapComponent";
 import { useMediaQuery } from "@mui/material";
 import { Offer } from "./components/JobOffers/OfferInterface";
 import { FilterState, useFilterContext } from "./utlis/FilterContext";
@@ -18,20 +11,18 @@ import OfferWithIdAndMapView from "./OfferWithIdAndMapView";
 import { EditProfilePage } from "./components/Layout/EditProfilePage/EditProfilePage";
 import { initialFilterState } from "./utlis/FilterContext";
 import NewJobCreationForm from "./components/Layout/NewJobForm/NewJobCreationForm";
-import { useAlertContext } from "./utlis/AlertHandlingContext";
-import { IsLoggedInContext } from "./utlis/IsLoggedInContext";
 import { UserAlreadyLoggedInHandler } from "./utlis/UserAlreadyLoggedInHandler";
 import EmployersOffersView from "./components/Layout/EmployerOffersView";
+
 const App = () => {
   const [filteredOffers, setFilteredOffers] = useState<Offer[]>([]);
   const [showJobBoard, setShowJobBoard] = useState(true);
-  const [isMapReset, setIsMapReset] = useState(false);
+
   const isMobile = useMediaQuery("(max-width: 600px)");
   const mapRef = useRef(null);
   const { state: filterState, dispatch } = useFilterContext();
-  const { dispatch: customDispatch } = useAlertContext();
 
-  // UserAlreadyLoggedInHandler();
+  UserAlreadyLoggedInHandler();
   const navigate = useNavigate();
 
   const fetchOffers = async (filterState: FilterState) => {
@@ -46,11 +37,12 @@ const App = () => {
     console.log(selectedOffer?.id);
 
     if (filterState === initialFilterState) {
+      
       try {
         const response = await fetch("http://localhost:3000/offers");
         const data = await response.json();
         setFilteredOffers(data);
-        console.log(response); // Log the fetched offers
+        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -67,7 +59,7 @@ const App = () => {
         const data = await response.json();
         const offersArray = Array.isArray(data) ? data : [data]; // Wrap in an array if it's a single offer
         setFilteredOffers(offersArray as Offer[]);
-        console.log(response); // Log the filtered offers
+        console.log(response); 
       } catch (error) {
         console.error(error);
       }
@@ -85,7 +77,6 @@ const App = () => {
 
   const handleCloseOffer = (): void => {
     navigate("/");
-    setIsMapReset(true);
   };
 
   const handleToggleJobBoard = () => {
@@ -99,8 +90,6 @@ const App = () => {
       onOfferClick={handleOfferClick}
       selectedOffer={filterState.selectedOffer}
       mapRef={mapRef}
-      onCloseOffer={handleCloseOffer}
-      isMapReset={isMapReset}
     />
   );
 
@@ -123,7 +112,7 @@ const App = () => {
             </>
           }
         />
-          <Route
+        <Route
           path="/user-offers"
           element={
             <>
@@ -152,7 +141,6 @@ const App = () => {
           element={
             <OfferWithIdAndMapView
               mapComponent={mapComponent}
-              onMapReset={() => setIsMapReset}
               handleCloseOffer={handleCloseOffer}
               isMobile={isMobile}
               showOfferCard={showJobBoard}
@@ -172,7 +160,6 @@ const App = () => {
               handleOfferClick={handleOfferClick}
               handleOfferClose={handleCloseOffer}
               mapComponent={mapComponent}
-              handleMapReset={() => setIsMapReset}
             />
           }
         />

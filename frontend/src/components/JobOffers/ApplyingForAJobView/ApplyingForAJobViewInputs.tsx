@@ -1,7 +1,8 @@
 import { TextField, FormHelperText } from "@mui/material";
-import { ApplicationViewState } from "../../../utlis/initialStatesForForms";
+import { ApplicationViewState } from "../../../utlis/Form Reducers/initialStatesForForms";
 import { useContext } from "react";
-import { ThemeContext } from "../../../styles/ThemeProvider";
+import { ThemeContext } from "../../../styles/ThemeProviderContext";
+import { getInputPlaceholdersStyling } from "../../../styles/formStyling";
 
 interface NewApplicationFormInputsProps {
   onFirstNameChange: (value: string) => void;
@@ -10,7 +11,7 @@ interface NewApplicationFormInputsProps {
   onPhoneNumberChange: (value: string) => void;
   onCoverLetterChange: (value: string) => void;
 
-  formState: ApplicationViewState; // Replace with your actual form state type
+  formState: ApplicationViewState; 
 }
 
 const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
@@ -22,42 +23,14 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
   formState,
 }) => {
   const { themeMode } = useContext(ThemeContext);
-  const inputStylingForModalOfApplying = {
-    margin: "10px 10px",
-    "& input::placeholder": {
-      color: themeMode === "dark" ? "#2feb00" : "", // Green placeholder text in dark mode
-    },
-    "& input": {
-      color: themeMode === "dark" ? "#2feb00" : "", // Green text color in dark mode
-      border: `1px solid ${themeMode === "dark" ? "#2feb00" : ""}`, // Green border in dark mode
-      "&::placeholder": {
-        color: themeMode === "dark" ? "#2feb00" : "", // Explicitly set placeholder color
-      },
-      "&:focus": {
-        outlineColor: themeMode === "dark" ? "#2feb00" : "", // Set outline color on focus
-      },
-    },
-    "& textarea::placeholder": {
-      color: themeMode === "dark" ? "#2feb00" : "", // Green placeholder text in dark mode for textarea
-    },
-    "& textarea": {
-      color: themeMode === "dark" ? "#2feb00" : "", // Green text color in dark mode for textarea
-      border: `1px solid ${themeMode === "dark" ? "#2feb00" : ""}`, // Green border in dark mode for textarea
-      "&::placeholder": {
-        color: themeMode === "dark" ? "#2feb00" : "", // Explicitly set placeholder color
-      },
-      "&:focus": {
-        outlineColor: themeMode === "dark" ? "#2feb00" : "", // Set outline color on focus
-      },
-    },
-  };
+  const inputStyling = getInputPlaceholdersStyling(themeMode);
 
   return (
     <>
       <TextField
         label="First Name"
         fullWidth
-        sx={inputStylingForModalOfApplying}
+        sx={{ ...inputStyling, margin: "10px 0px" }}
         value={formState.firstName || ""}
         onChange={(e) => onFirstNameChange(e.target.value)}
         onBlur={() => onFirstNameChange(formState.firstName)}
@@ -67,7 +40,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
       <TextField
         label="Last Name"
         fullWidth
-        sx={inputStylingForModalOfApplying}
+        sx={{ ...inputStyling, margin: "10px 0px"}}
         value={formState.lastName || ""}
         onChange={(e) => onLastNameChange(e.target.value)}
         onBlur={() => onLastNameChange(formState.lastName)}
@@ -77,7 +50,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
       <TextField
         label="Email"
         fullWidth
-        sx={inputStylingForModalOfApplying}
+        sx={{ ...inputStyling, margin: "10px 0px" }}
         value={formState.email || ""}
         onChange={(e) => onEmailChange(e.target.value)}
         onBlur={() => onEmailChange(formState.email)}
@@ -88,7 +61,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
       <TextField
         label="Phone Number"
         fullWidth
-        sx={inputStylingForModalOfApplying}
+        sx={{ ...inputStyling, margin: "10px 0px"}}
         value={formState.phoneNumber || ""}
         onChange={(e) => onPhoneNumberChange(e.target.value)}
         onBlur={() => onPhoneNumberChange(formState.phoneNumber)}
@@ -102,7 +75,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
         label="Cover Letter"
         fullWidth
         rows={4}
-        sx={inputStylingForModalOfApplying}
+        sx={{ ...inputStyling, margin: "10px 0px", }}
         value={formState.coverLetter || ""}
         onChange={(e) => onCoverLetterChange(e.target.value)}
         onBlur={() => onCoverLetterChange(formState.coverLetter)}

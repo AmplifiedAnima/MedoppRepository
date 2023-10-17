@@ -1,7 +1,6 @@
-
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { AppBar, Toolbar, Box, IconButton, Typography } from "@mui/material";
-import { ThemeContext } from "../../styles/ThemeProvider";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 import styles from "./Header.module.css";
 import Dashboard from "./Dashboard";
 import PowerIcon1Green from "./PowerIcon1Green.png";
@@ -51,9 +50,10 @@ const HeaderForOtherRoutes: React.FC<HeaderForOtherRoutesProps> = ({
     <>
       <AppBar position="static">
         <Toolbar
-          className={`${styles["app-bar-for-other-routes"]} ${
-            themeMode === "dark" ? styles["dark-mode"] : ""
-          }`}
+          sx={{
+            background: themeMode === "dark" ? "#000000" : "#001b45",
+            padding: "0px",
+          }}
         >
           <HeaderMenuItem />
 
@@ -61,16 +61,16 @@ const HeaderForOtherRoutes: React.FC<HeaderForOtherRoutesProps> = ({
           <Box sx={{ flexGrow: 0.1 }}>
             <Typography
               variant="subtitle1"
-              className={`${styles["routeViewText"]} ${
-                themeMode === "dark" ? styles["dark-mode"] : ""
-              }`}
               sx={{
-                paddingLeft:'30px',
+                paddingLeft: "30px",
                 fontSize: "15px",
-                maxWidth: "100%", // Set maximum width to 100%
-                whiteSpace: "wrap", // Prevent text from wrapping
-                overflow: "hidden", // Hide overflow text
-                textOverflow: "ellipsis", // Add ellipsis (...) for long text
+                maxWidth: "100%",
+                whiteSpace: "wrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                color: themeMode === "dark" ? "#2feb00" : "#679af8",
+                alignItems: "center",
+                flexWrap: "wrap",
               }}
             >
               {routeView}
@@ -79,7 +79,7 @@ const HeaderForOtherRoutes: React.FC<HeaderForOtherRoutesProps> = ({
           <Switcher />
           <IconButton
             color="inherit"
-            className={styles["profile-button"]}
+
             onClick={isLoggedIn ? handleProfileToggle : handleLoginModalOpen}
           >
             {isLoggedIn ? (
@@ -92,13 +92,13 @@ const HeaderForOtherRoutes: React.FC<HeaderForOtherRoutesProps> = ({
               <img
                 src={PowerIcon1Green}
                 alt="PowerIcon"
-                style={{ width: "45px", height: "45px" }}
+                style={{ width: "40px", height: "40px" }}
               />
             ) : (
               <img
                 src={PowerIcon2Blue}
                 alt="PowerIcon"
-                style={{ width: "45px", height: "45px" }}
+                style={{ width: "40px", height: "40px" }}
               />
             )}
           </IconButton>

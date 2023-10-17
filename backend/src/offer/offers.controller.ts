@@ -23,24 +23,38 @@ import FilterOptions from './offers.service'; // Import the FilterOptions interf
 import RoleGuard from 'src/auth/role.guard';
 import Role from 'src/user/role.enum';
 
+interface offerSToBeFetchedToFrontend {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  offerId: string;
+}
+
 @Controller('offers')
 export class OffersController {
   constructor(private readonly offersService: OffersService) {}
 
-  @Get()
-  async getAllOffers(@Query() queryParams: FilterOptions): Promise<Offer[]> {
-    if (queryParams) {
-      // Call your service method with the query parameters
-      return this.offersService.getFilteredOffers(queryParams);
-    } else {
-      // Call your service method to fetch all offers
-      return this.offersService.getAllOffers();
-    }
+  @UseGuards(RoleGuard(Role.Employer))
+  @UseGuards(AuthGuard('jwt'))
+  @Get('employer-offers')
+  async getUserOffers(@Request() request: RequestWithUser): Promise<Offer[]> {
+    const user = request.user;
+    return this.offersService.getAllUserOffers(user.id);
   }
 
   @Get(':id')
   async getOfferById(@Param('id') id: string): Promise<Offer> {
     return this.offersService.getOfferById(id);
+  }
+  @Get()
+  async getAllOffers(@Query() queryParams: FilterOptions): Promise<Offer[]> {
+    if (queryParams) {
+      return this.offersService.getFilteredOffers(queryParams);
+    } else {
+      return this.offersService.getAllOffers();
+    }
   }
 
   @UseGuards(RoleGuard(Role.Employer))
@@ -88,5 +102,6 @@ export class OffersController {
     }
 
     await this.offersService.deleteOffer(id, request.user);
+    console.log(`offer ${id} has been deleted `)
   }
 }

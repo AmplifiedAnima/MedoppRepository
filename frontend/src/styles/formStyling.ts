@@ -1,4 +1,4 @@
-// styles.js or commonStyles.ts
+
 export const getInputPlaceholdersStyling = (themeMode: "dark" | "light") => ({
   "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
     padding: "20px",
@@ -20,12 +20,10 @@ export const getInputPlaceholdersStyling = (themeMode: "dark" | "light") => ({
   "@media (max-width: 600px)": {
     width: "100%",
     fontSize: "13px",
-    // Adjust other styles as needed for small screens
+
   },
 });
-// styles.js or commonStyles.ts
-// styles.js or commonStyles.ts
-// styles.js or commonStyles.ts
+
 export const getReactQuillStyling = (themeMode: "dark" | "light") => {
   const borderColor = themeMode === "dark" ? "#2feb00" : "";
   return {
@@ -34,7 +32,7 @@ export const getReactQuillStyling = (themeMode: "dark" | "light") => {
     minWidth: "100%",
     backgroundColor: "transparent",
     color: themeMode === "dark" ? "#2feb00" : "black",
-    border: `1px solid ${borderColor}`, // Set the border color here
+    border: `1px solid ${borderColor}`, 
     borderRadius: "4px",
     minHeight: "auto",
   };
@@ -45,11 +43,10 @@ export const getPaperStyling = (themeMode: "dark" | "light") => ({
   margin: "20px 10px",
   background:
     themeMode === "dark"
-      ? "linear-gradient(20deg, rgb(0, 0, 0) 20%, #263139 89%)" // Dark mode gradient
+      ? "linear-gradient(20deg, rgb(0, 0, 0) 20%, #263139 89%)"
       : "#FFFFFF",
   color: themeMode === "dark" ? "white" : "black",
   width: "auto",
-  // margin: "0 auto",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -59,7 +56,6 @@ export const getPaperStyling = (themeMode: "dark" | "light") => ({
     width: "auto",
     padding: "35px",
     marginLeft: "20px",
-    // Adjust other styles as needed for small screens
   },
 });
 
@@ -84,6 +80,5 @@ export const getButtonStyling = (themeMode: "dark" | "light") => ({
     width: "100%",
     padding: "10px",
     fontSize: "16px",
-    // Adjust other styles as needed for small screens
   },
 });

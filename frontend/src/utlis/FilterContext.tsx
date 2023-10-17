@@ -1,7 +1,6 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import { Offer } from "../components/JobOffers/OfferInterface";
 
-// Define the shape of the filter state
 export interface FilterState {
   query: string;
   specialties: string;
@@ -18,7 +17,6 @@ export interface FilterOptions {
   typeOfEmployment: string;
 }
 
-// Define the filter action types
 type FilterAction =
   | {
       type: "SET_QUERY";
@@ -50,13 +48,13 @@ type FilterAction =
     }
   | { type: "SET_INITIAL_FILTER_STATE" };
 
-// Define the filter context type
+
 interface FilterContextType {
   state: FilterState;
   dispatch: React.Dispatch<FilterAction>;
 }
 
-// Create the initial filter state
+
 export const initialFilterState: FilterState = {
   query: "",
   specialties: "",
@@ -66,13 +64,13 @@ export const initialFilterState: FilterState = {
   selectedOffer: null,
 };
 
-// Create the filter context
+
 export const FilterContext = createContext<FilterContextType>({
   state: initialFilterState,
   dispatch: () => {},
 });
 
-// Create the filter context provider component
+
 export const FilterContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -85,7 +83,7 @@ export const FilterContextProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// Define the filter reducer function
+
 export const filterReducer = (
   state: FilterState,
   action: FilterAction
@@ -110,7 +108,6 @@ export const filterReducer = (
   }
 };
 
-// Custom hook to easily access the filter context
 export const useFilterContext = () => {
   const { state, dispatch } = useContext(FilterContext);
   return { state, dispatch };

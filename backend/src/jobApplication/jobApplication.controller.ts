@@ -21,17 +21,8 @@ import { UseInterceptors } from '@nestjs/common/decorators/core/use-interceptors
 import { UploadedFile } from '@nestjs/common';
 import { multerConfig } from '../fileUploadService/multerConfig';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
-
-interface ApplicationToBeFetchedToFrontend {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  coverLetter: string;
-  cvFilePath: string;
-  offerId: string;
-}
+import { File } from 'buffer';
+import { ApplicationToBeFetchedToFrontend } from './jobApplication.interface';
 
 @Controller('job-applications')
 export class JobApplicationController {
@@ -48,25 +39,7 @@ export class JobApplicationController {
   async getAllUserApplications(
     @Request() request: RequestWithUser,
   ): Promise<ApplicationToBeFetchedToFrontend[]> {
-    const userApplications = await this.offerRepository
-      .createQueryBuilder('offer')
-      .leftJoinAndSelect('offer.applications', 'application')
-      .where('application.user = :userId', { userId: request.user.id })
-      .getMany();
-
-    const applicants: ApplicationToBeFetchedToFrontend[] = [];
-
-    userApplications.forEach((offer) => {
-      offer.applications.forEach((application) => {
-        const applicationDto: ApplicationToBeFetchedToFrontend = {
-          ...application,
-          offerId: offer.id,
-        };
-        applicants.push(applicationDto);
-      });
-    });
-
-    return applicants;
+    return this.jobApplicationService.getAllUserApplications(request.user);
   }
 
   @UseGuards(RoleGuard(Role.Employer))
@@ -75,27 +48,7 @@ export class JobApplicationController {
   async getApplicantsForUserOffers(
     @Request() request: RequestWithUser,
   ): Promise<ApplicationToBeFetchedToFrontend[]> {
-    console.log(request.user);
-    const userOffers = await this.offerRepository
-      .createQueryBuilder('offer')
-      .leftJoinAndSelect('offer.applications', 'application')
-      .leftJoinAndSelect('application.user', 'user')
-      .where('offer.user = :userId', { userId: request.user.id })
-      .getMany();
-
-    const applicants: ApplicationToBeFetchedToFrontend[] = [];
-
-    userOffers.forEach((offer) => {
-      offer.applications.forEach((application) => {
-        const applicationDto: ApplicationToBeFetchedToFrontend = {
-          ...application,
-          offerId: offer.id,
-        };
-        applicants.push(applicationDto);
-      });
-    });
-
-    return applicants;
+    return this.jobApplicationService.getApplicantsForUserOffers(request.user);
   }
 
   @UseGuards(RoleGuard(Role.Employee))
@@ -110,11 +63,14 @@ export class JobApplicationController {
     try {
       const userCvUploadedAlready = request.user.cv;
 
-      if (userCvUploadedAlready && !cv) {
+      if (userCvUploadedAlready) {
         createJobApplicationDto.cvFilePath = userCvUploadedAlready;
       }
 
       if (cv) {
+        if (!cv) {
+          throw new Error('CV file is required.');
+        }
         createJobApplicationDto.cvFileBuffer = cv.buffer;
         createJobApplicationDto.cvFileName = cv.originalname;
 
@@ -126,10 +82,7 @@ export class JobApplicationController {
         console.log('CV Buffer:', cv.buffer); // Log the buffer
         console.log('CV Original Name:', cv.originalname);
       }
-      if (!cv) {
-        // Handle the case where cv is not provided
-        throw new Error('CV file is required.');
-      }
+
       console.log(request.user);
 
       return this.jobApplicationService.createJobApplication(

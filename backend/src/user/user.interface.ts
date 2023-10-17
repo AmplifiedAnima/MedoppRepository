@@ -4,6 +4,7 @@ import Role from './role.enum';
 
 export interface User {
   id: string;
+  avatarImage:string;
   username: string;
   password: string;
   roles: Role[];

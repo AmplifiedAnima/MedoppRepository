@@ -9,12 +9,12 @@ import {
   Typography,
 } from "@mui/material";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
-import { ThemeContext } from "../../styles/ThemeProvider";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   getInputPlaceholdersStyling,
   getButtonStyling,
-} from "./inputStylingForFormLoginRegistration";
+} from "../../styles/formStyling";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
 import AlertLayout from "../../utlis/Alerts";
 
@@ -30,7 +30,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
     isLoggedIn,
     setIsLoggedIn,
     isLoginModalOpen,
-    setIsLoginModalOpen,
     username,
     setUsername,
     setRoles,
@@ -129,14 +128,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
     setHideContent(false);
   }, [isLoginModalOpen]);
 
-  const dialogContentStyling = {
-    backgroundColor: "#00000003",
-    color: themeMode === "dark" ? "white" : "black",
-    maxWidth: "100%",
-    maxHeight: "100%",
-    minWidth: "600px",
-    minHeight: "800px",
-  };
 
   const colorsForModal = {
     backgroundColor: themeMode === "dark" ? "black" : "white",
@@ -145,7 +136,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
 
   return (
     <Box>
-      <Dialog open={open} onClose={onClose} sx={dialogContentStyling}>
+      <Dialog open={open} onClose={onClose} >
         <AlertLayout />
         <DialogContent sx={colorsForModal}>
           {!hideContent && (

@@ -51,13 +51,13 @@ export class UsersService {
       signupDto.cvFileBuffer,
     );
 
-    // const avatarImageFilePath = await this.fileUploadService.uploadImage(
-    //   signupDto.avatarImageName,
-    //   signupDto.avatarImageFileBuffer,
-    // );
+    const avatarImageFilePath = await this.fileUploadService.uploadImage(
+      signupDto.avatarImageName,
+      signupDto.avatarImageFileBuffer,
+    );
 
     const newUser = this.userRepository.create({
-      // avatarImage: avatarImageFilePath,
+      avatarImage: avatarImageFilePath,
       username: signupDto.username,
       firstName: signupDto.firstName,
       lastName: signupDto.lastName,
@@ -104,7 +104,7 @@ export class UsersService {
     if (updatedInfo.password !== null) {
       updatedInfo.password = Hash.make(updatedInfo.password);
     }
-
+    console.log(updatedInfo)
     Object.assign(user, updatedInfo);
 
     return await this.userRepository.save(user);

@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { Offer } from "../components/JobOffers/OfferInterface";
-import { FilterState } from "./FilterContext";
+import { Offer } from "../../components/JobOffers/OfferInterface";
+import { FilterState } from "../FilterContext";
 import { getOfferIconUrl } from "./MapComponentUtils";
 import { useNavigate } from "react-router";
-import { ThemeContext } from "../styles/ThemeProvider";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 
 interface ClusterPopoverProps {
   open: boolean;

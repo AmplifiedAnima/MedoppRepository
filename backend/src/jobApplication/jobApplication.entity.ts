@@ -33,5 +33,7 @@ export default class JobApplication {
 
   @ManyToOne(() => User, (user) => user.offers, { onDelete: 'CASCADE' })
   user: User;
+
+  
 }
 

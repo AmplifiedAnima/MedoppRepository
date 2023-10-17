@@ -1,7 +1,7 @@
 import {
   RegistrationFormAction,
   RegistrationFormState,
-} from "../../../utlis/initialStatesForForms";
+} from "../../../utlis/Form Reducers/initialStatesForForms";
 
 export const handleInputForRegistrationForm = (
   state: RegistrationFormState,

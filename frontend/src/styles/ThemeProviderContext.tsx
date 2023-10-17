@@ -134,9 +134,8 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     },
   ];
 
-  const lightModeStyle: google.maps.MapTypeStyle[] = [
-  ];
-  
+  const lightModeStyle: google.maps.MapTypeStyle[] = [];
+
   return (
     <ThemeContext.Provider
       value={{ themeMode, toggleTheme, darkModeStyle, lightModeStyle }}

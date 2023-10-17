@@ -78,6 +78,9 @@ export class OffersService {
 
     return queryBuilder.getMany();
   }
+  async getAllUserOffers(userId: string): Promise<Offer[]> {
+    return this.offersRepository.find({ where: { user: { id: userId } } });
+  }
 
   async getOfferById(id: string): Promise<Offer> {
     return this.offersRepository.findOne({ where: { id } });
@@ -100,12 +103,8 @@ export class OffersService {
     updateOfferDto: UpdateOfferDto,
     user: User,
   ): Promise<Offer> {
-    // Retrieve the offer from the database
     const offer = await this.getOfferById(id);
 
-    // Update the offer properties with the values from the DTO
-
-    // Save the updated offer
     const updatedOffer = this.offersRepository.create({
       ...updateOfferDto,
       user,
@@ -115,12 +114,12 @@ export class OffersService {
   }
 
   async deleteOffer(id: string, user: User): Promise<void> {
-    // Check if the offer with the given ID exists
+  
     const offer = await this.getOfferById(id);
+
     if (!offer) {
       throw new NotFoundException('Offer not found');
     }
-    // If the user is authorized, delete the offer
     await this.offersRepository.remove(offer);
   }
 }

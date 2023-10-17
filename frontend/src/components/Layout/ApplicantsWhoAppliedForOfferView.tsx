@@ -14,11 +14,10 @@ import {
   useMediaQuery,
   Link,
 } from "@mui/material";
-import { ThemeContext } from "../../styles/ThemeProvider";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
 import HeaderForOtherRoutes from "../Header/HeaderForOtherRoutes";
 import { InfoOutlined } from "@mui/icons-material";
-import { getPaperStyling } from "./inputStylingForFormLoginRegistration";
 
 interface JobApplication {
   id: string;
@@ -37,7 +36,7 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
 
   const isMobile = useMediaQuery("(max-width: 600px)");
   const { themeMode } = useContext(ThemeContext);
-  
+
   const { isLoggedIn, roles } = useContext(IsLoggedInContext);
   const isEmployee = isLoggedIn && roles.includes("Employee");
 
@@ -89,7 +88,16 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
   }, [isLoggedIn]);
 
   return (
-    <>
+    <Box
+      sx={{
+        background:
+          themeMode === "dark"
+            ? "linear-gradient(20deg, rgb(0, 0, 0) 2%, #263139 69%)" // Dark mode gradient
+            : "#FFFFFF",
+        color: themeMode === "dark" ? "white" : "black",
+        height: "737px",
+      }}
+    >
       <Paper elevation={3}>
         <HeaderForOtherRoutes
           routeView={
@@ -208,7 +216,9 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
                       <TableCell>
                         <IconButton
                           onClick={handlePopoverOpen(application.coverLetter)}
-                          sx={{color:themeMode ==='dark'? 'white': 'black'}}
+                          sx={{
+                            color: themeMode === "dark" ? "white" : "black",
+                          }}
                         >
                           <InfoOutlined />
                         </IconButton>
@@ -220,7 +230,6 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
                             vertical: "top",
                             horizontal: "left",
                           }}
-              
                         >
                           <Box
                             sx={{
@@ -293,7 +302,7 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
           </Paper>
         )}
       </Paper>
-    </>
+    </Box>
   );
 };
 

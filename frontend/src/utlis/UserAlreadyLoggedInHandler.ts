@@ -16,10 +16,9 @@ export const UserAlreadyLoggedInHandler = () => {
     setEmail,
   } = useContext(IsLoggedInContext);
 
+  const loginToken = localStorage.getItem("token");
 
   useEffect(() => {
-    const loginToken = localStorage.getItem("token");
-
     if (loginToken) {
       const tokenPayload = JSON.parse(
         Buffer.from(loginToken.split(".")[1], "base64").toString("utf-8")
@@ -35,5 +34,5 @@ export const UserAlreadyLoggedInHandler = () => {
       setCv(tokenPayload.cv);
       setIsLoggedIn(true);
     }
-  }, []);
+  }, [loginToken]);
 };

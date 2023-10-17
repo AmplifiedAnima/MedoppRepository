@@ -12,13 +12,13 @@ import ReactQuill from "react-quill";
 import {
   getInputPlaceholdersStyling,
   getReactQuillStyling,
-} from "./../inputStylingForFormLoginRegistration";
-import { ThemeContext } from "../../../styles/ThemeProvider";
-import { NewJobFormReducer } from "../../../utlis/FormReducer";
+} from "../../../styles/formStyling";
+import { ThemeContext } from "../../../styles/ThemeProviderContext";
+import { NewJobFormReducer } from "../../../utlis/Form Reducers/FormReducer";
 import {
   NewJobFormState,
   initialStateNewJobForm,
-} from "../../../utlis/initialStatesForForms";
+} from "../../../utlis/Form Reducers/initialStatesForForms";
 import { handleInputFieldForNewJobForm } from "./FunctionsToHandleInputNewJobForm";
 import { useLocation } from "react-router";
 import specialties from "../../Specialities";

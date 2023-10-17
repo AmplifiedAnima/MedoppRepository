@@ -1,7 +1,7 @@
 import {
   ApplicationViewState,
   JobApplicationViewAction,
-} from "../../../utlis/initialStatesForForms";
+} from "../../../utlis/Form Reducers/initialStatesForForms";
 
 const formatFieldName = (fieldName: string) => {
   const words = fieldName.split(/(?=[A-Z])/);
@@ -25,7 +25,7 @@ export const handleInputFieldForJobApplication = (
     dispatch({
       type: "UPDATE_FIELD",
       fieldName: fieldName,
-      fieldValue: "", // Clear the field value when it's empty
+      fieldValue: "", 
     });
 
     dispatch({

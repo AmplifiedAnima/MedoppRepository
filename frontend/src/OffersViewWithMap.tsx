@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "./styles/ThemeProvider";
+import { ThemeContext } from "./styles/ThemeProviderContext";
 import { Box, Button } from "@mui/material";
 import Header from "./components/Header/Header";
 import { Offer } from "./components/JobOffers/OfferInterface";
-import styles from "./components/JobOffers/OffersCard.module.css";
 import appStyle from "./App.module.css";
 import { styled } from "@mui/material/styles";
 import { useFilterContext } from "./utlis/FilterContext";
 import OfferCard from "./components/JobOffers/OfferCard";
+import { getButtonStyles } from "./styles/buttonStyling";
+import { getOffersListStyles } from "./styles/offersListStyle";
 
 export const Container = styled("div")({
   backgroundColor: "#E0E0F1",
@@ -36,7 +37,6 @@ interface OffersViewWithMapProps {
   handleToggleJobBoard: () => void;
   handleOfferClick: (offer: Offer | null) => void; // Update the function type
   handleOfferClose: () => void;
-  handleMapReset: () => void;
   mapComponent: React.ReactNode;
 }
 
@@ -47,11 +47,13 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
   filteredOffers,
   handleOfferClick,
   handleOfferClose,
-  handleMapReset,
   mapComponent,
 }) => {
   const { themeMode } = useContext(ThemeContext);
   const { state: filterState } = useFilterContext();
+
+  const buttonStyles = getButtonStyles(themeMode);
+  const offersListStyle = getOffersListStyles(themeMode);
 
   const offerCardVariable = filteredOffers.map((offer, index) => (
     <OfferCard
@@ -59,7 +61,6 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
       offer={offer}
       onOfferClick={handleOfferClick}
       onCloseOffer={handleOfferClose}
-      onMapReset={handleMapReset}
       isSelected={false}
       offerId={filterState.selectedOffer?.id || ""}
     />
@@ -73,9 +74,7 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
           <Button
             onClick={handleToggleJobBoard}
             variant="contained"
-            className={`${appStyle["button"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
+            sx={buttonStyles}
           >
             {showJobBoard ? "MAP" : "JOB"}
           </Button>
@@ -84,13 +83,7 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
       {isMobile ? (
         <Box>
           {showJobBoard ? (
-            <Box
-              className={`${styles["offers-list"]} ${
-                themeMode === "dark" ? styles["dark-mode"] : ""
-              }`}
-            >
-              {offerCardVariable}
-            </Box>
+            <Box sx={offersListStyle}>{offerCardVariable}</Box>
           ) : (
             <Box sx={{ overflow: "auto" }}>{mapComponent}</Box>
           )}
@@ -99,22 +92,18 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
         <FlexContainer
           sx={{
             background:
-            themeMode === "dark"
-              ? "linear-gradient(180deg,  #000000 10%,  #FF0000 99%)" // Dark mode with red background
-              : "linear-gradient(180deg, #001b45 10%, #476bad 99%)" // Light mode with lighter golden background
-          
+              themeMode === "dark"
+                ? "linear-gradient(180deg,  #000000 50%,  #02dc10 99%)"
+                : "linear-gradient(180deg, #001b45 10%, #476bad 99%)",
           }}
         >
-          <LeftColumn
-            className={`${styles["offers-list"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
-          >
+          <LeftColumn sx={offersListStyle}>
             <>{offerCardVariable}</>
           </LeftColumn>
           <RightColumn>{mapComponent}</RightColumn>
         </FlexContainer>
       )}
+      
     </Container>
   );
 };

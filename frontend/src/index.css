@@ -14,3 +14,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+::-webkit-scrollbar {
+  min-width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #293039;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #a2a0a0;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ffffff;
+}
+
+@media (min-width: 1480px) {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  ::-webkit-scrollbar-track {
+    display: none;
+  }
+}

@@ -19,7 +19,7 @@ import {
   DoctorIconDarkMode,
   ParamedicIconDarkMode,
 } from "../IconsIconFinder";
-import { ThemeContext } from "../../styles/ThemeProvider";
+ import { ThemeContext } from "../../styles/ThemeProviderContext";
 import styles from "./ButtonSection.module.css";
 import { useFilterContext } from "../../utlis/FilterContext";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
@@ -55,10 +55,10 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
     filterDispatch({ type: "SET_SPECIALTIES", payload: specialty });
     console.log(specialty);
 
-    // dispatch({
-    //   type: "SHOW_SUCCCESS",
-    //   payload: `speciality selected ${filterState.specialties}`,
-    // });
+    dispatch({
+      type: 'SHOW_SPECIALTY',
+      payload: `Selected specialty : ${specialty}`,
+    });
 
     handleClose();
   };
@@ -67,10 +67,31 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
 
   return (
     <Box>
+      <style>
+        {`.css-6hp17o-MuiList-root-MuiMenu-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      outline: 0;
+    }`}
+      </style>
       <Box
-        className={`${styles.buttonSection} ${
-          themeMode === "dark" ? styles["dark-mode"] : ""
-        }`}
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          padding: "0px 20px",
+          gap: "12px",
+          borderRadius: "0px",
+          overflowX: "auto",
+          width: "740px",
+          scrollbarWidth: "thick",
+          scrollbarColor: "#1e2021",
+        }}
       >
         {buttons.map((button, index) => (
           <React.Fragment key={button.label}>
@@ -78,7 +99,6 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
               color="inherit"
               onClick={(event) => handleClick(event, index)}
               endIcon={<KeyboardArrowDownIcon />}
-              className={styles.button}
             >
               {button.label === "Doctor" &&
                 (themeMode === "dark" ? (
@@ -133,12 +153,22 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
                 vertical: "top",
                 horizontal: "center",
               }}
-              className={styles.menu}
             >
               {button.specialties.map((specialty) => (
                 <MenuItem
                   key={specialty}
                   onClick={() => handleOptionSelect(specialty)}
+                  sx={{
+                    width: "100%",
+                    background: themeMode === "dark" ? "black" : "white",
+                    backgroundColor: themeMode === "dark" ? "black" : "white",
+                    color: themeMode === "dark" ? "white" : "black",
+
+                    "&:hover": {
+                      background: themeMode === "dark" ? "#2feb00" : "#001b45",
+                      color: themeMode ==='dark' ? 'black' : 'white'
+                    },
+                  }}
                 >
                   {specialty}
                 </MenuItem>

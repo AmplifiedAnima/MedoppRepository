@@ -34,8 +34,8 @@ import physio_map_white from "../static/IconsMedopp/Physio/physio_map_white.png"
 import physio_map_red from "../static/IconsMedopp/Physio/physio_map_red.png";
 
 // Pharmacists
-import mortar_green from "../static/IconsMedopp/Pharmacist/mortar_green.png";
-import mortar_white from "../static/IconsMedopp/Pharmacist/mortar_white.png";
+import pharmacy_green from "../static/IconsMedopp/Pharmacist/pharmacy_green.png";
+import pharmacy_blue from "../static/IconsMedopp/Pharmacist/pharmacy_blue.png";
 import mortar_map_green from "../static/IconsMedopp/Pharmacist/mortar_map_green.png";
 import mortar_map_white from "../static/IconsMedopp/Pharmacist/mortar_map_white.png";
 import mortar_map_red from "../static/IconsMedopp/Pharmacist/mortar_map_red.png";
@@ -63,6 +63,16 @@ import care_map_red from "../static/IconsMedopp/Care/care_map_red.png";
 
 import caduceus_blue from "../static/IconsMedopp/CADUCEUS_BLUE.png";
 import caduceus_green from "../static/IconsMedopp/CADUCEUS_GREEN.png";
+
+import filter_white from "../static/IconsMedopp/FILTER_WHITE.png";
+import filter_green from "../static/IconsMedopp/FILTER_GREEN.png";
+
+export const filterWhiteIcon = () => {
+  return <img src={filter_white} alt="Icon" width="30px" height="30px" />;
+};
+export const filterGreenIcon = () => {
+  return <img src={filter_green} alt="Icon" width="30px" height="30px" />;
+};
 
 export const CaduceusIcon = () => {
   return <img src={caduceus_blue} alt="Icon" width="50px" height="50px" />;
@@ -93,10 +103,10 @@ export const NurseIconDarkMode = () => {
 };
 
 export const PharmacistIcon = () => {
-  return <img src={mortar_white} alt="Icon" width="35px" height="35px" />;
+  return <img src={pharmacy_blue} alt="Icon" width='40px' height="40px" />;
 };
 export const PharmacistIconDarkMode = () => {
-  return <img src={mortar_green} alt="Icon" width="35px" height="35px" />;
+  return <img src={pharmacy_green} alt="Icon" width="40px" height="40px" />;
 };
 
 export const PhysiotherapistIcon = () => {

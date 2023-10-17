@@ -1,19 +1,18 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Card, CardContent, Typography, Button, Box } from "@mui/material";
-import styles from "./OffersCard.module.css";
-import { ThemeContext } from "../../styles/ThemeProvider";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Offer } from "./OfferInterface";
-import ApplyingForAJobView from "./ApplyingForAJobView/ApplyingForAJobView"; 
+import ApplyingForAJobView from "./ApplyingForAJobView/ApplyingForAJobView";
 import DOMPurify from "dompurify";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
+import { getButtonStyles } from "../../styles/buttonStyling";
 
 interface OfferCardProps {
   offer: Offer;
   onOfferClick: (offer: Offer) => void;
   onCloseOffer: () => void;
-  onMapReset: () => void;
   isSelected: boolean;
   offerId: string;
 }
@@ -22,7 +21,6 @@ const OfferCard: React.FC<OfferCardProps> = ({
   offer,
   onOfferClick,
   onCloseOffer,
-  onMapReset,
   isSelected,
   offerId,
 }) => {
@@ -35,22 +33,16 @@ const OfferCard: React.FC<OfferCardProps> = ({
     typeOfEmployment,
     specialties,
   } = offer;
-  
+
   const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const { themeMode } = useContext(ThemeContext);
+  const buttonStyles = getButtonStyles(themeMode);
 
-  const { isLoggedIn,roles } = useContext(IsLoggedInContext);
+  const { isLoggedIn, roles } = useContext(IsLoggedInContext);
   const isEmployee = isLoggedIn && roles.includes("Employee");
   const { dispatch: alertDispatch } = useAlertContext();
 
   const sanitizedDescription = DOMPurify.sanitize(offer.description);
-  const truncatedDescription =
-    description.length > 20
-      ? description.substring(0, 100) + " (READ MORE)"
-      : description;
-
-  const sanitizedTruncatedDescription =
-    DOMPurify.sanitize(truncatedDescription);
 
   const handleApply = () => {
     setIsApplicationModalOpen(true);
@@ -58,14 +50,13 @@ const OfferCard: React.FC<OfferCardProps> = ({
 
   const handleClick = () => {
     onOfferClick(offer);
-    // console.log(offerId);
   };
 
   const handleClose = () => {
     onCloseOffer();
   };
 
-  const handleApplicationModal = () => {
+  const handleCloseApplicationModal = () => {
     setIsApplicationModalOpen(false);
   };
 
@@ -76,41 +67,55 @@ const OfferCard: React.FC<OfferCardProps> = ({
   return (
     <Card
       sx={{
-        margin: "25px",
-        backgroundColor: "#D1E9F6",
+        margin: "10px 20px",
         borderRadius: "8px",
+        backgroundColor:
+          themeMode === "dark"
+            ? "rgba(209, 233, 246, 0.05)"
+            : "rgba(209, 233, 246, 0.3)",
+        display: "grid",
+        width: "auto",
+        position: "relative",
+        fontFamily: "Helvetica",
       }}
-      className={`${styles["offer-card"]} ${
-        themeMode === "dark" ? styles["dark-mode"] : ""
-      }`}
     >
       <CardContent>
         <Box style={{ display: "flex", justifyContent: "space-between" }}>
           <Typography
-            variant="h6"
-            component="div"
-            color="#335075"
-            className={`${styles["title"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
+            sx={{
+              alignSelf: "center",
+              fontSize: "18px",
+              color: "#ffffff",
+              paddingLeft: "0px",
+              "@media (max-width: 768px)": {
+                fontSize: "16px",
+              },
+            }}
           >
             {title}
           </Typography>
+
           <Typography
             variant="subtitle1"
-            color="text.secondary"
-            className={`${styles["subTitle"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
+            sx={{
+              color: "#ffffff",
+              fontSize: "16px",
+              "@media (max-width: 768px)": {
+                fontSize: "14px",
+              },
+            }}
           >
             {specialties}
           </Typography>
           <Typography
             variant="subtitle1"
-            color="text.secondary"
-            className={`${styles["subTitle"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
+            sx={{
+              color: "#ffffff",
+              fontSize: "16px",
+              "@media (max-width: 768px)": {
+                fontSize: "14px",
+              },
+            }}
           >
             {company}
           </Typography>
@@ -118,19 +123,33 @@ const OfferCard: React.FC<OfferCardProps> = ({
         <Box style={{ display: "flex", justifyContent: "space-between" }}>
           <Typography
             variant="h5"
-            color="#335075"
-            className={`${styles["salary"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
+            sx={{
+              color: themeMode === "dark" ? " #7fee01" : "#21d3ff",
+              borderRadius: "8px",
+              padding: "10px 2px",
+              fontSize: "17px",
+              fontWeight: "bold",
+              "@media (max-width: 768px)": {
+                fontSize: "15px",
+              },
+            }}
           >
             {salary} PLN/MONTH
           </Typography>
+
           <Typography
             variant="subtitle1"
             color="text.secondary"
-            className={`${styles["subTitle"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
+            sx={{
+              display: "inline",
+              color: themeMode === "dark" ? "white" : "#21d3ff",
+              borderRadius: "8px",
+              padding: "8px 2px",
+              fontSize: "16px",
+              "@media (max-width: 768px)": {
+                fontSize: "14px",
+              },
+            }}
           >
             {location}
           </Typography>
@@ -138,41 +157,32 @@ const OfferCard: React.FC<OfferCardProps> = ({
           <Typography
             variant="subtitle1"
             color="text.secondary"
-            className={`${styles["typeOfContract"]} ${
-              themeMode === "dark" ? styles["dark-mode"] : ""
-            }`}
+            sx={{
+              color: themeMode === "dark" ? "#7fee01" : "#21d3ff",
+              marginTop: "12px",
+              fontSize: "16px",
+              "@media (max-width: 768px)": {
+                fontSize: "14px",
+              },
+            }}
           >
             {typeOfEmployment.toUpperCase()}
           </Typography>
         </Box>
-        <Box
-          className={`${styles["bodyOfDescription"]} ${
-            themeMode === "dark" ? styles["dark-mode"] : ""
-          }`}
-        >
-          {isSelected ? (
-            <Box dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
-          ) : (
+        <Box sx={{ fontSize: "16px", color: "white" }}>
+          {isSelected && (
             <Box
-              dangerouslySetInnerHTML={{
-                __html: sanitizedTruncatedDescription,
-              }}
+              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+              sx={{ wordBreak: "break-word" }}
             />
           )}
         </Box>
-        <Link
-          key={offer.id}
-          to={`/offers/${offer.id}`}
-          className={styles["offer-link"]}
-        >
+        <Link key={offer.id} to={`/offers/${offer.id}`}>
           {!isSelected && (
             <Button
               variant="contained"
               color="success"
-              sx={{ marginTop: "10px" }}
-              className={`${styles["offer-button"]} ${
-                themeMode === "dark" ? styles["dark-mode"] : ""
-              }`}
+              sx={buttonStyles}
               onClick={handleClick}
             >
               VIEW JOB OFFER
@@ -180,26 +190,32 @@ const OfferCard: React.FC<OfferCardProps> = ({
           )}
         </Link>
         {isSelected && (
-          <Box className={styles["button-container"]}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "0px",
+            }}
+          >
             <Button
               variant="contained"
               color="error"
-              sx={{ marginTop: "10px" }}
-              className={`${styles["offer-button"]} ${
-                themeMode === "dark" ? styles["dark-mode"] : ""
-              }`}
+              sx={{
+                ...buttonStyles,
+                "&:hover": {
+                  color: "white",
+                },
+              }}
               onClick={handleClose}
             >
               CLOSE
             </Button>
+
             {isEmployee && (
               <Button
                 variant="contained"
-                color="primary"
-                sx={{ marginTop: "10px" }}
-                className={`${styles["offer-apply"]} ${
-                  themeMode === "dark" ? styles["dark-mode"] : ""
-                }`}
+                sx={buttonStyles}
                 onClick={handleApply}
               >
                 APPLY HERE
@@ -210,7 +226,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
       </CardContent>
       <ApplyingForAJobView
         isOpen={isApplicationModalOpen}
-        onClose={handleApplicationModal}
+        onClose={handleCloseApplicationModal}
         offerId={offerId}
       />
     </Card>

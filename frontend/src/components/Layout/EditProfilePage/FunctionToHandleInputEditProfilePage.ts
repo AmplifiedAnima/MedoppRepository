@@ -1,7 +1,7 @@
 import {
   EditProfileFormAction,
   EditProfileFormState,
-} from "../../../utlis/initialStatesForForms";
+} from "../../../utlis/Form Reducers/initialStatesForForms";
 
 export const handleInputForEditProfileForm = (
   state: EditProfileFormState,
