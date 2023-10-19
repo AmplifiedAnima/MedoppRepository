@@ -12,7 +12,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RequestWithUser } from '../user/user.interface';
 import { Offer } from 'src/offer/offer.entity';
 import JobApplication from './jobApplication.entity';
-import { Repository } from 'typeorm';
+import { ConflictException } from '@nestjs/common/exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
 import RoleGuard from 'src/auth/role.guard';
 import Role from 'src/user/role.enum';
@@ -21,7 +21,6 @@ import { UseInterceptors } from '@nestjs/common/decorators/core/use-interceptors
 import { UploadedFile } from '@nestjs/common';
 import { multerConfig } from '../fileUploadService/multerConfig';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
-import { File } from 'buffer';
 import { ApplicationToBeFetchedToFrontend } from './jobApplication.interface';
 
 @Controller('job-applications')
@@ -29,7 +28,6 @@ export class JobApplicationController {
   constructor(
     private readonly jobApplicationService: JobApplicationService,
     @InjectRepository(Offer)
-    private readonly offerRepository: Repository<Offer>,
     private readonly fileUploadService: FileUploadService,
   ) {}
 
@@ -69,7 +67,7 @@ export class JobApplicationController {
 
       if (cv) {
         if (!cv) {
-          throw new Error('CV file is required.');
+          throw new ConflictException('You need  to attach cv to apply for the offer.');
         }
         createJobApplicationDto.cvFileBuffer = cv.buffer;
         createJobApplicationDto.cvFileName = cv.originalname;
@@ -82,7 +80,7 @@ export class JobApplicationController {
         console.log('CV Buffer:', cv.buffer); // Log the buffer
         console.log('CV Original Name:', cv.originalname);
       }
-
+      
       console.log(request.user);
 
       return this.jobApplicationService.createJobApplication(

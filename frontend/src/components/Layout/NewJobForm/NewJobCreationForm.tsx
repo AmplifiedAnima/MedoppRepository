@@ -99,17 +99,12 @@ const NewJobCreationForm: React.FC = () => {
     console.log(lat, lng, location);
   };
 
-  useEffect(() => {
-    if (!isEmployer || !isLoggedIn) {
-      dispatch({
-        type: "SHOW_WARNING",
-        payload: "You are not authorized to be here!",
-      });
-      setTimeout(() => {
-        navigate("/");
-      }, 4500);
-    }
-  }, [isEmployer, dispatch, navigate]);
+  // useEffect(() => {
+  //   if (!isEmployer || !isLoggedIn) {
+  //     setTimeout(())
+  //     setTimeout(() => {}, 4500);
+  //   }
+  // }, [isEmployer, dispatch, navigate]);
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -393,9 +388,18 @@ const NewJobCreationForm: React.FC = () => {
             </Box>
           </>
         ) : (
-          <Typography variant="h5">
-            YOU ARE NOT ENTITLED TO COME HERE
-          </Typography>
+          <Box
+            sx={{
+              height: "670px",
+            }}
+          >
+            <Typography
+              variant="h2"
+              sx={{ color: themeMode === "dark" ? "white" : "black" }}
+            >
+              YOU ARE NOT AUTHORIZED TO BE HERE
+            </Typography>
+          </Box>
         )}
       </Container>
     </Box>

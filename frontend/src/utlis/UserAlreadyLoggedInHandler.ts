@@ -4,6 +4,7 @@ import { Buffer } from "buffer";
 
 export const UserAlreadyLoggedInHandler = () => {
   const {
+    isLoggedIn,
     setIsLoggedIn,
     setRoles,
     setUsername,
@@ -12,6 +13,7 @@ export const UserAlreadyLoggedInHandler = () => {
     setFirstName,
     setAddress,
     setCity,
+    setAvatarImage,
     setCv,
     setEmail,
   } = useContext(IsLoggedInContext);
@@ -19,20 +21,28 @@ export const UserAlreadyLoggedInHandler = () => {
   const loginToken = localStorage.getItem("token");
 
   useEffect(() => {
-    if (loginToken) {
+    if (loginToken && !isLoggedIn) {
       const tokenPayload = JSON.parse(
         Buffer.from(loginToken.split(".")[1], "base64").toString("utf-8")
       );
-      setUsername(tokenPayload.username);
-      setRoles(tokenPayload.roles);
-      setFirstName(tokenPayload.firstName);
-      setLastName(tokenPayload.lastName);
-      setPhoneNumber(tokenPayload.phoneNumber);
-      setEmail(tokenPayload.email);
-      setAddress(tokenPayload.address);
-      setCity(tokenPayload.city);
-      setCv(tokenPayload.cv);
-      setIsLoggedIn(true);
+      const expirationTime = tokenPayload.exp * 1000;
+      if (Date.now() < expirationTime) {
+        setUsername(tokenPayload.username);
+        setRoles(tokenPayload.roles);
+        setAvatarImage(tokenPayload.avatarImage);
+        setFirstName(tokenPayload.firstName);
+        setLastName(tokenPayload.lastName);
+        setPhoneNumber(tokenPayload.phoneNumber);
+        setEmail(tokenPayload.email);
+        setAddress(tokenPayload.address);
+        setCity(tokenPayload.city);
+        setCv(tokenPayload.cv);
+        setIsLoggedIn(true);
+      } else {
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+      }
+      return;
     }
-  }, [loginToken]);
+  }, [loginToken, !isLoggedIn]);
 };

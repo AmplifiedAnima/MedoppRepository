@@ -12,7 +12,7 @@ import { EditProfilePage } from "./components/Layout/EditProfilePage/EditProfile
 import { initialFilterState } from "./utlis/FilterContext";
 import NewJobCreationForm from "./components/Layout/NewJobForm/NewJobCreationForm";
 import { UserAlreadyLoggedInHandler } from "./utlis/UserAlreadyLoggedInHandler";
-import EmployersOffersView from "./components/Layout/EmployerOffersView";
+import EmployersOffersView from "./components/Layout/MyOffersView/EmployerOffersView";
 
 const App = () => {
   const [filteredOffers, setFilteredOffers] = useState<Offer[]>([]);
@@ -22,7 +22,8 @@ const App = () => {
   const mapRef = useRef(null);
   const { state: filterState, dispatch } = useFilterContext();
 
-  UserAlreadyLoggedInHandler();
+   UserAlreadyLoggedInHandler();
+
   const navigate = useNavigate();
 
   const fetchOffers = async (filterState: FilterState) => {
@@ -144,7 +145,7 @@ const App = () => {
               handleCloseOffer={handleCloseOffer}
               isMobile={isMobile}
               showOfferCard={showJobBoard}
-              selectedOffer={filterState.selectedOffer} // Pass the selected offer from filterState
+              selectedOffer={filterState.selectedOffer}
               handleToggleOfferCard={handleToggleJobBoard}
             />
           }

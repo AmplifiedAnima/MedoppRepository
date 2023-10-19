@@ -6,6 +6,7 @@ import { getInputPlaceholdersStyling } from "../../../styles/formStyling";
 
 interface EditProfileFormInputProps {
   onUserNameChange: (value: string) => void;
+  onCurrentPasswordChange: (value: string) =>void;
   onPasswordChange: (value: string) => void;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
@@ -13,18 +14,21 @@ interface EditProfileFormInputProps {
   onEmailChange: (value: string) => void;
   onAddressChange: (value: string) => void;
   onCityChange: (value: string) => void;
+  onSubmit: boolean;
   formState: EditProfileFormState;
 }
 
 export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
   onUserNameChange,
   onPasswordChange,
+  onCurrentPasswordChange,
   onFirstNameChange,
   onLastNameChange,
   onPhoneNumberChange,
   onEmailChange,
   onAddressChange,
   onCityChange,
+  onSubmit,
   formState,
 }) => {
   const { themeMode } = useContext(ThemeContext);
@@ -56,6 +60,21 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         value={formState.username}
         error={!!formState.errorMessages.username}
         helperText={formState.errorMessages.username}
+        disabled={onSubmit}
+      />
+        <TextField
+        label="Current password"
+        type='password'
+        fullWidth
+        variant="outlined"
+        margin="normal"
+        sx={inputPlaceholdersStyling}
+        onChange={(e) => onCurrentPasswordChange(e.target.value)}
+        onBlur={() => onCurrentPasswordChange(formState.currentPassword)}
+        value={formState.currentPassword}
+        error={!!formState.errorMessages.currentPassword}
+        helperText={formState.errorMessages.currentPassword}
+        disabled={onSubmit}
       />
       <TextField
         label="Password"
@@ -69,9 +88,10 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         value={formState.password}
         error={!!formState.errorMessages.password}
         helperText={formState.errorMessages.password}
+        disabled={onSubmit}
       />
      <TextField
-        label="Confirm Password"
+        label="Confirm password"
         fullWidth
         type="password"
         value={confirmPassword}
@@ -81,6 +101,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         onChange={(e) => handleConfirmPasswordChange(e.target.value)}
         error={passwordMatchError}
         helperText={passwordMatchError ? "Passwords do not match" : ""}
+        disabled={onSubmit}
       />
       <TextField
         label="First name"
@@ -93,6 +114,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         value={formState.firstName}
         error={!!formState.errorMessages.firstName}
         helperText={formState.errorMessages.firstName}
+        disabled={onSubmit}
       />
       <TextField
         label="Last name"
@@ -105,6 +127,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         value={formState.lastName}
         error={!!formState.errorMessages.lastName}
         helperText={formState.errorMessages.lastName}
+        disabled={onSubmit}
       />
       <TextField
         label="Phone Number"
@@ -117,6 +140,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         onBlur={() => onPhoneNumberChange(formState.phoneNumber)}
         error={!!formState.errorMessages.phoneNumber}
         helperText={formState.errorMessages.phoneNumber}
+        disabled={onSubmit}
       />
       <TextField
         label="Email"
@@ -129,6 +153,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         onBlur={() => onEmailChange(formState.email)}
         error={!!formState.errorMessages.email}
         helperText={formState.errorMessages.email}
+        disabled={onSubmit}
       />
       <TextField
         label="Address"
@@ -141,6 +166,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         onBlur={() => onAddressChange(formState.address)}
         error={!!formState.errorMessages.address}
         helperText={formState.errorMessages.address}
+        disabled={onSubmit}
       />
       <TextField
         label="City"
@@ -153,6 +179,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         onBlur={() => onCityChange(formState.city)}
         error={!!formState.errorMessages.city}
         helperText={formState.errorMessages.city}
+        disabled={onSubmit}
       />
     </>
   );

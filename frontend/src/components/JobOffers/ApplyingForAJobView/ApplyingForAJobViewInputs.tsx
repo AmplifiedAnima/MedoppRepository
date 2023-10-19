@@ -10,8 +10,8 @@ interface NewApplicationFormInputsProps {
   onEmailChange: (value: string) => void;
   onPhoneNumberChange: (value: string) => void;
   onCoverLetterChange: (value: string) => void;
-
   formState: ApplicationViewState; 
+  isSubmitted: boolean;
 }
 
 const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
@@ -21,6 +21,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
   onPhoneNumberChange,
   onCoverLetterChange,
   formState,
+  isSubmitted
 }) => {
   const { themeMode } = useContext(ThemeContext);
   const inputStyling = getInputPlaceholdersStyling(themeMode);
@@ -34,6 +35,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
         value={formState.firstName || ""}
         onChange={(e) => onFirstNameChange(e.target.value)}
         onBlur={() => onFirstNameChange(formState.firstName)}
+        disabled={isSubmitted}
       />
       <FormHelperText error>{formState.errorMessages.firstName}</FormHelperText>
 
@@ -44,6 +46,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
         value={formState.lastName || ""}
         onChange={(e) => onLastNameChange(e.target.value)}
         onBlur={() => onLastNameChange(formState.lastName)}
+        disabled={isSubmitted}
       />
       <FormHelperText error>{formState.errorMessages.lastName}</FormHelperText>
 
@@ -55,6 +58,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
         onChange={(e) => onEmailChange(e.target.value)}
         onBlur={() => onEmailChange(formState.email)}
         error={Boolean(formState.errorMessages.email)}
+        disabled={isSubmitted}
       />
       <FormHelperText error>{formState.errorMessages.email}</FormHelperText>
 
@@ -66,6 +70,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
         onChange={(e) => onPhoneNumberChange(e.target.value)}
         onBlur={() => onPhoneNumberChange(formState.phoneNumber)}
         error={Boolean(formState.errorMessages.phoneNumber)}
+        disabled={isSubmitted}
       />
       <FormHelperText error>
         {formState.errorMessages.phoneNumber}
@@ -80,6 +85,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
         onChange={(e) => onCoverLetterChange(e.target.value)}
         onBlur={() => onCoverLetterChange(formState.coverLetter)}
         error={Boolean(formState.errorMessages.coverLetter)}
+        disabled={isSubmitted}
       />
       <FormHelperText error>
         {formState.errorMessages.coverLetter}

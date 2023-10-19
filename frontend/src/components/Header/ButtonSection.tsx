@@ -19,8 +19,7 @@ import {
   DoctorIconDarkMode,
   ParamedicIconDarkMode,
 } from "../IconsIconFinder";
- import { ThemeContext } from "../../styles/ThemeProviderContext";
-import styles from "./ButtonSection.module.css";
+import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { useFilterContext } from "../../utlis/FilterContext";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
 import AlertLayout from "../../utlis/Alerts";
@@ -56,14 +55,14 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
     console.log(specialty);
 
     dispatch({
-      type: 'SHOW_SPECIALTY',
+      type: "SHOW_SPECIALTY",
       payload: `Selected specialty : ${specialty}`,
     });
 
     handleClose();
   };
 
-  useEffect(() => {}, []);
+  const isMobile = window.innerWidth > 768;
 
   return (
     <Box>
@@ -84,11 +83,11 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
           flexWrap: "wrap",
           justifyContent: "flex-start",
           alignItems: "center",
-          padding: "0px 20px",
-          gap: "12px",
+          padding: "0px 30px",
+          gap: "20px",
           borderRadius: "0px",
           overflowX: "auto",
-          width: "740px",
+          width: "768px",
           scrollbarWidth: "thick",
           scrollbarColor: "#1e2021",
         }}
@@ -166,7 +165,7 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
 
                     "&:hover": {
                       background: themeMode === "dark" ? "#2feb00" : "#001b45",
-                      color: themeMode ==='dark' ? 'black' : 'white'
+                      color: themeMode === "dark" ? "black" : "white",
                     },
                   }}
                 >

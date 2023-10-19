@@ -2,7 +2,7 @@ import {
   RegistrationFormAction,
   RegistrationFormState,
 } from "../../../utlis/Form Reducers/initialStatesForForms";
-
+import { formatFieldName } from "../../JobOffers/ApplyingForAJobView/FunctionToHandleInputJobApplication";
 export const handleInputForRegistrationForm = (
   state: RegistrationFormState,
   dispatch: React.Dispatch<RegistrationFormAction>,
@@ -12,6 +12,8 @@ export const handleInputForRegistrationForm = (
   regexPattern: RegExp,
   customErrorMessage?: string
 ) => {
+  const formattedFieldName = formatFieldName(fieldName)
+
   if (value.trim().length === 0) {
     dispatch({
       type: "UPDATE_FIELD",
@@ -22,19 +24,19 @@ export const handleInputForRegistrationForm = (
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} is required.`,
+      errorMessage: `${formattedFieldName} is required.`,
     });
   } else if (!value.trim()) {
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} is required.`,
+      errorMessage: `${formattedFieldName} is required.`,
     });
   } else if (value.length > maxLength) {
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} must not exceed ${maxLength} ${
+      errorMessage: `${formattedFieldName} must not exceed ${maxLength} ${
         fieldName === "phoneNumber" ? "numbers" : "characters"
       }`,
     });
@@ -42,13 +44,13 @@ export const handleInputForRegistrationForm = (
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} should only contain numbers.`,
+      errorMessage: `${formattedFieldName} should only contain numbers.`,
     });
   } else if (regexPattern.test(value)) {
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} should only contain letters, numbers, and spaces.`,
+      errorMessage: `${formattedFieldName} should only contain letters, numbers, and spaces.`,
     });
   } else {
     dispatch({
@@ -69,12 +71,13 @@ export const handleSelectFieldForRegistrationForm = (
   dispatch: React.Dispatch<RegistrationFormAction>,
   fieldName: keyof RegistrationFormState,
   value: string,
-  customErrorMessage?: string // Add a custom error message parameter
+  customErrorMessage?: string 
 ) => {
+  const formattedFieldName = formatFieldName(fieldName)
   if (!value) {
     const errorMessage = customErrorMessage
       ? customErrorMessage // Use the custom error message if provided
-      : `${fieldName} is required.`; // Otherwise, use the default error message
+      : `${formattedFieldName} is required.`; // Otherwise, use the default error message
 
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",

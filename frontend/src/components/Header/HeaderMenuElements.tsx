@@ -1,32 +1,77 @@
 import React, { useContext, useState } from "react";
-import { Typography, Button, Menu, MenuItem, Switch } from "@mui/material";
-import { CaduceusIcon, CaduceusIconDarkMode } from "../IconsIconFinder";
+import { Button, Switch } from "@mui/material";
 import { ThemeContext } from "../../styles/ThemeProviderContext";
-import styles from "./Header.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import caduceus_blue from "../../static/IconsMedopp/CADUCEUS_BLUE.png";
+import caduceus_green from "../../static/IconsMedopp/CADUCEUS_GREEN.png";
+import PowerIcon1Green from "./PowerIcon1Green.png";
+import PowerIcon2Blue from "./PowerIcon2Blue.png";
+import {
+  ProfileIcon,
+  ProfileIconDarkMode
+} from "../IconsIconFinder";
+import { IconButton } from "@mui/material";
+
+export const IconButtons = (
+  handleProfileToggle: () => void,
+  handleLoginModalOpen: () => void,
+  imageStyles: {},
+  isLoggedIn: boolean,
+  themeMode: string
+) => (
+  <IconButton
+    color="inherit"
+    onClick={isLoggedIn ? handleProfileToggle : handleLoginModalOpen}
+    sx={{ paddingLeft: "10px" }}
+  >
+    {isLoggedIn ? (
+      themeMode === "dark" ? (
+        <ProfileIconDarkMode />
+      ) : (
+        <ProfileIcon />
+      )
+    ) : themeMode === "dark" ? (
+      <img src={PowerIcon1Green} alt="PowerIcon" style={imageStyles} />
+    ) : (
+      <img src={PowerIcon2Blue} alt="PowerIcon" style={imageStyles} />
+    )}
+  </IconButton>
+);
 
 export const HeaderMenuItem: React.FC = () => {
   const { themeMode } = useContext(ThemeContext);
+  const isMobile = window.innerWidth < 768;
 
   const navigate = useNavigate();
 
   const handleNavigation = () => {
     navigate("/");
   };
+  const iconHeightAndWeight = isMobile ? "38px" : "45px";
 
   return (
     <>
-      <Typography variant="h6">
-        <Button
-          color="inherit"
-          startIcon={
-            themeMode === "dark" ? <CaduceusIconDarkMode /> : <CaduceusIcon />
-          }
-          onClick={handleNavigation}
-        >
-          MedOpp
-        </Button>
-      </Typography>
+      <Button
+        color="inherit"
+        startIcon={
+          themeMode === "dark" ? (
+            <img
+              src={caduceus_green}
+              alt="Icon"
+              width={iconHeightAndWeight}
+              height={iconHeightAndWeight}
+            />
+          ) : (
+            <img
+              src={caduceus_blue}
+              alt="Icon"
+              width={iconHeightAndWeight}
+              height={iconHeightAndWeight}
+            />
+          )
+        }
+        onClick={handleNavigation}
+      />
     </>
   );
 };
@@ -51,11 +96,18 @@ export const Switcher: React.FC = () => {
           transition: "background-color 1s",
           minWidth: "10px",
           minHeight: "10px",
+          "@media (max-width: 768px)": {
+            minWidth: "5px",
+            minHeight: "5px",
+          },
           borderRadius: "12px",
           "&.MuiSwitch-root": {
             position: "relative",
             height: "25px",
             marginRight: "10px",
+            "@media (max-width: 768px)": {
+              marginRight: "0px",
+            },
           },
           "& .MuiSwitch-thumb": {
             minWidth: "0px",
@@ -63,15 +115,6 @@ export const Switcher: React.FC = () => {
             backgroundColor: `${themeMode === "dark" ? "white" : "white"}`,
             border: `1.5px solid ${themeMode === "dark" ? "black" : "white"}`,
           },
-          // "&.MuiSwitch-track": {
-          //   height: "10px",
-          // },
-          // "@media (max-width: 600px)": {
-          //   width: "40px",
-          //   marginRight: "0px",
-          //   marginLeft: "25px",
-          //   // Adjust ot
-          // },
         }}
       />
     </>

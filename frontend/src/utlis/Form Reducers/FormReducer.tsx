@@ -247,6 +247,7 @@ export const EditProfileFormReducer = (
       const clearedErrorMessagesEditProfile = {
         username: "",
         password: "",
+        currentPassword:'',
         firstName: "",
         lastName: "",
         phoneNumber: "",

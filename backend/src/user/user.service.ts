@@ -11,7 +11,7 @@ import { Hash } from 'src/utils/hash.util';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
 import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
-
+import { ConflictException } from '@nestjs/common/exceptions';
 @Injectable()
 export class UsersService {
   private s3Client: S3Client;
@@ -38,26 +38,31 @@ export class UsersService {
   async getByUsername(username: string): Promise<User> {
     return this.userRepository.findOne({ where: { username } });
   }
-
   async createUser(signupDto: SignupDto): Promise<User> {
     const user = await this.getByUsername(signupDto.username);
 
     if (user) {
-      throw new NotAcceptableException('Username already exists.');
+      throw new ConflictException('Username already exists.');
+    }
+    if (signupDto.cvFileBuffer) {
+      signupDto.cv = await this.fileUploadService.uploadFileCv(
+        signupDto.cvFileName,
+        signupDto.cvFileBuffer,
+      );
+    } else {
+      signupDto.cv = '';
     }
 
-    const cvFilePath = await this.fileUploadService.uploadFileCv(
-      signupDto.cvFileName,
-      signupDto.cvFileBuffer,
-    );
-
-    const avatarImageFilePath = await this.fileUploadService.uploadImage(
-      signupDto.avatarImageName,
-      signupDto.avatarImageFileBuffer,
-    );
-
+    if (signupDto.avatarImageFileBuffer) {
+      signupDto.avatarImage = await this.fileUploadService.uploadImage(
+        signupDto.avatarImageName,
+        signupDto.avatarImageFileBuffer,
+      );
+    } else {
+      signupDto.avatarImage = '';
+    }
     const newUser = this.userRepository.create({
-      avatarImage: avatarImageFilePath,
+      avatarImage: signupDto.avatarImage,
       username: signupDto.username,
       firstName: signupDto.firstName,
       lastName: signupDto.lastName,
@@ -65,7 +70,7 @@ export class UsersService {
       phoneNumber: signupDto.phoneNumber,
       email: signupDto.email,
       city: signupDto.city,
-      cv: cvFilePath,
+      cv: signupDto.cv,
       address: signupDto.address,
       roles: [signupDto.role],
     });
@@ -74,9 +79,11 @@ export class UsersService {
 
     return userToDatabase;
   }
+
   async updateUserInfo(
     userId: string,
     updatedInfo: Partial<User>,
+    files: any,
   ): Promise<User> {
     const user = await this.get(userId);
 
@@ -85,7 +92,7 @@ export class UsersService {
     }
 
     if (updatedInfo.username === '') {
-      throw new NotAcceptableException('Username cannot be empty');
+      throw new Error('Username cannot be empty');
     }
 
     if (updatedInfo.username && updatedInfo.username !== user.username) {
@@ -93,18 +100,33 @@ export class UsersService {
         updatedInfo.username,
       );
       if (existingUserWithUsername) {
-        throw new NotAcceptableException('Username already exists');
+        throw new Error('Username already exists');
       }
     }
 
     if (updatedInfo.password === '') {
-      throw new NotAcceptableException('Password cannot be empty');
+      throw new Error('Password cannot be empty');
+    }
+
+    if (files.cv) {
+      updatedInfo.cv = await this.fileUploadService.uploadFileCv(
+        updatedInfo.cvFileName,
+        updatedInfo.cvFileBuffer,
+      );
+    }
+
+    if (files.avatarImage) {
+      updatedInfo.avatarImage = await this.fileUploadService.uploadImage(
+        updatedInfo.avatarImageName,
+        updatedInfo.avatarImageFileBuffer,
+      );
     }
 
     if (updatedInfo.password !== null) {
       updatedInfo.password = Hash.make(updatedInfo.password);
     }
-    console.log(updatedInfo)
+    console.log(updatedInfo);
+
     Object.assign(user, updatedInfo);
 
     return await this.userRepository.save(user);

@@ -11,7 +11,7 @@ import { getButtonStyles } from "../../styles/buttonStyling";
 
 interface OfferCardProps {
   offer: Offer;
-  onOfferClick: (offer: Offer) => void;
+
   onCloseOffer: () => void;
   isSelected: boolean;
   offerId: string;
@@ -19,7 +19,7 @@ interface OfferCardProps {
 
 const OfferCard: React.FC<OfferCardProps> = ({
   offer,
-  onOfferClick,
+
   onCloseOffer,
   isSelected,
   offerId,
@@ -29,7 +29,6 @@ const OfferCard: React.FC<OfferCardProps> = ({
     company,
     location,
     salary,
-    description,
     typeOfEmployment,
     specialties,
   } = offer;
@@ -49,20 +48,21 @@ const OfferCard: React.FC<OfferCardProps> = ({
   };
 
   const handleClick = () => {
-    onOfferClick(offer);
+
+    console.log(offer.id)
   };
 
   const handleClose = () => {
     onCloseOffer();
   };
-
+ 
   const handleCloseApplicationModal = () => {
     setIsApplicationModalOpen(false);
   };
 
   useEffect(() => {
     alertDispatch({ type: "CLEAR_ALERTS" });
-  }, [isApplicationModalOpen, alertDispatch]);
+  }, [isApplicationModalOpen]);
 
   return (
     <Card
@@ -71,8 +71,8 @@ const OfferCard: React.FC<OfferCardProps> = ({
         borderRadius: "8px",
         backgroundColor:
           themeMode === "dark"
-            ? "rgba(209, 233, 246, 0.05)"
-            : "rgba(209, 233, 246, 0.3)",
+            ? "rgba(0,0,0, 1)"
+            : "rgba(209, 233, 246, 0.1)",
         display: "grid",
         width: "auto",
         position: "relative",
@@ -88,7 +88,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               color: "#ffffff",
               paddingLeft: "0px",
               "@media (max-width: 768px)": {
-                fontSize: "16px",
+                fontSize: "15px"
               },
             }}
           >
@@ -101,7 +101,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               color: "#ffffff",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "14px",
+                fontSize: "13px",
               },
             }}
           >
@@ -113,7 +113,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               color: "#ffffff",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "14px",
+                fontSize: "13px",
               },
             }}
           >
@@ -130,7 +130,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               fontSize: "17px",
               fontWeight: "bold",
               "@media (max-width: 768px)": {
-                fontSize: "15px",
+                fontSize: "14px",
               },
             }}
           >
@@ -147,7 +147,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               padding: "8px 2px",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "14px",
+                fontSize: "13px",
               },
             }}
           >
@@ -162,7 +162,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               marginTop: "12px",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "14px",
+                fontSize: "13px",
               },
             }}
           >

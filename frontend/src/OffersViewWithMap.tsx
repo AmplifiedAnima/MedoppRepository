@@ -45,7 +45,6 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
   showJobBoard,
   handleToggleJobBoard,
   filteredOffers,
-  handleOfferClick,
   handleOfferClose,
   mapComponent,
 }) => {
@@ -59,7 +58,7 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
     <OfferCard
       key={offer.id}
       offer={offer}
-      onOfferClick={handleOfferClick}
+
       onCloseOffer={handleOfferClose}
       isSelected={false}
       offerId={filterState.selectedOffer?.id || ""}
@@ -81,7 +80,11 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
         </Box>
       )}
       {isMobile ? (
-        <Box>
+        <Box sx={{
+          "@media (max-width: 768px)": {
+            height: "auto"
+          },
+        }}>
           {showJobBoard ? (
             <Box sx={offersListStyle}>{offerCardVariable}</Box>
           ) : (
@@ -97,10 +100,10 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
                 : "linear-gradient(180deg, #001b45 10%, #476bad 99%)",
           }}
         >
-          <LeftColumn sx={offersListStyle}>
+          <LeftColumn sx={offersListStyle} >
             <>{offerCardVariable}</>
           </LeftColumn>
-          <RightColumn>{mapComponent}</RightColumn>
+          <RightColumn> {mapComponent} </RightColumn>
         </FlexContainer>
       )}
       

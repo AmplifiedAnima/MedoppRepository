@@ -16,6 +16,9 @@ export class EditProfileDto {
   password: string;
 
   @IsString()
+  currentPassword: string;
+
+  @IsString()
   avatarImage: string;
 
   avatarImageFileBuffer: Buffer;
@@ -30,7 +33,7 @@ export class EditProfileDto {
   lastName: string;
 
   @IsString()
-  email?: string;
+  email: string;
 
   @IsString()
   cv: string;

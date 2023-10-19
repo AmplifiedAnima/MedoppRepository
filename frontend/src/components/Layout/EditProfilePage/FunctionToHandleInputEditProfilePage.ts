@@ -2,7 +2,9 @@ import {
   EditProfileFormAction,
   EditProfileFormState,
 } from "../../../utlis/Form Reducers/initialStatesForForms";
-
+import {
+  formatFieldName,
+} from "../../JobOffers/ApplyingForAJobView/FunctionToHandleInputJobApplication";
 export const handleInputForEditProfileForm = (
   state: EditProfileFormState,
   dispatch: React.Dispatch<EditProfileFormAction>,
@@ -12,6 +14,8 @@ export const handleInputForEditProfileForm = (
   regexPattern: RegExp,
   customErrorMessage?: string
 ) => {
+  const formattedFieldName = formatFieldName(fieldName);
+
   if (value === null || value.trim().length === 0) {
     dispatch({
       type: "UPDATE_FIELD",
@@ -22,25 +26,25 @@ export const handleInputForEditProfileForm = (
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} is required.`,
+      errorMessage: `${formattedFieldName} is required.`,
     });
   } else if (value.length > maxLength) {
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} must not exceed ${maxLength} characters`,
+      errorMessage: `${formattedFieldName} must not exceed ${maxLength} characters`,
     });
   } else if (fieldName === "phoneNumber" && !/^\d+$/.test(value)) {
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} should only contain numbers.`,
+      errorMessage: `${formattedFieldName} should only contain numbers.`,
     });
   } else if (regexPattern.test(value)) {
     dispatch({
       type: "UPDATE_ERROR_MESSAGE",
       fieldName: fieldName,
-      errorMessage: `${fieldName} should only contain letters, numbers, and spaces.`,
+      errorMessage: `${formattedFieldName} should only contain letters, numbers, and spaces.`,
     });
   } else {
     dispatch({

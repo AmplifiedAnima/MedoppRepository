@@ -133,6 +133,7 @@ export const initialApplicationViewState: ApplicationViewState = {
 export interface EditProfileFormState {
   username: string;
   password: string;
+  currentPassword: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -143,6 +144,7 @@ export interface EditProfileFormState {
   errorMessages: {
     username: string;
     password: string;
+    currentPassword: string,
     firstName: string;
     lastName: string;
     phoneNumber: string;
@@ -156,6 +158,7 @@ export interface EditProfileFormState {
 export const initialEditProfileState: EditProfileFormState = {
   username: "",
   password: "",
+  currentPassword: '',
   firstName: "",
   lastName: "",
   phoneNumber: "",
@@ -166,6 +169,7 @@ export const initialEditProfileState: EditProfileFormState = {
   errorMessages: {
     username: "",
     password:"",
+    currentPassword: '',
     firstName: "",
     lastName: "",
     phoneNumber: "",

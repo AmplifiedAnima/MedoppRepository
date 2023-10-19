@@ -38,10 +38,17 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
   );
 
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-
-  const { isLoggedIn, roles, firstName, lastName, email, phoneNumber, cv: CvFilePath } =
-    useContext(IsLoggedInContext); // Get the user's login status from the context
-  const { themeMode } = useContext(ThemeContext); // Get the themeMode from the context
+  const [IsSubmitted, setIsSubmitted] = useState(false);
+  const {
+    isLoggedIn,
+    roles,
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    cv: CvFilePath,
+  } = useContext(IsLoggedInContext);
+  const { themeMode } = useContext(ThemeContext);
   const [hideButton, setHideButton] = useState(false);
 
   const buttonStyling = getButtonStyling(themeMode);
@@ -83,6 +90,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
     formData.append("email", formState.email || "");
     formData.append("phoneNumber", formState.phoneNumber || "");
     formData.append("coverLetter", formState.coverLetter || "");
+    formData.append("offerId", offerId);
 
     if (selectedFiles.length > 0) {
       formData.append("cv", selectedFiles[0]);
@@ -96,7 +104,8 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
       formState.email,
       formState.phoneNumber,
       formState.coverLetter,
-      CvFilePath
+      CvFilePath,
+      offerId
     );
     try {
       const token = localStorage.getItem("token");
@@ -114,22 +123,27 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
           type: "SHOW_SUCCESS",
           payload: `Application went forward`,
         });
+
+        setIsSubmitted(true);
         setHideButton(true);
         setTimeout(() => {
           onClose();
-        }, 1500);
+          navigate("/");
+        }, 2500);
       }
 
       if (!response.ok) {
+        const errorMessage = await response.json();
+
         dispatch({
           type: "SHOW_ERROR",
-          payload: `Something went wrong while sending the application!`,
+          payload: `${errorMessage.message}`,
         });
       }
     } catch (error) {
       dispatch({
         type: "SHOW_ERROR",
-        payload: "Please make sure the input you put in is valid",
+        payload: ` Error : ${error}`,
       });
       console.log("Error occurred while submitting the application:", error);
     }
@@ -153,15 +167,9 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
     ...modalStyling,
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setHideButton(false);
-    }, 1500);
-  }, [isOpen]);
-
   return (
     <>
-      <Dialog open={isOpen} onClose={onClose} maxWidth='md'>
+      <Dialog open={isOpen} onClose={onClose} maxWidth="md">
         <DialogTitle
           sx={{
             backgroundColor: themeMode === "dark" ? "black" : "white",
@@ -209,7 +217,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                     formDispatch,
                     "lastName",
                     value,
-                    30, 
+                    30,
                     /[^a-zA-Z0-9\s/-żźćńó]/,
                     formState.errorMessages.lastName
                   )
@@ -221,7 +229,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                     "email",
                     value,
                     40,
-                    /[^a-zA-Z0-9\s@._/-]/, 
+                    /[^a-zA-Z0-9\s@._/-]/,
                     formState.errorMessages.email
                   )
                 }
@@ -248,11 +256,16 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                   )
                 }
                 formState={formState}
+                isSubmitted={IsSubmitted}
               />
               {CvFilePath ? (
                 <Box>
                   <Typography>Uploaded CV:</Typography>
-                  <Link href={CvFilePath} target="_blank" rel="noopener noreferrer">
+                  <Link
+                    href={CvFilePath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     View CV
                   </Link>
                 </Box>
@@ -284,13 +297,18 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
                   variant="contained"
                   onClick={handleSubmit}
                   sx={{ ...buttonStyling, width: "auto" }}
+                  disabled={IsSubmitted}
                 >
                   Apply
                 </Button>
               ) : (
                 <></>
               )}
-              <Button onClick={onClose} sx={cancelButtonStyling}>
+              <Button
+                onClick={onClose}
+                sx={cancelButtonStyling}
+                disabled={IsSubmitted}
+              >
                 Cancel
               </Button>
             </>

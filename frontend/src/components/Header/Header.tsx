@@ -7,26 +7,29 @@ import specialities from "../Specialities";
 import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Switcher } from "./HeaderMenuElements";
 import { HeaderMenuItem } from "./HeaderMenuElements";
-import {
-  ProfileIcon,
-  ProfileIconDarkMode,
-  filterWhiteIcon,
-  filterGreenIcon,
-} from "../IconsIconFinder";
-import PowerIcon1Green from "./PowerIcon1Green.png";
-import PowerIcon2Blue from "./PowerIcon2Blue.png";
+import { filterWhiteIcon, filterGreenIcon } from "../IconsIconFinder";
 import FilterModal from "../Layout/FilterModal";
 import { useSearchHook } from "../Layout/SearchFunctionalityHook";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
 import LoginModal from "../Layout/LoginModal";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
 import AlertLayout from "../../utlis/Alerts";
+import filterWhite from "../../static/IconsMedopp/FILTER_WHITE.png";
+import filterGreen from "../../static/IconsMedopp/FILTER_GREEN.png";
+import { IconButtons } from "./HeaderMenuElements";
 
 const Header: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState<boolean>(false);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  const imageStyles = {
+    width: isMobile ? "30px" : "40px",
+    height: isMobile ? "30px" : "40px",
+  };
+
+  const filterIconHeightAndWeight = isMobile ? "27px" : "34px";
 
   const { isLoggedIn, setIsLoggedIn, isLoginModalOpen, setIsLoginModalOpen } =
     useContext(IsLoggedInContext);
@@ -91,27 +94,39 @@ const Header: React.FC = () => {
   return (
     <>
       <style>
-        {
-        `@media (min-width: 1480px) {
+        {`@media (min-width: 1480px) {
           ::-webkit-scrollbar {
-            display: none;}}`
-        }
+            display: none;}}`}
       </style>
       <AppBar position="static">
         <Toolbar
           sx={{
             backgroundColor: themeMode === "dark" ? "#000000" : "#001b45",
             color: "#ffffff",
-            padding: "0px 20px",
+            padding: isMobile ? "5px 10px" : "2px 20px",
             margin: "0px",
           }}
         >
           <HeaderMenuItem />
-          <Box sx={{ padding: "0 2px" }} />
-          <IconButton color="inherit" onClick={handleFilterModalOpen}>
-            {themeMode === "dark" ? filterGreenIcon() : filterWhiteIcon()}
+
+          <IconButton onClick={handleFilterModalOpen}>
+            {themeMode === "light" ? (
+              <img
+                src={filterWhite}
+                alt="Icon"
+                width={filterIconHeightAndWeight}
+                height={filterIconHeightAndWeight}
+              />
+            ) : (
+              <img
+                src={filterGreen}
+                alt="Icon"
+                width={filterIconHeightAndWeight}
+                height={filterIconHeightAndWeight}
+              />
+            )}
           </IconButton>
-          <Box sx={{ padding: "0 6px" }} />
+          <Box sx={{ padding: isMobile ? "0 2px" : "0 6px" }} />
           <SearchBar
             onHandleSearchSubmit={handleSearchSubmit}
             onHandleInputChange={handleInputChange}
@@ -132,31 +147,13 @@ const Header: React.FC = () => {
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Switcher />
-          <IconButton
-            color="inherit"
-            onClick={isLoggedIn ? handleProfileToggle : handleLoginModalOpen}
-            sx={{ paddingLeft: "10px" }}
-          >
-            {isLoggedIn ? (
-              themeMode === "dark" ? (
-                <ProfileIconDarkMode />
-              ) : (
-                <ProfileIcon />
-              )
-            ) : themeMode === "dark" ? (
-              <img
-                src={PowerIcon1Green}
-                alt="PowerIcon"
-                style={{ width: "40px", height: "40px" }}
-              />
-            ) : (
-              <img
-                src={PowerIcon2Blue}
-                alt="PowerIcon"
-                style={{ width: "40px", height: "40px" }}
-              />
-            )}
-          </IconButton>
+          {IconButtons(
+            handleProfileToggle,
+            handleLoginModalOpen,
+            imageStyles,
+            isLoggedIn,
+            themeMode
+          )}
         </Toolbar>
       </AppBar>
       <Dashboard

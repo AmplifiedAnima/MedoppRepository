@@ -8,6 +8,10 @@
   transform: translateX(-0%);
   z-index: 1;
 }
+@media (max-width: 768px) {
+  .container {
+    bottom:0%;
+    right: 40%;}}
 
 .button {
   cursor: pointer;

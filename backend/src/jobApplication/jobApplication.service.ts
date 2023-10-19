@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import JobApplication from './jobApplication.entity';
@@ -92,11 +92,22 @@ export class JobApplicationService {
     user: User,
   ): Promise<JobApplication> {
     console.log(user);
+
     const offerId = createJobApplicationDto.offerId;
     const offer = await this.offerRepository.findOne({
       where: { id: offerId },
     });
-    if (this.jobApplicationRepository.find({})) {
+
+    console.log(offer, offerId);
+    const existingJobApplication = await this.jobApplicationRepository.findOne({
+      where: {
+        user: { id: user.id },
+        offer: { id: offerId },
+      },
+    });
+
+    if (existingJobApplication) {
+      throw new ConflictException('You have already applied for this job offer.');
     }
     let cvFilePath = createJobApplicationDto.cvFilePath;
 

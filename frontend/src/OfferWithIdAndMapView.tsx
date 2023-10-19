@@ -41,7 +41,6 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
       onCloseOffer={handleCloseOffer}
       isSelected={true}
       offerId={selectedOffer.id}
-      onOfferClick={() => {}}
     />
   ) : null;
   

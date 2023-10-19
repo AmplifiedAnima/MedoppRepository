@@ -118,11 +118,14 @@ export const EditProfilePage = () => {
     formData.append("username", formState.username);
     formData.append("firstName", formState.firstName);
     formData.append("lastName", formState.lastName);
+    formData.append("currentPassword", formState.currentPassword);
     formData.append("password", formState.password);
     formData.append("email", formState.email);
     formData.append("phoneNumber", formState.phoneNumber);
     formData.append("address", formState.address);
     formData.append("city", formState.city);
+
+    console.log(`current password `,formState.currentPassword ,`password`, formState.password)
 
     if (selectedFilesCv.length > 0) {
       formData.append("cv", selectedFilesCv[0]);
@@ -156,6 +159,8 @@ export const EditProfilePage = () => {
         setFirstName(data.firstName);
         setLastName(data.lastName);
         setAddress(data.address);
+        setPhoneNumber(data.phoneNumber);
+        setEmail(data.email);
         setCity(data.city);
         setCv(data.cv);
 
@@ -202,23 +207,29 @@ export const EditProfilePage = () => {
         {isLoggedIn ? (
           <Paper elevation={3} sx={{ ...paperStyling, padding: "20px 40px" }}>
             <form onSubmit={handleProfileUpdate}>
-              <Typography variant="body1">Current image</Typography>
-              <br />
-              <Avatar
-                src={avatarImage}
-                sx={{ width: "60px", height: "60px" }}
-                alt="other image"
-              />
-              <Typography
-                variant="h5"
-                sx={{
-                  color: themeMode === "dark" ? "#2feb00" : "black",
-                }}
-              >
-                Change avatar
-              </Typography>
-              <br></br>
-              <MyDropzoneForAvatarImage setSelectedFiles={setSelectedImage} />
+              {!isSubmitted && (
+                <>
+                  <Typography variant="body1">Current image</Typography>
+                  <br />
+                  <Avatar
+                    src={avatarImage}
+                    sx={{ width: "60px", height: "60px" }}
+                    alt="other image"
+                  />
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: themeMode === "dark" ? "#2feb00" : "black",
+                    }}
+                  >
+                    Change avatar
+                  </Typography>
+                  <br></br>
+                  <MyDropzoneForAvatarImage
+                    setSelectedFiles={setSelectedImage}
+                  />
+                </>
+              )}
               <br></br>
               <EditProfileFormInput
                 onUserNameChange={(value) =>
@@ -246,6 +257,16 @@ export const EditProfilePage = () => {
                     formState,
                     formDispatch,
                     "lastName",
+                    value,
+                    25,
+                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                  )
+                }
+                onCurrentPasswordChange={(value) =>
+                  handleInputForEditProfileForm(
+                    formState,
+                    formDispatch,
+                    "currentPassword",
                     value,
                     25,
                     /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
@@ -304,58 +325,66 @@ export const EditProfilePage = () => {
                     formState.errorMessages.address
                   )
                 }
+                onSubmit={isSubmitted}
                 formState={formState}
               />
               <br></br>
               <br></br>
-              <Typography
-                variant="h5"
-                sx={{
-                  color: themeMode === "dark" ? "#2feb00" : "black",
-                }}
-              >
-                Upload CV
-              </Typography>
-              <MyDropzoneForCV setSelectedFiles={setSelectedFilesCv} />
-              <br></br>
-              <Typography variant="body1">
-                <Link
-                  href={cv}
-                  color="inherit"
-                  underline="hover"
-                  sx={{ color: themeMode === "dark" ? "#2feb00" : "black" }}
-                >
-                  Current CV
-                </Link>
-              </Typography>
-              {!isSubmitted ? (
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    ...buttonStyling,
-                    border: themeMode === "dark" ? "white 1px solid" : "",
-                    marginBottom: "20px",
-                  }}
-                  fullWidth
-                >
-                  Update Profile
-                </Button>
-              ) : (
-                <>Profile changed</>
+              {!isSubmitted && (
+                <>
+                  <Typography
+                    variant="h5"
+                    sx={{
+                      color: themeMode === "dark" ? "#2feb00" : "black",
+                    }}
+                  >
+                    Upload CV
+                  </Typography>
+                  <MyDropzoneForCV setSelectedFiles={setSelectedFilesCv} />
+                  <br></br>
+                  {cv !== "" ? (
+                    <Typography variant="body1">
+                      <Link
+                        href={cv}
+                        color="inherit"
+                        underline="hover"
+                        sx={{
+                          color: themeMode === "dark" ? "#2feb00" : "black",
+                        }}
+                      >
+                        Current CV
+                      </Link>
+                    </Typography>
+                  ) : (
+                    "no Cv uploaded"
+                  )}
+                </>
               )}
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  ...buttonStyling,
+                  border: themeMode === "dark" ? "white 1px solid" : "",
+                  marginBottom: "20px",
+                }}
+                fullWidth
+                disabled={isSubmitted}
+              >
+                Update Profile
+              </Button>
             </form>
           </Paper>
         ) : (
-          <Box sx={{height:'634px'}}>
-          <Typography
-            variant="h4"
-            sx={{
-              color: themeMode === "dark" ? "#2feb00" : "white",
-            }}
-          >
-            Please login to acces this part of website{" "}
-          </Typography>
+          <Box sx={{ height: "634px" }}>
+            <Typography
+              variant="h4"
+              sx={{
+                color: themeMode === "dark" ? "#2feb00" : "white",
+              }}
+            >
+              Please login to access this part of website{" "}
+            </Typography>
           </Box>
         )}
       </Container>

@@ -19,6 +19,7 @@ interface NewRegistrationFormInputProps {
   onPhoneNumberChange: (value: string) => void;
   onAddressChange: (value: string) => void;
   onRoleChange: (value: string) => void;
+  onSubmit: boolean,
   formState: RegistrationFormState;
 }
 
@@ -36,6 +37,7 @@ export const NewRegistrationFormInput: React.FC<
   onAddressChange,
   onRoleChange,
   formState,
+  onSubmit
 }) => {
   const { themeMode } = useContext(ThemeContext);
   const inputPlaceholdersStyling = getInputPlaceholdersStyling(themeMode);
@@ -71,6 +73,7 @@ export const NewRegistrationFormInput: React.FC<
         value={formState.username}
         error={!!formState.errorMessages.username}
         helperText={formState.errorMessages.username}
+        disabled={onSubmit}
       />
       <TextField
         label="First name"
@@ -83,6 +86,7 @@ export const NewRegistrationFormInput: React.FC<
         value={formState.firstName}
         error={!!formState.errorMessages.firstName}
         helperText={formState.errorMessages.firstName}
+        disabled={onSubmit}
       />
       <TextField
         label="Last name"
@@ -95,6 +99,7 @@ export const NewRegistrationFormInput: React.FC<
         value={formState.lastName}
         error={!!formState.errorMessages.lastName}
         helperText={formState.errorMessages.lastName}
+        disabled={onSubmit}
       />
       <TextField
         label="Password"
@@ -108,6 +113,7 @@ export const NewRegistrationFormInput: React.FC<
         onBlur={() => onPasswordChange(formState.password)}
         error={!!formState.errorMessages.password}
         helperText={formState.errorMessages.password}
+        disabled={onSubmit}
       />
       <TextField
         label="Confirm Password"
@@ -120,6 +126,7 @@ export const NewRegistrationFormInput: React.FC<
         onChange={(e) => handleConfirmPasswordChange(e.target.value)}
         error={passwordMatchError}
         helperText={passwordMatchError ? "Passwords do not match" : ""}
+        disabled={onSubmit}
       />
 
       <TextField
@@ -133,6 +140,7 @@ export const NewRegistrationFormInput: React.FC<
         onBlur={() => onPhoneNumberChange(formState.phoneNumber)}
         error={!!formState.errorMessages.phoneNumber}
         helperText={formState.errorMessages.phoneNumber}
+        disabled={onSubmit}
       />
 
       <TextField
@@ -146,6 +154,7 @@ export const NewRegistrationFormInput: React.FC<
         onBlur={() => onEmailChange(formState.email)}
         error={!!formState.errorMessages.email}
         helperText={formState.errorMessages.email}
+        disabled={onSubmit}
       />
 
       <TextField
@@ -159,6 +168,7 @@ export const NewRegistrationFormInput: React.FC<
         onBlur={() => onAddressChange(formState.address)}
         error={!!formState.errorMessages.address}
         helperText={formState.errorMessages.address}
+        disabled={onSubmit}
       />
 
       <TextField
@@ -172,6 +182,7 @@ export const NewRegistrationFormInput: React.FC<
         onBlur={() => onCitychange(formState.city)}
         error={!!formState.errorMessages.city}
         helperText={formState.errorMessages.city}
+        disabled={onSubmit}
       />
       <TextField
         select
@@ -185,6 +196,7 @@ export const NewRegistrationFormInput: React.FC<
         sx={inputPlaceholdersStyling}
         error={!!formState.errorMessages.role}
         helperText={formState.errorMessages.role}
+        disabled={onSubmit}
       >
         <MenuItem value="Employee"> Employee</MenuItem>
         <MenuItem value="Employer"> Employer</MenuItem>

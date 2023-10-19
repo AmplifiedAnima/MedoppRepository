@@ -290,7 +290,7 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
                             color="inherit"
                             underline="hover"
                           >
-                            Check offer
+                            {application.offerId}
                           </Link>
                         </Typography>
                       </TableCell>

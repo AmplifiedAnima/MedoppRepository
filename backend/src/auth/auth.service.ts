@@ -19,6 +19,14 @@ export class AuthService {
         username: user.username,
         id: user.id,
         roles: user.roles,
+        avatarImage: user.avatarImage,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        email: user.email,
+        address: user.address,
+        city: user.city,
+        cv: user.cv,
       }),
       user: {
         id: user.id,
@@ -39,9 +47,15 @@ export class AuthService {
   async validateUser(signinDto: SigninDto) {
     const user = await this.userService.getByUsername(signinDto.username);
     const passwordMatch = await Hash.compare(signinDto.password, user.password);
+
     if (!user || !passwordMatch) {
       throw new UnauthorizedException('Invalid credentials!');
     }
     return user;
+  }
+
+  async validatePassword(password: string, hashedPassword: string) {
+    const validPassword = await Hash.compare(password, hashedPassword);
+    return validPassword;
   }
 }

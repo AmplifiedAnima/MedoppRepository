@@ -3,7 +3,7 @@ import {
   JobApplicationViewAction,
 } from "../../../utlis/Form Reducers/initialStatesForForms";
 
-const formatFieldName = (fieldName: string) => {
+export const formatFieldName = (fieldName: string) => {
   const words = fieldName.split(/(?=[A-Z])/);
   return words
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

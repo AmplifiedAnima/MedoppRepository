@@ -9,16 +9,16 @@ import {
   UseInterceptors,
   Patch,
   UploadedFiles,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from 'src/user/user.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RequestWithUser } from 'src/user/user.interface';
+import { RequestWithUser, User } from 'src/user/user.interface';
 import {
   FileFieldsInterceptor,
-  FileInterceptor,
 } from '@nestjs/platform-express';
 import { multerConfig } from 'src/fileUploadService/multerConfig';
 import { EditProfileDto } from './dto/editProfile.dto';
@@ -50,40 +50,20 @@ export class AuthController {
     @Body() signupDto: SignupDto,
     @UploadedFiles()
     files: { cv?: Express.Multer.File[]; avatarImage?: Express.Multer.File[] },
-  ): Promise<any> {
-    const cv = files.cv[0];
-    const avatarImage = files.avatarImage[0];
-
-    console.log(cv, avatarImage);
-    if (!cv) {
-      throw new Error('CV file is required.');
+  ) {
+    if (files.cv) {
+      const cv = files.cv[0];
+      signupDto.cvFileName = cv.originalname;
+      signupDto.cvFileBuffer = cv.buffer;
     }
 
-    console.log('CV Buffer:', cv.buffer);
-    console.log('CV Original Name:', cv.originalname);
-    console.log('image Buffer:', avatarImage.buffer);
-    console.log('avatarImage:', avatarImage.originalname);
-
-    signupDto.cvFileName = cv.originalname;
-    signupDto.cvFileBuffer = cv.buffer;
-
-    signupDto.cv = await this.fileUploadService.uploadFileCv(
-      signupDto.cvFileName,
-      signupDto.cvFileBuffer,
-    );
-
-    if (!avatarImage) {
-      throw new Error('Avatar Image is required');
+    if (files.avatarImage) {
+      const avatarImage = files.avatarImage[0];
+      signupDto.avatarImageName = avatarImage.originalname;
+      signupDto.avatarImageFileBuffer = avatarImage.buffer;
     }
 
-    signupDto.avatarImageName = avatarImage.originalname;
-    signupDto.avatarImageFileBuffer = avatarImage.buffer;
-
-    signupDto.avatarImage = await this.fileUploadService.uploadImage(
-      signupDto.avatarImageName,
-      signupDto.avatarImageFileBuffer,
-    );
-
+    console.log(files.cv, files.avatarImage);
     return this.userService.createUser(signupDto);
   }
 
@@ -97,49 +77,55 @@ export class AuthController {
   )
   async editProfile(
     @Body() editProfileDto: EditProfileDto,
+
     @UploadedFiles()
     files: { cv?: Express.Multer.File[]; avatarImage?: Express.Multer.File[] },
     @Request() request: RequestWithUser,
-  ): Promise<any> {
+  ) {
+    const currentPassword = request.body.currentPassword;
+
+    const user = await this.authService.validateUser({
+      username: request.user.username,
+      password: currentPassword
+    });
+
     const userId = request.user.id;
-  
+
+    const oldPasswordIsValid = await this.authService.validatePassword(
+      currentPassword,
+      user.password,
+    );
+
+    console.log(`is valid ? ${oldPasswordIsValid}`, currentPassword, user.password );
+
+    if (!oldPasswordIsValid) {
+      throw new UnauthorizedException('Old password is incorrect');
+    }
     if (files.cv) {
       const cv = files.cv[0];
       editProfileDto.cvFileName = cv.originalname;
       editProfileDto.cvFileBuffer = cv.buffer;
-      editProfileDto.cv = await this.fileUploadService.uploadFileCv(
-        editProfileDto.cvFileName,
-        editProfileDto.cvFileBuffer,
-      );
-    } else {
-      editProfileDto.cv = request.user.cv;
     }
-  
+
     if (files.avatarImage) {
       const avatarImage = files.avatarImage[0];
       editProfileDto.avatarImageName = avatarImage.originalname;
       editProfileDto.avatarImageFileBuffer = avatarImage.buffer;
-      editProfileDto.avatarImage = await this.fileUploadService.uploadImage(
-        editProfileDto.avatarImageName,
-        editProfileDto.avatarImageFileBuffer,
-      );
-    } else {
-      editProfileDto.avatarImage = request.user.avatarImage;
     }
-  
+
     const updatedUser = await this.userService.updateUserInfo(
       userId,
       editProfileDto,
+      files,
     );
-  
+
     console.log('User Updated', updatedUser.username);
     return updatedUser;
   }
-  
 
   @UseGuards(AuthGuard())
   @Get('me')
-  async getLoggedInUser(@Request() request: RequestWithUser): Promise<any> {
+  async getLoggedInUser(@Request() request: RequestWithUser) {
     return request.user;
   }
 }

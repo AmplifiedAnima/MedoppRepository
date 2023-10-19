@@ -52,18 +52,17 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
     onApply(filterOptions);
     onClose();
+
   };
 
   const handlePriceRangeToggle = () => {
     setIsPriceRangeEnabled(!isPriceRangeEnabled);
-    if (!isPriceRangeEnabled) {
-      setPriceRange([0, 30000]);
-      dispatch({
-        type: "SET_PRICE_RANGE",
-        payload: { min: "0", max: "30000" },
-      });
-    }
   };
+
+  useEffect(() => {
+    setPriceRange([0, 30000]);
+  }, [!isPriceRangeEnabled]);
+
   console.log(priceRange);
   const inputPlaceholdersStyling = getInputPlaceholdersStyling(themeMode);
   const buttonStyling = getButtonStyling(themeMode);
@@ -105,7 +104,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           margin="normal"
           sx={inputPlaceholdersStyling}
         >
-          <MenuItem value="">All</MenuItem>
+          <MenuItem value="" >All</MenuItem>
           <MenuItem value="full-time"> Full-Time </MenuItem>
           <MenuItem value="part-time"> Part-Time </MenuItem>
           <MenuItem value="B2B"> B2B </MenuItem>

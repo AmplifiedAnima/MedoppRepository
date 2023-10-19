@@ -17,6 +17,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const { themeMode } = useContext(ThemeContext);
 
+  const isMobile = window.innerWidth < 768;
+
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       onHandleSearchSubmit();
@@ -24,11 +26,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   const inputStyle = {
-    width: "370px",
-    padding: "2.5px 10px",
+    padding: "2px 10px",
     fontSize: "17px",
     borderRadius: "4px",
-    border: themeMode ==='dark' ? " 1px solid #36d336" : '',
+    border: themeMode === "dark" ? " 1px solid #36d336" : "",
     backgroundColor: themeMode === "dark" ? "#000000" : "#e9f2ed",
     color: themeMode === "dark" ? "#36d336" : "#000000",
     fontWeight: "bold",
@@ -36,8 +37,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
     zIndex: 1,
     boxShadow: "none",
 
+    "@media (min-width: 1480px)": {
+      width: "400px",
+    },
+
     "@media (max-width: 768px)": {
       width: "100%",
+      padding: "2px 7px",
+      fontSize: "14px",
     },
   };
   return (
@@ -67,11 +74,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
-            marginLeft: "5px",
           }}
           onClick={onHandleSearchSubmit}
         >
-          <SearchIcon sx={{ color: "white", fontSize: "30px" }} />
+          <SearchIcon
+            sx={{ color: "white", fontSize: isMobile ? "25px" : "30px" }}
+          />
         </Button>
       </Box>
     </Box>

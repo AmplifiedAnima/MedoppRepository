@@ -17,7 +17,7 @@ import {
 } from "../../styles/formStyling";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
 import AlertLayout from "../../utlis/Alerts";
-
+import { Buffer } from "buffer";
 interface LoginModalProps {
   open: boolean;
   onClose: () => void;
@@ -60,7 +60,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
     dispatch({ type: "CLEAR_ALERTS" });
 
     document.body.style.overflow = isLoginModalOpen ? "hidden" : "auto";
-    
+
     try {
       const response = await fetch("http://localhost:3000/auth/signin", {
         method: "POST",
@@ -74,14 +74,18 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
 
       if (response.ok) {
         localStorage.setItem("token", data.accessToken);
-
+        console.log(
+          Buffer.from(data.accessToken.split(".")[1], "base64").toString(
+            "utf-8"
+          )
+        );
         setUsername(data.user.username);
         setRoles(data.user.roles);
-        setAvatarImage(data.user.avatarImage)
+        setAvatarImage(data.user.avatarImage);
         setFirstName(data.user.firstName);
         setLastName(data.user.lastName);
-        setPhoneNumber(data.user.phoneNumber)
-        setEmail(data.user.email)
+        setPhoneNumber(data.user.phoneNumber);
+        setEmail(data.user.email);
         setAddress(data.user.address);
         setCity(data.user.city);
         setCv(data.user.cv);
@@ -128,7 +132,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
     setHideContent(false);
   }, [isLoginModalOpen]);
 
-
   const colorsForModal = {
     backgroundColor: themeMode === "dark" ? "black" : "white",
     color: themeMode === "dark" ? "#2feb00" : "black",
@@ -136,7 +139,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
 
   return (
     <Box>
-      <Dialog open={open} onClose={onClose} >
+      <Dialog open={open} onClose={onClose}>
         <AlertLayout />
         <DialogContent sx={colorsForModal}>
           {!hideContent && (

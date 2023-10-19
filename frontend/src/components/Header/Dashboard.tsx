@@ -26,10 +26,17 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
   const { themeMode } = useContext(ThemeContext);
   const itemTextColor = themeMode === "dark" ? "#1dc01d" : "#0072ba";
   const isEmployer = isLoggedIn && roles.includes("Employer");
+
+  const textStyling = {
+    "@media (max-width: 768px)": {
+      fontSize: "14px",
+      paddingRight: "60px",
+    },
+  };
   return (
     <Container>
       <Box
-        style={{
+        sx={{
           position: "fixed",
           top: 0,
           left: isOpen ? "calc(100% - 400px)" : "100%",
@@ -39,6 +46,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
           color: itemTextColor,
           zIndex: 10000,
           transition: "left 0.7s ease",
+          "@media (max-width: 768px)": {
+            left: isOpen ? "calc(100% - 250px)" : "100%",
+            width: "400px",
+          },
         }}
       >
         {isOpen && (
@@ -54,7 +65,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
           >
             {" "}
             {avatarImage && (
-              <Avatar src={avatarImage} sx={{ width: 60, height: 60 }} />
+              <Avatar src={avatarImage} sx={{ width: 70, height: 70 }} />
             )}
             {!avatarImage && firstName && lastName && (
               <Avatar>{`${firstName[0]}${lastName[0].toUpperCase()}`}</Avatar>
@@ -63,7 +74,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
               <Avatar>{`${username[0].toUpperCase()}`}</Avatar>
             )}
             <Box>
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" sx={textStyling}>
                 {username}
                 {"  "} {roles}
               </Typography>
@@ -77,13 +88,15 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
           <List>
             <ListItem>
               <Link to="/edit-user-profile">
-                <Button style={{ color: itemTextColor }}>Edit Profile</Button>
+                <Button sx={{ ...textStyling, color: itemTextColor }}>
+                  Edit Profile
+                </Button>
               </Link>
             </ListItem>
             {isEmployer && (
               <ListItem>
                 <Link to="/new-job-offer">
-                  <Button style={{ color: itemTextColor }}>
+                  <Button sx={{ ...textStyling, color: itemTextColor }}>
                     Add new job offer +
                   </Button>
                 </Link>
@@ -92,9 +105,9 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
 
             <ListItem>
               <Link to="/job-applications">
-                <Button style={{ color: itemTextColor }}>
+                <Button sx={{ ...textStyling, color: itemTextColor }}>
                   {isEmployer
-                    ? "JOB APPLICATIONS (Who applied?)"
+                    ? "WHO APPLIED"
                     : "WHERE I APPLIED"}
                 </Button>
               </Link>
@@ -102,12 +115,17 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
             {isEmployer && (
               <ListItem>
                 <Link to="/user-offers">
-                  <Button style={{ color: itemTextColor }}>My Offers</Button>
+                  <Button sx={{ ...textStyling, color: itemTextColor }}>
+                    My Offers
+                  </Button>
                 </Link>
               </ListItem>
             )}
             <ListItem>
-              <Button onClick={onLogout} style={{ color: itemTextColor }}>
+              <Button
+                onClick={onLogout}
+                sx={{ ...textStyling, color: itemTextColor }}
+              >
                 LOGOUT
               </Button>
             </ListItem>
