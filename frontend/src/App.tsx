@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import MapComponent from "./utlis/GoogleMapsApi/MapComponent";
 import { useMediaQuery } from "@mui/material";
 import { Offer } from "./components/JobOffers/OfferInterface";
 import { FilterState, useFilterContext } from "./utlis/FilterContext";
-import ApplicantsWhoAppliedForOfferView from "./components/Layout/ApplicantsWhoAppliedForOfferView";
+import ApplicantsWhoAppliedForOfferView from "./components/Layout/ApplicantsForOffers/ApplicantsWhoAppliedForOfferView";
 import RegistrationPage from "./components/Layout/RegistrationPage/RegistrationPage";
 import OffersViewWithMap from "./OffersViewWithMap";
 import OfferWithIdAndMapView from "./OfferWithIdAndMapView";
@@ -13,17 +13,23 @@ import { initialFilterState } from "./utlis/FilterContext";
 import NewJobCreationForm from "./components/Layout/NewJobForm/NewJobCreationForm";
 import { UserAlreadyLoggedInHandler } from "./utlis/UserAlreadyLoggedInHandler";
 import EmployersOffersView from "./components/Layout/MyOffersView/EmployerOffersView";
+import { ThemeContext } from "./styles/ThemeProviderContext";
 
 const App = () => {
   const [filteredOffers, setFilteredOffers] = useState<Offer[]>([]);
   const [showJobBoard, setShowJobBoard] = useState(true);
-
+  const { themeMode, toggleTheme } = useContext(ThemeContext);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const mapRef = useRef(null);
   const { state: filterState, dispatch } = useFilterContext();
 
-   UserAlreadyLoggedInHandler();
-
+  UserAlreadyLoggedInHandler();
+  useEffect(() => {
+    const storedThemeMode = localStorage.getItem('themeMode');
+    if (storedThemeMode && storedThemeMode !== themeMode) {
+      toggleTheme()
+    }
+  }, [themeMode, toggleTheme]);
   const navigate = useNavigate();
 
   const fetchOffers = async (filterState: FilterState) => {
@@ -38,7 +44,6 @@ const App = () => {
     console.log(selectedOffer?.id);
 
     if (filterState === initialFilterState) {
-      
       try {
         const response = await fetch("http://localhost:3000/offers");
         const data = await response.json();
@@ -60,7 +65,7 @@ const App = () => {
         const data = await response.json();
         const offersArray = Array.isArray(data) ? data : [data]; // Wrap in an array if it's a single offer
         setFilteredOffers(offersArray as Offer[]);
-        console.log(response); 
+        console.log(response);
       } catch (error) {
         console.error(error);
       }

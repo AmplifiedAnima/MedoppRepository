@@ -24,117 +24,133 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   const toggleTheme = () => {
     setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
+  
   const darkModeStyle: google.maps.MapTypeStyle[] = [
     {
       elementType: "geometry",
-      stylers: [{ color: "#002b00" }], // Glowing green background
+      stylers: [{ color: "#002b00" }], 
     },
     {
       elementType: "labels.text.stroke",
-      stylers: [{ color: "#002b00" }], // Glowing green text stroke
+      stylers: [{ color: "#002b00" }], 
     },
     {
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], // Glowing green text
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "administrative",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#FFFFFF" }], // Glowing green text for administrative labels
+      stylers: [{ color: "#FFFFFF" }], 
     },
     {
       featureType: "administrative.country",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#FFFFFF" }], // Glowing green text for country labels
+      stylers: [{ color: "#FFFFFF" }],
     },
     {
       featureType: "administrative.locality",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#FFFFFF" }], // Glowing green text for city labels
+      stylers: [{ color: "#FFFFFF" }], 
     },
     {
       featureType: "poi",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], // Glowing green text for points of interest
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "poi.park",
       elementType: "geometry",
-      stylers: [{ color: "#004400" }], // Dark green color for park geometry
+      stylers: [{ color: "#004400" }],
     },
     {
       featureType: "poi.park",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], // Glowing green text for park labels
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "road",
       elementType: "geometry",
-      stylers: [{ color: "#000000" }], // Black color for all roads
+      stylers: [{ color: "#000000" }],
     },
     {
       featureType: "road",
       elementType: "geometry.stroke",
-      stylers: [{ color: "#000000" }], // Black color for all road borders
+      stylers: [{ color: "#000000" }], 
     },
     {
       featureType: "road",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], // Glowing green text for road labels
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "road.highway",
       elementType: "geometry",
-      stylers: [{ color: "#000000" }], // Black color for highways
+      stylers: [{ color: "#000000" }], 
     },
     {
       featureType: "road.highway",
       elementType: "geometry.stroke",
-      stylers: [{ color: "#000000" }], // Black color for highway borders
+      stylers: [{ color: "#000000" }],
     },
     {
       featureType: "road.highway",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], // Glowing green text for highway labels
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "transit",
       elementType: "geometry",
-      stylers: [{ color: "#00ff00" }], // Glowing green color for transit lines
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "transit.station",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], // Glowing green text for transit station labels
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "landscape",
       elementType: "geometry",
-      stylers: [{ color: "#263139" }], // Dark green color for every land
+      stylers: [{ color: "#263139" }], 
     },
     {
       featureType: "landscape",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], // Glowing green text for landscape labels
+      stylers: [{ color: "#00ff00" }], 
     },
     {
       featureType: "water",
       elementType: "geometry",
-      stylers: [{ color: "#00000" }], // Light greyish color for water
+      stylers: [{ color: "#00000" }], 
     },
     {
       featureType: "water",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#293039" }], // Glowing green text for water labels
+      stylers: [{ color: "#293039" }],
     },
     {
       featureType: "water",
       elementType: "labels.text.stroke",
-      stylers: [{ color: "#293039" }], // Glowing green text stroke for water labels
+      stylers: [{ color: "#293039" }], 
     },
   ];
 
-  const lightModeStyle: google.maps.MapTypeStyle[] = [];
+  const lightModeStyle: google.maps.MapTypeStyle[] = [
+    {
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [{ color: "#99CEFF" }],
+    },
+    {
+      featureType: "landscape",
+      stylers: [{ color: "#FFFFFF" }],
+    },
+    {
+      featureType: "road.arterial",
+      elementType: "geometry",
+      stylers: [{ color: "#99CEFF" }],
+    },
+  ];
 
   return (
     <ThemeContext.Provider

@@ -6,10 +6,7 @@ import caduceus_blue from "../../static/IconsMedopp/CADUCEUS_BLUE.png";
 import caduceus_green from "../../static/IconsMedopp/CADUCEUS_GREEN.png";
 import PowerIcon1Green from "./PowerIcon1Green.png";
 import PowerIcon2Blue from "./PowerIcon2Blue.png";
-import {
-  ProfileIcon,
-  ProfileIconDarkMode
-} from "../IconsIconFinder";
+import { ProfileIcon, ProfileIconDarkMode } from "../IconsIconFinder";
 import { IconButton } from "@mui/material";
 
 export const IconButtons = (
@@ -80,7 +77,8 @@ export const Switcher: React.FC = () => {
   const { themeMode, toggleTheme } = useContext(ThemeContext);
   const handleThemeToggle = () => {
     toggleTheme();
-    console.log(themeMode);
+    const newThemeMode = themeMode === "light" ? "dark" : "light";
+    localStorage.setItem("themeMode", newThemeMode);
   };
 
   return (

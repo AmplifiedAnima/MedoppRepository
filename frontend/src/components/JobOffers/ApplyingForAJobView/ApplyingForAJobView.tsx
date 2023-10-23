@@ -3,10 +3,8 @@ import {
   Link,
   Button,
   Box,
-  Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Typography,
 } from "@mui/material";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
@@ -22,16 +20,10 @@ import JobApplicationFormInputs from "./ApplyingForAJobViewInputs";
 import MyDropzoneForCV from "../../../utlis/MyDropzone";
 
 interface ApplicationViewProps {
-  isOpen: boolean;
-  onClose: () => void;
   offerId: string;
 }
 
-const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
-  isOpen,
-  onClose,
-  offerId,
-}) => {
+const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({ offerId }) => {
   const [formState, formDispatch] = useReducer(
     JobApplicationViewReducer,
     initialApplicationViewState
@@ -127,7 +119,6 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
         setIsSubmitted(true);
         setHideButton(true);
         setTimeout(() => {
-          onClose();
           navigate("/");
         }, 2500);
       }
@@ -149,172 +140,148 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({
     }
   };
 
-  const cancelButtonStyling = {
-    ...buttonStyling,
-    width: "auto",
-    "&:hover": {
-      backgroundColor: "red",
-      color: "white",
-    },
-  };
-
-  const modalStyling = {
-    backgroundColor: themeMode === "dark" ? "black" : "white",
-    color: themeMode === "dark" ? "#2feb00" : "black",
+  const formStyling = {
+    backgroundColor: "transparent",
+    color: themeMode === "dark" ? "#2feb00" : "white",
+    borderRadius: "8px",
   };
 
   const dialogContentStyling = {
-    ...modalStyling,
+    ...formStyling,
+    marginBottom: "20px",
   };
 
   return (
     <>
-      <Dialog open={isOpen} onClose={onClose} maxWidth="md">
-        <DialogTitle
-          sx={{
-            backgroundColor: themeMode === "dark" ? "black" : "white",
-            color: themeMode === "dark" ? "#2feb00" : "black",
-          }}
-        >
-          {isLoggedIn && isEmployee && !hideButton ? (
-            <>Job Application</>
-          ) : (
-            <Typography variant="h5" sx={{ alignContent: "center" }}>
-              {" "}
-              Applied!{" "}
-            </Typography>
-          )}
-        </DialogTitle>
-        <AlertLayout />
-        <DialogContent sx={dialogContentStyling}>
-          {isLoggedIn && isEmployee && !hideButton ? (
-            <Box
-              sx={{
-                backgroundColor: themeMode === "dark" ? "black" : "white",
-                color: themeMode === "dark" ? "#2feb00" : "black",
-                paddingRight: "0px",
-                width: "400px",
-                "@media (max-width: 768px)": {
-                  width: "350px",
-                },
-              }}
-            >
-              <JobApplicationFormInputs
-                onFirstNameChange={(value) =>
-                  handleInputFieldForJobApplication(
-                    formState,
-                    formDispatch,
-                    "firstName",
-                    value,
-                    30,
-                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/,
-                    formState.errorMessages.firstName
-                  )
-                }
-                onLastNameChange={(value) =>
-                  handleInputFieldForJobApplication(
-                    formState,
-                    formDispatch,
-                    "lastName",
-                    value,
-                    30,
-                    /[^a-zA-Z0-9\s/-żźćńó]/,
-                    formState.errorMessages.lastName
-                  )
-                }
-                onEmailChange={(value) =>
-                  handleInputFieldForJobApplication(
-                    formState,
-                    formDispatch,
-                    "email",
-                    value,
-                    40,
-                    /[^a-zA-Z0-9\s@._/-]/,
-                    formState.errorMessages.email
-                  )
-                }
-                onPhoneNumberChange={(value) =>
-                  handleInputFieldForJobApplication(
-                    formState,
-                    formDispatch,
-                    "phoneNumber",
-                    value,
-                    15,
-                    /[^0-9+() -.]/g,
-                    formState.errorMessages.phoneNumber
-                  )
-                }
-                onCoverLetterChange={(value) =>
-                  handleInputFieldForJobApplication(
-                    formState,
-                    formDispatch,
-                    "coverLetter",
-                    value,
-                    400,
-                    /[^a-zA-Z0-9\s.,?!/@$#%^&*()-]/,
-                    formState.errorMessages.coverLetter
-                  )
-                }
-                formState={formState}
-                isSubmitted={IsSubmitted}
-              />
-              {CvFilePath ? (
-                <Box>
-                  <Typography>Uploaded CV:</Typography>
-                  <Link
-                    href={CvFilePath}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    View CV
-                  </Link>
-                </Box>
-              ) : (
-                <MyDropzoneForCV setSelectedFiles={setSelectedFiles} />
-              )}
-            </Box>
-          ) : (
-            ""
-          )}
-          {!isLoggedIn && (
-            <p>
-              Please{" "}
+      <DialogTitle
+        sx={{
+          color: themeMode === "dark" ? "#2feb00" : "white",
+        }}
+      >
+        {isLoggedIn && isEmployee && !hideButton && (
+          <> Apply for the job below </>
+        )}
+      </DialogTitle>
+      <AlertLayout />
+      <DialogContent sx={dialogContentStyling}>
+        {isLoggedIn && isEmployee && !hideButton ? (
+          <Box
+            sx={{
+              color: themeMode === "dark" ? "#2feb00" : "black",
+              paddingRight: "0px",
+              width: "auto",
+            }}
+          >
+            <JobApplicationFormInputs
+              onFirstNameChange={(value) =>
+                handleInputFieldForJobApplication(
+                  formState,
+                  formDispatch,
+                  "firstName",
+                  value,
+                  30,
+                  /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/,
+                  formState.errorMessages.firstName
+                )
+              }
+              onLastNameChange={(value) =>
+                handleInputFieldForJobApplication(
+                  formState,
+                  formDispatch,
+                  "lastName",
+                  value,
+                  30,
+                  /[^a-zA-Z0-9\s/-żźćńó]/,
+                  formState.errorMessages.lastName
+                )
+              }
+              onEmailChange={(value) =>
+                handleInputFieldForJobApplication(
+                  formState,
+                  formDispatch,
+                  "email",
+                  value,
+                  40,
+                  /[^a-zA-Z0-9\s@._/-]/,
+                  formState.errorMessages.email
+                )
+              }
+              onPhoneNumberChange={(value) =>
+                handleInputFieldForJobApplication(
+                  formState,
+                  formDispatch,
+                  "phoneNumber",
+                  value,
+                  15,
+                  /[^0-9+() -.]/g,
+                  formState.errorMessages.phoneNumber
+                )
+              }
+              onCoverLetterChange={(value) =>
+                handleInputFieldForJobApplication(
+                  formState,
+                  formDispatch,
+                  "coverLetter",
+                  value,
+                  400,
+                  /[^a-zA-Z0-9\s.,?!/@$#%^&*()-]/,
+                  formState.errorMessages.coverLetter
+                )
+              }
+              formState={formState}
+              isSubmitted={IsSubmitted}
+            />
+            {CvFilePath ? (
               <Link
-                href="/register-user"
-                onClick={() => navigate("/register-user")}
+                href={CvFilePath}
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: themeMode === "dark" ? "#2feb00" : "white" }}
+                underline="none"
               >
-                log in or sign up
-              </Link>{" "}
-              to apply for this job.
-            </p>
-          )}
-        </DialogContent>
-        <DialogActions sx={modalStyling}>
-          {!hideButton && (
+                <br></br>
+                View CV
+              </Link>
+            ) : (
+              <MyDropzoneForCV setSelectedFiles={setSelectedFiles} />
+            )}
+
             <>
-              {isLoggedIn ? (
-                <Button
-                  variant="contained"
-                  onClick={handleSubmit}
-                  sx={{ ...buttonStyling, width: "auto" }}
-                  disabled={IsSubmitted}
+              {isLoggedIn && isEmployee ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                  }}
                 >
-                  Apply
-                </Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmit}
+                    sx={{ ...buttonStyling, width: "auto" }}
+                    disabled={IsSubmitted}
+                  >
+                    Apply
+                  </Button>
+                </Box>
               ) : (
                 <></>
               )}
-              <Button
-                onClick={onClose}
-                sx={cancelButtonStyling}
-                disabled={IsSubmitted}
-              >
-                Cancel
-              </Button>
             </>
-          )}
-        </DialogActions>
-      </Dialog>
+          </Box>
+        ) : (
+          ""
+        )}
+        {!isLoggedIn && (
+          <Typography
+            variant="body1"
+            sx={{ color: themeMode === "dark" ? "white" : "black" }}
+          >
+            log in or sign up to apply for this job.
+          </Typography>
+        )}
+      </DialogContent>
     </>
   );
 };

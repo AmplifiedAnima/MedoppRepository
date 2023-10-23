@@ -21,7 +21,7 @@ export class User {
   password: string;
 
   @Column({ nullable: true })
-  phoneNumber?: string; // Added phoneNumber property
+  phoneNumber?: string; 
 
   @Column({ nullable: true })
   avatarImage?: string;
@@ -31,7 +31,7 @@ export class User {
   avatarImageName?: string;
 
   @Column({ nullable: true })
-  cv?: string; // Added cv property
+  cv?: string; 
 
   cvFileBuffer?: Buffer;
 
@@ -41,7 +41,7 @@ export class User {
   email?: string;
 
   @Column({ nullable: true })
-  address?: string; // Added address property
+  address?: string; 
 
   @Column({ nullable: true })
   city?: string;

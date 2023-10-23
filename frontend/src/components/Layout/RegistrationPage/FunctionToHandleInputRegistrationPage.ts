@@ -3,6 +3,7 @@ import {
   RegistrationFormState,
 } from "../../../utlis/Form Reducers/initialStatesForForms";
 import { formatFieldName } from "../../JobOffers/ApplyingForAJobView/FunctionToHandleInputJobApplication";
+
 export const handleInputForRegistrationForm = (
   state: RegistrationFormState,
   dispatch: React.Dispatch<RegistrationFormAction>,

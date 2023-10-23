@@ -101,6 +101,7 @@ export class AuthController {
     if (!oldPasswordIsValid) {
       throw new UnauthorizedException('Old password is incorrect');
     }
+    
     if (files.cv) {
       const cv = files.cv[0];
       editProfileDto.cvFileName = cv.originalname;

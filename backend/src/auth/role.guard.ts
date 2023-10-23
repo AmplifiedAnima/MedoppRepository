@@ -8,8 +8,8 @@ const RoleGuard = (role: Role): Type<CanActivate> => {
       const request = context.switchToHttp().getRequest<RequestWithUser>();
       const user = request.user;
 
-      console.log('User:', user.username, user.roles, user.id); // Log user object
-      console.log('Roles:', user?.roles); // Log roles
+      console.log('User:', user.username, user.roles, user.id); 
+      console.log('Roles:', user?.roles); 
       return user?.roles.includes(role);
     }
   }

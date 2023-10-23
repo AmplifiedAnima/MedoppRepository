@@ -16,6 +16,14 @@ export const getInputPlaceholdersStyling = (themeMode: "dark" | "light") => ({
   },
   "& .MuiOutlinedInput-input": {
     color: themeMode === "dark" ? "#2feb00" : "black",
+    "&:-webkit-autofill": {
+      "-webkit-box-shadow": `0 0 0 100px ${themeMode === "dark" ? "#000" : "#fff"} inset`,
+      "-webkit-text-fill-color": themeMode === "dark" ? "#2feb00" : "black",
+      "background-clip": "text !important",
+    },
+  },
+  "& .MuiAutocomplete-listbox .MuiAutocomplete-option.Mui-focused": {
+   background:'transparent'
   },
   "@media (max-width: 600px)": {
     width: "100%",
@@ -24,6 +32,38 @@ export const getInputPlaceholdersStyling = (themeMode: "dark" | "light") => ({
   },
 });
 
+export const getInputPlaceholdersStylingForJobApply = (themeMode: "dark" | "light") => ({
+  "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+    padding: "20px",
+    borderColor: themeMode === "dark" ? "#2feb00" : "white",
+  },
+  "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+    borderColor: themeMode === "dark" ? "#2feb00" : "white",
+  },
+  "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: themeMode === "dark" ? "#2feb00" : 'white',
+  },
+  "& .MuiInputLabel-outlined": {
+    color: themeMode === "dark" ? "#2feb00" : 'white',
+    fontWeight: "bold",
+  },
+  "& .MuiOutlinedInput-input": {
+    color: themeMode === "dark" ? "#2feb00" : 'white',
+    "&:-webkit-autofill": {
+      "-webkit-box-shadow": `0 0 0 100px ${themeMode === "dark" ? "#000" : 'transparent'} inset`,
+      "-webkit-text-fill-color": themeMode === "dark" ? "#2feb00" : 'transparent',
+      "background-clip": "text !important",
+    },
+  },
+  "& .MuiAutocomplete-listbox .MuiAutocomplete-option.Mui-focused": {
+   background:'transparent'
+  },
+  "@media (max-width: 600px)": {
+    width: "100%",
+    fontSize: "13px",
+
+  },
+});
 export const getReactQuillStyling = (themeMode: "dark" | "light") => {
   const borderColor = themeMode === "dark" ? "#2feb00" : "";
   return {

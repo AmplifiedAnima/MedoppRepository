@@ -28,17 +28,15 @@ loadGoogleMapsAPIKey(() => {
   root.render(
     <React.StrictMode>
       <Router>
-        <ThemeProviderMui theme={themeForBreakpoints}>
-          <AlertContextProvider>
-            <IsLoggedInContextProvider>
-              <ThemeProvider>
-                <FilterContextProvider>
-                  <App />
-                </FilterContextProvider>
-              </ThemeProvider>
-            </IsLoggedInContextProvider>
-          </AlertContextProvider>
-        </ThemeProviderMui>
+        <AlertContextProvider>
+          <IsLoggedInContextProvider>
+            <ThemeProvider>
+              <FilterContextProvider>
+                <App />
+              </FilterContextProvider>
+            </ThemeProvider>
+          </IsLoggedInContextProvider>
+        </AlertContextProvider>
       </Router>
     </React.StrictMode>
   );

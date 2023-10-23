@@ -48,6 +48,7 @@ export class OffersController {
   async getOfferById(@Param('id') id: string): Promise<Offer> {
     return this.offersService.getOfferById(id);
   }
+  
   @Get()
   async getAllOffers(@Query() queryParams: FilterOptions): Promise<Offer[]> {
     if (queryParams) {
@@ -90,7 +91,7 @@ export class OffersController {
 
   @UseGuards(RoleGuard(Role.Employer))
   @UseGuards(AuthGuard('jwt'))
-  @Delete(':id') // Define a new route for deleting an offer by its ID
+  @Delete(':id') 
   async deleteOffer(
     @Param('id') id: string,
     @Request() request: RequestWithUser,

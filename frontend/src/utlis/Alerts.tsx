@@ -31,7 +31,7 @@ const AlertLayout: React.FC<AlertLayoutSpecialtyProps> = ({
   };
 
   const textInsideNotifications = {
-    color: themeMode === "dark" ? "#2feb00" : "#006AC7",
+    color: themeMode === "dark" ? "#2feb00" : "#FFFFFF",
     fontWeight:'bold',
     padding: "5px 20px",
     fontSize: "15px",
@@ -127,7 +127,7 @@ const AlertLayout: React.FC<AlertLayoutSpecialtyProps> = ({
         alignItems="flex-end"
       >
         {messages.error && (
-          <Alert severity="error" onClose={() => closingTheAlert}>
+          <Alert severity="error" onClose={closingTheAlert}>
             {messages.error}
           </Alert>
         )}

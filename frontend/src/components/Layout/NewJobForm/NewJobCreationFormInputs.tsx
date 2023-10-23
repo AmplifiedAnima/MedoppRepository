@@ -31,7 +31,7 @@ interface NewJobCreationFormInputsProps {
   onDescriptionChange: (value: string) => void;
   onLabelChange: (value: string) => void;
   onSpecialtyChange: (value: string) => void;
-  isSecondStep: boolean,
+  isSecondStep: boolean;
   formState: NewJobFormState;
 }
 

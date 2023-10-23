@@ -7,7 +7,6 @@ import specialities from "../Specialities";
 import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Switcher } from "./HeaderMenuElements";
 import { HeaderMenuItem } from "./HeaderMenuElements";
-import { filterWhiteIcon, filterGreenIcon } from "../IconsIconFinder";
 import FilterModal from "../Layout/FilterModal";
 import { useSearchHook } from "../Layout/SearchFunctionalityHook";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";

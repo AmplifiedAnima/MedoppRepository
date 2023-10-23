@@ -43,7 +43,7 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
       offerId={selectedOffer.id}
     />
   ) : null;
-  
+
   useEffect(() => {
     alertDispatch({ type: "CLEAR_ALL_NOTIFICATIONS" });
   }, []);
@@ -110,7 +110,7 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
             background:
               themeMode === "dark"
                 ? "linear-gradient(180deg,  #000000 50%,  #FF0000 99%)"
-                : "linear-gradient(180deg, #001b45 10%, #476bad 99%)",
+                : "linear-gradient(180deg, #001b45 10%,#FFFFFF 99%)",
           }}
         >
           <LeftColumn sx={offersListStyle}>

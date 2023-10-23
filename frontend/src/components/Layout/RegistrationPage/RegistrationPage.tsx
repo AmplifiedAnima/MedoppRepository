@@ -30,7 +30,6 @@ const RegistrationPage = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { themeMode } = useContext(ThemeContext);
   const {
-    isLoggedIn,
     setIsLoggedIn,
     setUsername,
     setRoles,

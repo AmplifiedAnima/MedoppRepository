@@ -19,50 +19,24 @@ interface OfferCardProps {
 
 const OfferCard: React.FC<OfferCardProps> = ({
   offer,
-
   onCloseOffer,
   isSelected,
   offerId,
 }) => {
-  const {
-    title,
-    company,
-    location,
-    salary,
-    typeOfEmployment,
-    specialties,
-  } = offer;
+  const { title, company, location, salary, typeOfEmployment, specialties } =
+    offer;
 
-  const [isApplicationModalOpen, setIsApplicationModalOpen] = useState(false);
   const { themeMode } = useContext(ThemeContext);
   const buttonStyles = getButtonStyles(themeMode);
 
   const { isLoggedIn, roles } = useContext(IsLoggedInContext);
-  const isEmployee = isLoggedIn && roles.includes("Employee");
   const { dispatch: alertDispatch } = useAlertContext();
 
   const sanitizedDescription = DOMPurify.sanitize(offer.description);
 
-  const handleApply = () => {
-    setIsApplicationModalOpen(true);
-  };
-
-  const handleClick = () => {
-
-    console.log(offer.id)
-  };
-
   const handleClose = () => {
     onCloseOffer();
   };
- 
-  const handleCloseApplicationModal = () => {
-    setIsApplicationModalOpen(false);
-  };
-
-  useEffect(() => {
-    alertDispatch({ type: "CLEAR_ALERTS" });
-  }, [isApplicationModalOpen]);
 
   return (
     <Card
@@ -70,13 +44,12 @@ const OfferCard: React.FC<OfferCardProps> = ({
         margin: "10px 20px",
         borderRadius: "8px",
         backgroundColor:
-          themeMode === "dark"
-            ? "rgba(0,0,0, 1)"
-            : "rgba(209, 233, 246, 0.1)",
+          themeMode === "dark" ? "rgba(0,0,0, 1)" : "rgba(209, 233, 246, 0.055)",
         display: "grid",
         width: "auto",
         position: "relative",
         fontFamily: "Helvetica",
+        height: "auto",
       }}
     >
       <CardContent>
@@ -88,7 +61,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               color: "#ffffff",
               paddingLeft: "0px",
               "@media (max-width: 768px)": {
-                fontSize: "15px"
+                fontSize: "14px",
               },
             }}
           >
@@ -101,7 +74,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               color: "#ffffff",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "13px",
+                fontSize: "12px",
               },
             }}
           >
@@ -113,7 +86,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               color: "#ffffff",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "13px",
+                fontSize: "12px",
               },
             }}
           >
@@ -130,7 +103,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               fontSize: "17px",
               fontWeight: "bold",
               "@media (max-width: 768px)": {
-                fontSize: "14px",
+                fontSize: "12px",
               },
             }}
           >
@@ -147,7 +120,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
               padding: "8px 2px",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "13px",
+                fontSize: "12px",
               },
             }}
           >
@@ -162,7 +135,8 @@ const OfferCard: React.FC<OfferCardProps> = ({
               marginTop: "12px",
               fontSize: "16px",
               "@media (max-width: 768px)": {
-                fontSize: "13px",
+                fontSize: "12px",
+                padding: "0px 10px",
               },
             }}
           >
@@ -171,10 +145,13 @@ const OfferCard: React.FC<OfferCardProps> = ({
         </Box>
         <Box sx={{ fontSize: "16px", color: "white" }}>
           {isSelected && (
-            <Box
-              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-              sx={{ wordBreak: "break-word" }}
-            />
+            <>
+              <Box
+                dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+                sx={{ wordBreak: "break-word" }}
+              />
+              <ApplyingForAJobView offerId={offerId} />
+            </>
           )}
         </Box>
         <Link key={offer.id} to={`/offers/${offer.id}`}>
@@ -183,7 +160,6 @@ const OfferCard: React.FC<OfferCardProps> = ({
               variant="contained"
               color="success"
               sx={buttonStyles}
-              onClick={handleClick}
             >
               VIEW JOB OFFER
             </Button>
@@ -211,24 +187,9 @@ const OfferCard: React.FC<OfferCardProps> = ({
             >
               CLOSE
             </Button>
-
-            {isEmployee && (
-              <Button
-                variant="contained"
-                sx={buttonStyles}
-                onClick={handleApply}
-              >
-                APPLY HERE
-              </Button>
-            )}
           </Box>
         )}
       </CardContent>
-      <ApplyingForAJobView
-        isOpen={isApplicationModalOpen}
-        onClose={handleCloseApplicationModal}
-        offerId={offerId}
-      />
     </Card>
   );
 };

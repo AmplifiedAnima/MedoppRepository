@@ -2,7 +2,7 @@ import { TextField, FormHelperText } from "@mui/material";
 import { ApplicationViewState } from "../../../utlis/Form Reducers/initialStatesForForms";
 import { useContext } from "react";
 import { ThemeContext } from "../../../styles/ThemeProviderContext";
-import { getInputPlaceholdersStyling } from "../../../styles/formStyling";
+import { getInputPlaceholdersStylingForJobApply } from "../../../styles/formStyling";
 
 interface NewApplicationFormInputsProps {
   onFirstNameChange: (value: string) => void;
@@ -10,7 +10,7 @@ interface NewApplicationFormInputsProps {
   onEmailChange: (value: string) => void;
   onPhoneNumberChange: (value: string) => void;
   onCoverLetterChange: (value: string) => void;
-  formState: ApplicationViewState; 
+  formState: ApplicationViewState;
   isSubmitted: boolean;
 }
 
@@ -21,10 +21,10 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
   onPhoneNumberChange,
   onCoverLetterChange,
   formState,
-  isSubmitted
+  isSubmitted,
 }) => {
   const { themeMode } = useContext(ThemeContext);
-  const inputStyling = getInputPlaceholdersStyling(themeMode);
+  const inputStyling = getInputPlaceholdersStylingForJobApply(themeMode);
 
   return (
     <>
@@ -42,7 +42,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
       <TextField
         label="Last Name"
         fullWidth
-        sx={{ ...inputStyling, margin: "10px 0px"}}
+        sx={{ ...inputStyling, margin: "10px 0px" }}
         value={formState.lastName || ""}
         onChange={(e) => onLastNameChange(e.target.value)}
         onBlur={() => onLastNameChange(formState.lastName)}
@@ -65,7 +65,7 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
       <TextField
         label="Phone Number"
         fullWidth
-        sx={{ ...inputStyling, margin: "10px 0px"}}
+        sx={{ ...inputStyling, margin: "10px 0px" }}
         value={formState.phoneNumber || ""}
         onChange={(e) => onPhoneNumberChange(e.target.value)}
         onBlur={() => onPhoneNumberChange(formState.phoneNumber)}
@@ -79,8 +79,9 @@ const JobApplicationFormInputs: React.FC<NewApplicationFormInputsProps> = ({
       <TextField
         label="Cover Letter"
         fullWidth
+        multiline
         rows={4}
-        sx={{ ...inputStyling, margin: "10px 0px", }}
+        sx={{ ...inputStyling, margin: "10px 0px" }}
         value={formState.coverLetter || ""}
         onChange={(e) => onCoverLetterChange(e.target.value)}
         onBlur={() => onCoverLetterChange(formState.coverLetter)}

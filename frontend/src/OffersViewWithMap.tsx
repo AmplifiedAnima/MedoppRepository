@@ -16,7 +16,7 @@ export const Container = styled("div")({
 
 export const FlexContainer = styled("div")({
   display: "flex",
-  gap: "10px",
+  gap: "6px",
 });
 
 export const LeftColumn = styled("div")({
@@ -54,11 +54,10 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
   const buttonStyles = getButtonStyles(themeMode);
   const offersListStyle = getOffersListStyles(themeMode);
 
-  const offerCardVariable = filteredOffers.map((offer, index) => (
+  const offerCardVariable = filteredOffers.map((offer) => (
     <OfferCard
       key={offer.id}
       offer={offer}
-
       onCloseOffer={handleOfferClose}
       isSelected={false}
       offerId={filterState.selectedOffer?.id || ""}
@@ -80,11 +79,7 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
         </Box>
       )}
       {isMobile ? (
-        <Box sx={{
-          "@media (max-width: 768px)": {
-            height: "auto"
-          },
-        }}>
+        <Box>
           {showJobBoard ? (
             <Box sx={offersListStyle}>{offerCardVariable}</Box>
           ) : (
@@ -97,16 +92,16 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
             background:
               themeMode === "dark"
                 ? "linear-gradient(180deg,  #000000 50%,  #02dc10 99%)"
-                : "linear-gradient(180deg, #001b45 10%, #476bad 99%)",
+                : "linear-gradient(180deg, #001b45 10%, #FFFFFF 99%)",
           }}
         >
-          <LeftColumn sx={offersListStyle} >
+          <LeftColumn sx={offersListStyle}>
             <>{offerCardVariable}</>
           </LeftColumn>
+
           <RightColumn> {mapComponent} </RightColumn>
         </FlexContainer>
       )}
-      
     </Container>
   );
 };

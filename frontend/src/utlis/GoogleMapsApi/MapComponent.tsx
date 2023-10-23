@@ -1,23 +1,10 @@
-import React, {
-  useEffect,
-  useRef,
-  useContext,
-  useCallback,
-  useState,
-} from "react";
+import React, { useEffect, useRef, useContext, useCallback } from "react";
 import { ThemeContext } from "../../styles/ThemeProviderContext";
-import { Box, Popover } from "@mui/material";
-import { useLocation, useNavigate, useParams } from "react-router";
-import { FilterContext, initialFilterState } from "../FilterContext";
-import {
-  MarkerClusterer,
-  SuperClusterAlgorithm,
-} from "@googlemaps/markerclusterer";
-
-import ClusterPopover from "./ClusterPopover";
+import { Box } from "@mui/material";
+import { useLocation, useNavigate } from "react-router";
+import { FilterContext } from "../FilterContext";
 import { Offer } from "../../components/JobOffers/OfferInterface";
 import { getOfferIconUrl } from "./MapComponentUtils";
-import { calculateMostCommonSpecialty } from "./MapComponentUtils";
 
 interface MapProps {
   offers: Offer[] | [];
@@ -84,7 +71,7 @@ const MapComponent: React.FC<MapProps> = ({
           scaledSize: new google.maps.Size(40, 40),
         },
         visible: isSelected || selectedOffer === null,
-        map: map.current, // Add the marker to the map
+        map: map.current,
       };
 
       const marker = new google.maps.Marker(markerOptions);
@@ -109,9 +96,7 @@ const MapComponent: React.FC<MapProps> = ({
     return () => {};
   }, [themeMode, markers, onMarkerClick]);
 
-  return (
-    <Box style={{ height: isExpanded ? "672px" : "300px" }} ref={mapRef}></Box>
-  );
+  return <Box sx={{ height:"100vh" }} ref={mapRef} />;
 };
 
 export default MapComponent;

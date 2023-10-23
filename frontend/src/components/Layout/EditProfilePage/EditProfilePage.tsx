@@ -18,7 +18,6 @@ import {
 import { ThemeContext } from "../../../styles/ThemeProviderContext";
 import HeaderForOtherRoutes from "../../Header/HeaderForOtherRoutes";
 import {
-  getInputPlaceholdersStyling,
   getPaperStyling,
   getButtonStyling,
 } from "../../../styles/formStyling";
