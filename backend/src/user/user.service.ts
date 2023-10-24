@@ -12,6 +12,10 @@ import { FileUploadService } from 'src/fileUploadService/file-upload-service';
 import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { ConflictException } from '@nestjs/common/exceptions';
+
+type FileData = {
+  [fieldName: string]: Express.Multer.File;
+};
 @Injectable()
 export class UsersService {
   private s3Client: S3Client;
@@ -83,7 +87,10 @@ export class UsersService {
   async updateUserInfo(
     userId: string,
     updatedInfo: Partial<User>,
-    files: any,
+    files: {
+      cv?: Express.Multer.File[]; 
+      avatarImage?: Express.Multer.File[];
+    }
   ): Promise<User> {
     const user = await this.get(userId);
 

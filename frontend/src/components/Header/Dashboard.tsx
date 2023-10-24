@@ -47,7 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
           zIndex: 10000,
           transition: "left 0.7s ease",
           "@media (max-width: 768px)": {
-            left: isOpen ? "calc(100% - 250px)" : "100%",
+            left: isOpen ? "calc(100% - 260px)" : "100%",
             width: "400px",
           },
         }}
@@ -60,7 +60,10 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              width: "370px",
+              width: '370px',
+              "@media (max-width: 768px)": {
+                width: '250px'
+              }
             }}
           >
             {" "}

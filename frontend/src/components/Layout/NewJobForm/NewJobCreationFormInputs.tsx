@@ -19,7 +19,6 @@ import {
   NewJobFormState,
   initialStateNewJobForm,
 } from "../../../utlis/Form Reducers/initialStatesForForms";
-import { handleInputFieldForNewJobForm } from "./FunctionsToHandleInputNewJobForm";
 import { useLocation } from "react-router";
 import specialties from "../../Specialities";
 

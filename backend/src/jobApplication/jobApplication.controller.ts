@@ -77,7 +77,7 @@ export class JobApplicationController {
             createJobApplicationDto.cvFileName,
             createJobApplicationDto.cvFileBuffer,
           );
-        console.log('CV Buffer:', cv.buffer); // Log the buffer
+        console.log('CV Buffer:', cv.buffer); 
         console.log('CV Original Name:', cv.originalname);
       }
       

@@ -6,8 +6,6 @@ import { findSourceMap } from 'module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
-  const reflector = app.get(Reflector);
 
   app.enableCors();
   await app.listen(3000);

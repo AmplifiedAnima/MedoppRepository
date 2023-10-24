@@ -11,7 +11,6 @@ import { getButtonStyles } from "../../styles/buttonStyling";
 
 interface OfferCardProps {
   offer: Offer;
-
   onCloseOffer: () => void;
   isSelected: boolean;
   offerId: string;
@@ -44,7 +43,9 @@ const OfferCard: React.FC<OfferCardProps> = ({
         margin: "10px 20px",
         borderRadius: "8px",
         backgroundColor:
-          themeMode === "dark" ? "rgba(0,0,0, 1)" : "rgba(209, 233, 246, 0.055)",
+          themeMode === "dark"
+            ? "rgba(0,0,0, 1)"
+            : "rgba(209, 233, 246, 0.055)",
         display: "grid",
         width: "auto",
         position: "relative",
@@ -156,11 +157,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
         </Box>
         <Link key={offer.id} to={`/offers/${offer.id}`}>
           {!isSelected && (
-            <Button
-              variant="contained"
-              color="success"
-              sx={buttonStyles}
-            >
+            <Button variant="contained" color="success" sx={buttonStyles}>
               VIEW JOB OFFER
             </Button>
           )}

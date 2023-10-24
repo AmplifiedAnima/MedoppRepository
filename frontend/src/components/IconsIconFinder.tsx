@@ -66,7 +66,6 @@ import caduceus_green from "../static/IconsMedopp/CADUCEUS_GREEN.png";
 
 import filter_white from "../static/IconsMedopp/FILTER_WHITE.png";
 import filter_green from "../static/IconsMedopp/FILTER_GREEN.png";
-import { useState } from "react";
 
 
 export const filterWhiteIcon = () => {

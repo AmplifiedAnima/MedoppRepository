@@ -44,7 +44,7 @@ export class AuthService {
     };
   }
 
-  async validateUser(signinDto: SigninDto) {
+  async validateUser(signinDto: SigninDto):Promise<User> {
     const user = await this.userService.getByUsername(signinDto.username);
     const passwordMatch = await Hash.compare(signinDto.password, user.password);
 

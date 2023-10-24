@@ -5,7 +5,6 @@ import {
   UseGuards,
   Get,
   Request,
-  UploadedFile,
   UseInterceptors,
   Patch,
   UploadedFiles,
@@ -16,20 +15,20 @@ import { UsersService } from 'src/user/user.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RequestWithUser, User } from 'src/user/user.interface';
+import { RequestWithUser} from 'src/user/user.interface';
 import {
   FileFieldsInterceptor,
 } from '@nestjs/platform-express';
 import { multerConfig } from 'src/fileUploadService/multerConfig';
 import { EditProfileDto } from './dto/editProfile.dto';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
+import { User } from 'src/user/user.entity';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UsersService,
-    private readonly fileUploadService: FileUploadService,
   ) {}
 
   @Post('signin')
@@ -81,7 +80,7 @@ export class AuthController {
     @UploadedFiles()
     files: { cv?: Express.Multer.File[]; avatarImage?: Express.Multer.File[] },
     @Request() request: RequestWithUser,
-  ) {
+  ):Promise<User> {
     const currentPassword = request.body.currentPassword;
 
     const user = await this.authService.validateUser({
@@ -126,7 +125,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard())
   @Get('me')
-  async getLoggedInUser(@Request() request: RequestWithUser) {
+  async getLoggedInUser(@Request() request: RequestWithUser): Promise<User> {
     return request.user;
   }
 }

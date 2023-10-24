@@ -33,7 +33,7 @@ const Header: React.FC = () => {
   const { isLoggedIn, setIsLoggedIn, isLoginModalOpen, setIsLoginModalOpen } =
     useContext(IsLoggedInContext);
 
-  const { themeMode } = useContext(ThemeContext);
+  const { themeMode, toggleTheme } = useContext(ThemeContext);
   const { dispatch } = useAlertContext();
 
   const handleProfileToggle = () => {

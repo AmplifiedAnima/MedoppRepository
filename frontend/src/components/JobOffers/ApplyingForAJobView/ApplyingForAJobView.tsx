@@ -150,6 +150,14 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({ offerId }) => {
     ...formStyling,
     marginBottom: "20px",
   };
+  useEffect(() => {
+    if (!isLoggedIn) {
+      dispatch({
+        type: "SHOW_INFO",
+        payload: "you have to be logged in to apply",
+      });
+    }
+  }, [!isLoggedIn]);
 
   return (
     <>
@@ -272,14 +280,6 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({ offerId }) => {
           </Box>
         ) : (
           ""
-        )}
-        {!isLoggedIn && (
-          <Typography
-            variant="body1"
-            sx={{ color: themeMode === "dark" ? "white" : "black" }}
-          >
-            log in or sign up to apply for this job.
-          </Typography>
         )}
       </DialogContent>
     </>

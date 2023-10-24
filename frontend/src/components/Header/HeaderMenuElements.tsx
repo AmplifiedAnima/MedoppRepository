@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Switch } from "@mui/material";
 import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { useNavigate } from "react-router-dom";
@@ -80,6 +80,7 @@ export const Switcher: React.FC = () => {
     const newThemeMode = themeMode === "light" ? "dark" : "light";
     localStorage.setItem("themeMode", newThemeMode);
   };
+
 
   return (
     <>

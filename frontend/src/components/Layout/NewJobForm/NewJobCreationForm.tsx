@@ -292,8 +292,8 @@ const NewJobCreationForm: React.FC = () => {
                       marginLeft: "auto",
                       marginRight: "auto",
                       "& .MuiStepIcon-root": {
-                        borderColor: themeMode === "dark" ? "#02f016" : "black", // Change the border color to green
-                        color: themeMode === "dark" ? "#02f016" : "black", // Change the color to green
+                        borderColor: themeMode === "dark" ? "#02f016" : "black",
+                        color: themeMode === "dark" ? "#02f016" : "black",
                       },
                       "& .MuiStepLabel-label": {
                         color: themeMode === "dark" ? "#02f016" : "black",

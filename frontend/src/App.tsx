@@ -25,11 +25,13 @@ const App = () => {
 
   UserAlreadyLoggedInHandler();
   useEffect(() => {
-    const storedThemeMode = localStorage.getItem('themeMode');
-    if (storedThemeMode && storedThemeMode !== themeMode) {
-      toggleTheme()
+    const storedThemeMode = localStorage.getItem("themeMode");
+    console.log(storedThemeMode);
+    if (storedThemeMode !== themeMode) {
+      toggleTheme();
     }
   }, [themeMode, toggleTheme]);
+
   const navigate = useNavigate();
 
   const fetchOffers = async (filterState: FilterState) => {

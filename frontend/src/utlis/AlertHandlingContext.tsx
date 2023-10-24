@@ -5,6 +5,7 @@ interface AlertContextInterface {
     error: string;
     success: string;
     warning: string;
+    info: string;
     specialty: string;
     location: string;
     typeOfEmployment: string;
@@ -20,6 +21,8 @@ type AlertAction =
   | { type: "HIDE_SUCCESS" }
   | { type: "SHOW_WARNING"; payload: string }
   | { type: "HIDE_WARNING" }
+  | { type: "SHOW_INFO"; payload: string }
+  | { type: "HIDE_INFO" }
   | { type: "SHOW_LOCATION"; payload: string }
   | { type: "HIDE_LOCATION" }
   | { type: "SHOW_SPECIALTY"; payload: string }
@@ -35,6 +38,7 @@ const initialState = {
   error: "",
   success: "",
   warning: "",
+  info: "",
   specialty: "",
   location: "",
   typeOfEmployment: "",
@@ -55,6 +59,10 @@ const alertReducer = (state: typeof initialState, action: AlertAction) => {
       return { ...state, warning: action.payload };
     case "HIDE_WARNING":
       return { ...state, warning: "" };
+    case "SHOW_INFO":
+      return { ...state, info: action.payload };
+    case "HIDE_INFO":
+      return { ...state, info: "" };
     case "SHOW_LOCATION":
       return { ...state, location: action.payload };
     case "HIDE_LOCATION":
@@ -77,6 +85,7 @@ const alertReducer = (state: typeof initialState, action: AlertAction) => {
         error: "",
         success: "",
         warning: "",
+        info: "",
       };
     case "CLEAR_ALL_NOTIFICATIONS":
       return {
