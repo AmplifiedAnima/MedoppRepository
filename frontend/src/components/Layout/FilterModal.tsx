@@ -40,8 +40,6 @@ const FilterModal: React.FC<FilterModalProps> = ({
   const [isPriceRangeEnabled, setIsPriceRangeEnabled] =
     useState<boolean>(false);
 
-  const { state: filterState, dispatch } = useFilterContext();
-
   const handleApply = () => {
     const filterOptions: FilterOptions = {
       minPrice: priceRange[0].toString(),
