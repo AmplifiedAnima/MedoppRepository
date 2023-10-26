@@ -17,10 +17,7 @@ import {
 } from "@mui/material";
 import { ThemeContext } from "../../../styles/ThemeProviderContext";
 import HeaderForOtherRoutes from "../../Header/HeaderForOtherRoutes";
-import {
-  getPaperStyling,
-  getButtonStyling,
-} from "../../../styles/formStyling";
+import { getPaperStyling, getButtonStyling } from "../../../styles/formStyling";
 import { EditProfileFormInput } from "./EditProfilePageInputFields";
 import { EditProfileFormReducer } from "../../../utlis/Form Reducers/FormReducer";
 import { initialEditProfileState } from "../../../utlis/Form Reducers/initialStatesForForms";
@@ -31,7 +28,7 @@ import MyDropzoneForCV, {
 } from "../../../utlis/MyDropzone";
 import { useAlertContext } from "../../../utlis/AlertHandlingContext";
 import { useNavigate } from "react-router";
-
+import { motion } from "framer-motion";
 export const EditProfilePage = () => {
   const {
     isLoggedIn,
@@ -124,7 +121,12 @@ export const EditProfilePage = () => {
     formData.append("address", formState.address);
     formData.append("city", formState.city);
 
-    console.log(`current password `,formState.currentPassword ,`password`, formState.password)
+    console.log(
+      `current password `,
+      formState.currentPassword,
+      `password`,
+      formState.password
+    );
 
     if (selectedFilesCv.length > 0) {
       formData.append("cv", selectedFilesCv[0]);
@@ -193,200 +195,205 @@ export const EditProfilePage = () => {
       }}
     >
       <HeaderForOtherRoutes routeView={titleOfEditProfileForm} />
-
-      <Container
-        maxWidth="md"
-        sx={{
-          marginTop: "30px",
-          paddingBottom: "10px",
-          height: "100%",
-          flex: 1,
-        }}
+      <motion.div
+        className="black"
+        initial={{ width: 0, opacity: 0 }}
+        animate={{ width: "100%", transition: { duration: 1 }, opacity: 1 }}
       >
-        {isLoggedIn ? (
-          <Paper elevation={3} sx={{ ...paperStyling, padding: "20px 40px" }}>
-            <form onSubmit={handleProfileUpdate}>
-              {!isSubmitted && (
-                <>
-                  <Typography variant="body1">Current image</Typography>
-                  <br />
-                  <Avatar
-                    src={avatarImage}
-                    sx={{ width: "60px", height: "60px" }}
-                    alt="other image"
-                  />
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      color: themeMode === "dark" ? "#2feb00" : "black",
-                    }}
-                  >
-                    Change avatar
-                  </Typography>
-                  <br></br>
-                  <MyDropzoneForAvatarImage
-                    setSelectedFiles={setSelectedImage}
-                  />
-                </>
-              )}
-              <br></br>
-              <EditProfileFormInput
-                onUserNameChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "username",
-                    value,
-                    25,
-                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                  )
-                }
-                onFirstNameChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "firstName",
-                    value,
-                    25,
-                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                  )
-                }
-                onLastNameChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "lastName",
-                    value,
-                    25,
-                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                  )
-                }
-                onCurrentPasswordChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "currentPassword",
-                    value,
-                    25,
-                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                  )
-                }
-                onPasswordChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "password",
-                    value,
-                    25,
-                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                  )
-                }
-                onEmailChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "email",
-                    value,
-                    50,
-                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{5,}$/
-                  )
-                }
-                onCityChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "city",
-                    value,
-                    20,
-                    /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
-                    formState.errorMessages.city
-                  )
-                }
-                onPhoneNumberChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "phoneNumber",
-                    value,
-                    15,
-                    /[^0-9+() -.]/g,
-                    formState.errorMessages.phoneNumber
-                  )
-                }
-                onAddressChange={(value) =>
-                  handleInputForEditProfileForm(
-                    formState,
-                    formDispatch,
-                    "address",
-                    value,
-                    40,
-                    /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
-                    formState.errorMessages.address
-                  )
-                }
-                onSubmit={isSubmitted}
-                formState={formState}
-              />
-              <br></br>
-              <br></br>
-              {!isSubmitted && (
-                <>
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      color: themeMode === "dark" ? "#2feb00" : "black",
-                    }}
-                  >
-                    Upload CV
-                  </Typography>
-                  <MyDropzoneForCV setSelectedFiles={setSelectedFilesCv} />
-                  <br></br>
-                  {cv !== "" ? (
-                    <Typography variant="body1">
-                      <Link
-                        href={cv}
-                        color="inherit"
-                        underline="hover"
-                        sx={{
-                          color: themeMode === "dark" ? "#2feb00" : "black",
-                        }}
-                      >
-                        Current CV
-                      </Link>
+        <Container
+          maxWidth="md"
+          sx={{
+            marginTop: "30px",
+            paddingBottom: "10px",
+            height: "100%",
+            flex: 1,
+          }}
+        >
+          {isLoggedIn ? (
+            <Paper elevation={3} sx={{ ...paperStyling, padding: "20px 40px" }}>
+              <form onSubmit={handleProfileUpdate}>
+                {!isSubmitted && (
+                  <>
+                    <Typography variant="body1">Current image</Typography>
+                    <br />
+                    <Avatar
+                      src={avatarImage}
+                      sx={{ width: "60px", height: "60px" }}
+                      alt="other image"
+                    />
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        color: themeMode === "dark" ? "#2feb00" : "black",
+                      }}
+                    >
+                      Change avatar
                     </Typography>
-                  ) : (
-                    "no Cv uploaded"
-                  )}
-                </>
-              )}
-              <Button
-                type="submit"
-                variant="contained"
+                    <br></br>
+                    <MyDropzoneForAvatarImage
+                      setSelectedFiles={setSelectedImage}
+                    />
+                  </>
+                )}
+                <br></br>
+                <EditProfileFormInput
+                  onUserNameChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "username",
+                      value,
+                      25,
+                      /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                    )
+                  }
+                  onFirstNameChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "firstName",
+                      value,
+                      25,
+                      /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                    )
+                  }
+                  onLastNameChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "lastName",
+                      value,
+                      25,
+                      /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                    )
+                  }
+                  onCurrentPasswordChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "currentPassword",
+                      value,
+                      25,
+                      /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                    )
+                  }
+                  onPasswordChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "password",
+                      value,
+                      25,
+                      /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                    )
+                  }
+                  onEmailChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "email",
+                      value,
+                      50,
+                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{5,}$/
+                    )
+                  }
+                  onCityChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "city",
+                      value,
+                      20,
+                      /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
+                      formState.errorMessages.city
+                    )
+                  }
+                  onPhoneNumberChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "phoneNumber",
+                      value,
+                      15,
+                      /[^0-9+() -.]/g,
+                      formState.errorMessages.phoneNumber
+                    )
+                  }
+                  onAddressChange={(value) =>
+                    handleInputForEditProfileForm(
+                      formState,
+                      formDispatch,
+                      "address",
+                      value,
+                      40,
+                      /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
+                      formState.errorMessages.address
+                    )
+                  }
+                  onSubmit={isSubmitted}
+                  formState={formState}
+                />
+                <br></br>
+                <br></br>
+                {!isSubmitted && (
+                  <>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        color: themeMode === "dark" ? "#2feb00" : "black",
+                      }}
+                    >
+                      Upload CV
+                    </Typography>
+                    <MyDropzoneForCV setSelectedFiles={setSelectedFilesCv} />
+                    <br></br>
+                    {cv !== "" ? (
+                      <Typography variant="body1">
+                        <Link
+                          href={cv}
+                          color="inherit"
+                          underline="hover"
+                          sx={{
+                            color: themeMode === "dark" ? "#2feb00" : "black",
+                          }}
+                        >
+                          Current CV
+                        </Link>
+                      </Typography>
+                    ) : (
+                      "no Cv uploaded"
+                    )}
+                  </>
+                )}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    ...buttonStyling,
+                    border: themeMode === "dark" ? "white 1px solid" : "",
+                    marginBottom: "20px",
+                  }}
+                  fullWidth
+                  disabled={isSubmitted}
+                >
+                  Update Profile
+                </Button>
+              </form>
+            </Paper>
+          ) : (
+            <Box sx={{ height: "100vh" }}>
+              <Typography
+                variant="h4"
                 sx={{
-                  ...buttonStyling,
-                  border: themeMode === "dark" ? "white 1px solid" : "",
-                  marginBottom: "20px",
+                  color: themeMode === "dark" ? "#2feb00" : "white",
                 }}
-                fullWidth
-                disabled={isSubmitted}
               >
-                Update Profile
-              </Button>
-            </form>
-          </Paper>
-        ) : (
-          <Box sx={{ height: "634px" }}>
-            <Typography
-              variant="h4"
-              sx={{
-                color: themeMode === "dark" ? "#2feb00" : "white",
-              }}
-            >
-              Please login to access this part of website{" "}
-            </Typography>
-          </Box>
-        )}
-      </Container>
+                Please login to access this part of website{" "}
+              </Typography>
+            </Box>
+          )}
+        </Container>
+      </motion.div>
     </Box>
   );
 };

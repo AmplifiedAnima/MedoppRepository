@@ -8,7 +8,6 @@ import { getOfferIconUrl } from "./MapComponentUtils";
 
 interface MapProps {
   offers: Offer[] | [];
-  isExpanded?: boolean;
   onOfferClick: (offer: Offer) => void;
   selectedOffer: Offer | null;
   mapRef: React.RefObject<HTMLDivElement>;
@@ -16,7 +15,6 @@ interface MapProps {
 
 const MapComponent: React.FC<MapProps> = ({
   offers,
-  isExpanded,
   onOfferClick,
   selectedOffer,
   mapRef,
@@ -40,6 +38,9 @@ const MapComponent: React.FC<MapProps> = ({
   );
 
   useEffect(() => {
+    if (homeLocation && filterState.selectedOffer) {
+      dispatch({ type: "SET_INITIAL_FILTER_STATE" });
+    }
     if (!mapRef.current || !offers) return;
 
     const mapOptions: google.maps.MapOptions = {
@@ -51,9 +52,6 @@ const MapComponent: React.FC<MapProps> = ({
 
     map.current = new google.maps.Map(mapRef.current, mapOptions);
 
-    if (homeLocation && filterState.selectedOffer) {
-      dispatch({ type: "SET_INITIAL_FILTER_STATE" });
-    }
     offers.forEach((offer) => {
       let isSelected = selectedOffer?.id === offer.id;
 
@@ -94,9 +92,9 @@ const MapComponent: React.FC<MapProps> = ({
     });
 
     return () => {};
-  }, [themeMode, markers, onMarkerClick]);
+  }, [themeMode, markers]);
 
-  return <Box sx={{ height:"100vh" }} ref={mapRef} />;
+  return <Box sx={{ height: "100vh" }} ref={mapRef} />;
 };
 
 export default MapComponent;

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import ReactQuill from "react-quill";
 import {
+  getCustomMenuItemStyles,
   getInputPlaceholdersStyling,
   getReactQuillStyling,
 } from "../../../styles/formStyling";
@@ -48,7 +49,7 @@ const NewJobCreationFormInputs: React.FC<NewJobCreationFormInputsProps> = ({
   const { themeMode } = useContext(ThemeContext);
   const inputPlaceholdersStyling = getInputPlaceholdersStyling(themeMode);
   const quillStyling = getReactQuillStyling(themeMode);
-
+  const menuItemStyling = getCustomMenuItemStyles(themeMode);
   const [state, formDispatch] = useReducer(
     NewJobFormReducer,
     initialStateNewJobForm
@@ -66,6 +67,14 @@ const NewJobCreationFormInputs: React.FC<NewJobCreationFormInputsProps> = ({
 
   return (
     <>
+      <style>
+        {`.css-6hp17o-MuiList-root-MuiMenu-list {
+
+      padding-top: 0px;
+      padding-bottom: 0px;
+ 
+    }`}
+      </style>
       <TextField
         label="title"
         fullWidth
@@ -122,17 +131,23 @@ const NewJobCreationFormInputs: React.FC<NewJobCreationFormInputsProps> = ({
         }
         margin="normal"
         required
-        sx={inputPlaceholdersStyling}
+        sx={{ ...inputPlaceholdersStyling }}
         error={!!formState.errorMessages.selectedTypeOfEmployment}
         helperText={formState.errorMessages.selectedTypeOfEmployment}
         disabled={isSecondStep}
       >
-        <MenuItem value="full-time">Full-Time</MenuItem>
-        <MenuItem value="part-time">Part-Time</MenuItem>
-        <MenuItem value="B2B">Contract B2B</MenuItem>
+        <MenuItem value="full-time" sx={menuItemStyling}>
+          Full-Time
+        </MenuItem>
+        <MenuItem value="part-time" sx={menuItemStyling}>
+          Part-Time
+        </MenuItem>
+        <MenuItem value="B2B" sx={menuItemStyling}>
+          Contract B2B
+        </MenuItem>
       </TextField>
 
-      <Typography variant="subtitle1">Description:</Typography>
+      <Typography variant="subtitle1">Description :</Typography>
       <ReactQuill
         value={formState.description}
         onChange={(value) => onDescriptionChange(value)}
@@ -146,7 +161,11 @@ const NewJobCreationFormInputs: React.FC<NewJobCreationFormInputsProps> = ({
         </Typography>
       )}
       <Box mt={4} />
-      <FormControl variant="outlined" fullWidth sx={inputPlaceholdersStyling}>
+      <FormControl
+        variant="outlined"
+        fullWidth
+        sx={{ ...inputPlaceholdersStyling, marginBottom: "10px" }}
+      >
         <InputLabel>Profession</InputLabel>
         <Select
           label="Profession"
@@ -157,7 +176,11 @@ const NewJobCreationFormInputs: React.FC<NewJobCreationFormInputsProps> = ({
           disabled={isSecondStep}
         >
           {specialties.map((category) => (
-            <MenuItem key={category.label} value={category.label}>
+            <MenuItem
+              key={category.label}
+              value={category.label}
+              sx={menuItemStyling}
+            >
               {category.label}
             </MenuItem>
           ))}
@@ -187,7 +210,11 @@ const NewJobCreationFormInputs: React.FC<NewJobCreationFormInputsProps> = ({
             {specialties
               .find((category) => category.label === formState.selectedLabel)
               ?.specialties.map((specialty) => (
-                <MenuItem key={specialty} value={specialty}>
+                <MenuItem
+                  key={specialty}
+                  value={specialty}
+                  sx={menuItemStyling}
+                >
                   {specialty}
                 </MenuItem>
               ))}

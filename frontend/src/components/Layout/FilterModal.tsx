@@ -61,7 +61,6 @@ const FilterModal: React.FC<FilterModalProps> = ({
     setPriceRange([0, 30000]);
   }, [!isPriceRangeEnabled]);
 
-  console.log(priceRange);
   const inputPlaceholdersStyling = getInputPlaceholdersStyling(themeMode);
   const buttonStyling = getButtonStyling(themeMode);
 

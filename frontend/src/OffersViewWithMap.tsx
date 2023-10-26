@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "./styles/ThemeProviderContext";
-import { Box, Button } from "@mui/material";
+import { Backdrop, Box, Button } from "@mui/material";
 import Header from "./components/Header/Header";
 import { Offer } from "./components/JobOffers/OfferInterface";
 import appStyle from "./App.module.css";
@@ -9,6 +9,8 @@ import { useFilterContext } from "./utlis/FilterContext";
 import OfferCard from "./components/JobOffers/OfferCard";
 import { getButtonStyles } from "./styles/buttonStyling";
 import { getOffersListStyles } from "./styles/offersListStyle";
+import { motion } from "framer-motion";
+import SpinnerComponent from "./components/Layout/Spinner/Spinners";
 
 export const Container = styled("div")({
   backgroundColor: "#E0E0F1",
@@ -54,6 +56,8 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
   const buttonStyles = getButtonStyles(themeMode);
   const offersListStyle = getOffersListStyles(themeMode);
 
+  const [mapIsLoading, setMapIsLoading] = useState(true);
+
   const offerCardVariable = filteredOffers.map((offer) => (
     <OfferCard
       key={offer.id}
@@ -67,6 +71,7 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
   return (
     <Container>
       <Header />
+
       {isMobile && (
         <Box className={appStyle["container"]}>
           <Button
@@ -78,6 +83,7 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
           </Button>
         </Box>
       )}
+
       {isMobile ? (
         <Box>
           {showJobBoard ? (
@@ -96,10 +102,16 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
           }}
         >
           <LeftColumn sx={offersListStyle}>
-            <>{offerCardVariable}</>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 2 }}
+            >
+              <>{offerCardVariable}</>
+            </motion.div>
           </LeftColumn>
 
-          <RightColumn> {mapComponent} </RightColumn>
+          <RightColumn>{mapComponent}</RightColumn>
         </FlexContainer>
       )}
     </Container>

@@ -22,6 +22,9 @@ export const getInputPlaceholdersStyling = (themeMode: "dark" | "light") => ({
       "background-clip": "text !important",
     },
   },
+  "& .MuiInputBase-input.Mui-disabled": {
+    WebkitTextFillColor: themeMode === "dark" ? "#229907" : "lightgray"
+},
   "& .MuiAutocomplete-listbox .MuiAutocomplete-option.Mui-focused": {
    background:'transparent'
   },
@@ -58,6 +61,7 @@ export const getInputPlaceholdersStylingForJobApply = (themeMode: "dark" | "ligh
   "& .MuiAutocomplete-listbox .MuiAutocomplete-option.Mui-focused": {
    background:'transparent'
   },
+  
   "@media (max-width: 600px)": {
     width: "100%",
     fontSize: "13px",
@@ -75,8 +79,24 @@ export const getReactQuillStyling = (themeMode: "dark" | "light") => {
     border: `1px solid ${borderColor}`, 
     borderRadius: "4px",
     minHeight: "auto",
+    "&.quill-disabled": {
+      pointerEvents: "none", 
+      opacity: 1, 
+    },
   };
 };
+export const getCustomMenuItemStyles=  (themeMode: "dark" | "light") => ({
+  background: themeMode === "dark" ? "black" : "white",
+  color: themeMode === "dark" ? "white" : "black",
+  "&:hover": {
+    background: themeMode === "dark" ? "#2feb00" : "#001b45",
+    color: themeMode === "dark" ? "black" : "white",
+  },
+  "&.Mui-selected": {
+    background: themeMode === "dark" ? "#2feb00" : "#001b45",
+    color: themeMode === "dark" ? "black" : "white",
+  },
+});
 
 export const getPaperStyling = (themeMode: "dark" | "light") => ({
   padding: "10px 30px",

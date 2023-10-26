@@ -100,6 +100,10 @@ export class AuthController {
     if (!oldPasswordIsValid) {
       throw new UnauthorizedException('Old password is incorrect');
     }
+
+    if (currentPassword === editProfileDto.password) {
+      throw new UnauthorizedException('Old and new password cannot be the same ')
+    }
     
     if (files.cv) {
       const cv = files.cv[0];

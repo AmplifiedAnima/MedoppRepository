@@ -16,7 +16,7 @@ import {
   handleInputForRegistrationForm,
   handleSelectFieldForRegistrationForm,
 } from "./FunctionToHandleInputRegistrationPage";
-
+import { motion } from "framer-motion";
 const RegistrationPage = () => {
   const [formState, formDispatch] = useReducer(
     registrationFormReducer,
@@ -127,149 +127,155 @@ const RegistrationPage = () => {
           height: "100%",
         }}
       >
-        <Paper elevation={3} sx={{ ...paperStyling, padding: "20px 40px" }}>
-          <form onSubmit={handleRegistration}>
-            {!isSubmitted && (
-              <>
-                <Typography variant="h5"> Upload Avatar Image</Typography>
-                <MyDropzoneForAvatarImage
-                  setSelectedFiles={setSelectedImagesForAvatar}
-                />
-              </>
-            )}
-            <NewRegistrationFormInput
-              onUserNameChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "username",
-                  value,
-                  25,
-                  /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                )
-              }
-              onFirstNameChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "firstName",
-                  value,
-                  25,
-                  /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                )
-              }
-              onLastNameChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "lastName",
-                  value,
-                  25,
-                  /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                )
-              }
-              onPasswordChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "password",
-                  value,
-                  25,
-                  /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                )
-              }
-              onConfirmPasswordChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "confirmPassword",
-                  value,
-                  25,
-                  /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                )
-              }
-              onEmailChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "email",
-                  value,
-                  50,
-                  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{5,}$/
-                )
-              }
-              onCitychange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "city",
-                  value,
-                  20,
-                  /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
-                  formState.errorMessages.city
-                )
-              }
-              onPhoneNumberChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "phoneNumber",
-                  value,
-                  20,
-                  /[^0-9+() -.]/g,
-                  formState.errorMessages.phoneNumber
-                )
-              }
-              onAddressChange={(value) =>
-                handleInputForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "address",
-                  value,
-                  40,
-                  /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
-                  formState.errorMessages.address
-                )
-              }
-              onRoleChange={(value) =>
-                handleSelectFieldForRegistrationForm(
-                  formState,
-                  formDispatch,
-                  "role",
-                  value,
-                  "Role is required"
-                )
-              }
-              formState={formState}
-              onSubmit={isSubmitted}
-            />
+        <motion.div
+          className="black"
+          initial={{ width: 0, opacity: 0 }}
+          animate={{ width: "100%", transition: { duration: 1 }, opacity: 1 }}
+        >
+          <Paper elevation={3} sx={{ ...paperStyling, padding: "20px 40px" }}>
+            <form onSubmit={handleRegistration}>
+              {!isSubmitted && (
+                <>
+                  <Typography variant="h5"> Upload Avatar Image</Typography>
+                  <MyDropzoneForAvatarImage
+                    setSelectedFiles={setSelectedImagesForAvatar}
+                  />
+                </>
+              )}
+              <NewRegistrationFormInput
+                onUserNameChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "username",
+                    value,
+                    25,
+                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                  )
+                }
+                onFirstNameChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "firstName",
+                    value,
+                    25,
+                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                  )
+                }
+                onLastNameChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "lastName",
+                    value,
+                    25,
+                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                  )
+                }
+                onPasswordChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "password",
+                    value,
+                    25,
+                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                  )
+                }
+                onConfirmPasswordChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "confirmPassword",
+                    value,
+                    25,
+                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
+                  )
+                }
+                onEmailChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "email",
+                    value,
+                    50,
+                    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{5,}$/
+                  )
+                }
+                onCitychange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "city",
+                    value,
+                    20,
+                    /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
+                    formState.errorMessages.city
+                  )
+                }
+                onPhoneNumberChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "phoneNumber",
+                    value,
+                    20,
+                    /[^0-9+() -.]/g,
+                    formState.errorMessages.phoneNumber
+                  )
+                }
+                onAddressChange={(value) =>
+                  handleInputForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "address",
+                    value,
+                    40,
+                    /[^a-zA-Z0-9\s.-żźćńół&()'"-]/,
+                    formState.errorMessages.address
+                  )
+                }
+                onRoleChange={(value) =>
+                  handleSelectFieldForRegistrationForm(
+                    formState,
+                    formDispatch,
+                    "role",
+                    value,
+                    "Role is required"
+                  )
+                }
+                formState={formState}
+                onSubmit={isSubmitted}
+              />
 
-            {formState.role !== "Employer" && (
-              <>
-                {!isSubmitted && (
-                  <>
-                    <Typography variant="h5"> Upload Cv </Typography>
-                    <MyDropzoneForCV setSelectedFiles={setSelectedCvFile} />
-                  </>
-                )}
-              </>
-            )}
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                ...buttonStyling,
-                border: themeMode === "dark" ? "white 1px solid" : "",
-                marginBottom: "20px",
-              }}
-              fullWidth
-              disabled={isSubmitted}
-            >
-              Register
-            </Button>
-          </form>
-        </Paper>
-        <AlertLayout />
+              {formState.role !== "Employer" && (
+                <>
+                  {!isSubmitted && (
+                    <>
+                      <Typography variant="h5"> Upload Cv </Typography>
+                      <MyDropzoneForCV setSelectedFiles={setSelectedCvFile} />
+                    </>
+                  )}
+                </>
+              )}
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{
+                  ...buttonStyling,
+                  border: themeMode === "dark" ? "white 1px solid" : "",
+                  marginBottom: "20px",
+                }}
+                fullWidth
+                disabled={isSubmitted}
+              >
+                Register
+              </Button>
+            </form>
+          </Paper>
+          <AlertLayout />
+        </motion.div>
       </Container>
     </Box>
   );

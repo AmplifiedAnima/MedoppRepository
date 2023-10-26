@@ -23,6 +23,7 @@ import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { useFilterContext } from "../../utlis/FilterContext";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
 import AlertLayout from "../../utlis/Alerts";
+import { getCustomMenuItemStyles } from "../../styles/formStyling";
 
 interface ButtonSectionProps {
   buttons: { label: string; specialties: string[] }[];
@@ -63,18 +64,14 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
   };
 
   const isMobile = window.innerWidth > 768;
-
+  const menuItemStyling = getCustomMenuItemStyles(themeMode)
   return (
     <Box>
       <style>
         {`.css-6hp17o-MuiList-root-MuiMenu-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      position: relative;
       padding-top: 0px;
       padding-bottom: 0px;
-      outline: 0;
+ 
     }`}
       </style>
       <Box
@@ -157,17 +154,7 @@ const ButtonSection: React.FC<ButtonSectionProps> = ({ buttons }) => {
                 <MenuItem
                   key={specialty}
                   onClick={() => handleOptionSelect(specialty)}
-                  sx={{
-                    width: "100%",
-                    background: themeMode === "dark" ? "black" : "white",
-                    backgroundColor: themeMode === "dark" ? "black" : "white",
-                    color: themeMode === "dark" ? "white" : "black",
-
-                    "&:hover": {
-                      background: themeMode === "dark" ? "#2feb00" : "#001b45",
-                      color: themeMode === "dark" ? "black" : "white",
-                    },
-                  }}
+                  sx={menuItemStyling}
                 >
                   {specialty}
                 </MenuItem>

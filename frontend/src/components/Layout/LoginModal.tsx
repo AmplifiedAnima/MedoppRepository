@@ -129,6 +129,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
 
   useEffect(() => {
     dispatch({ type: "CLEAR_ALERTS" });
+ 
     setHideContent(false);
   }, [isLoginModalOpen]);
 

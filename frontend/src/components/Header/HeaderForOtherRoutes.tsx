@@ -35,7 +35,7 @@ const HeaderForOtherRoutes: React.FC<HeaderForOtherRoutesProps> = ({
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    setIsLoggedIn(false); // Update the login state to "not logged in"
+    setIsLoggedIn(false); 
     setIsProfileOpen(false);
     dispatch({ type: "SHOW_SUCCESS", payload: "Sucessfully logged out!" });
     setTimeout(() => {

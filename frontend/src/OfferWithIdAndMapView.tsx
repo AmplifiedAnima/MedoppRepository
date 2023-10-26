@@ -10,6 +10,7 @@ import { useFilterContext } from "./utlis/FilterContext";
 import { useParams } from "react-router-dom";
 import { getOffersListStyles } from "./styles/offersListStyle";
 import { useAlertContext } from "./utlis/AlertHandlingContext";
+import { motion } from "framer-motion";
 
 interface OfferWithIdAndMapViewProps {
   mapComponent: React.ReactNode;
@@ -96,6 +97,7 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
           </Button>
         </Box>
       )}
+
       {isMobile ? (
         <Box>
           {showOfferCard && selectedOffer ? (
@@ -114,8 +116,18 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
           }}
         >
           <LeftColumn sx={offersListStyle}>
-            <>{offerCardVariable}</>
+            <motion.div
+              className="black"
+              initial={{ opacity: 0 }}
+              animate={{
+                transition: { duration: 1 },
+                opacity: 1,
+              }}
+            >
+              <>{offerCardVariable}</>
+            </motion.div>
           </LeftColumn>
+
           <RightColumn>{mapComponent}</RightColumn>
         </FlexContainer>
       )}

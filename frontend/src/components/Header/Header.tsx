@@ -12,7 +12,7 @@ import { useSearchHook } from "../Layout/SearchFunctionalityHook";
 import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
 import LoginModal from "../Layout/LoginModal";
 import { useAlertContext } from "../../utlis/AlertHandlingContext";
-import AlertLayout from "../../utlis/Alerts";
+import AlertLayout, { NotificationAlerts } from "../../utlis/Alerts";
 import filterWhite from "../../static/IconsMedopp/FILTER_WHITE.png";
 import filterGreen from "../../static/IconsMedopp/FILTER_GREEN.png";
 import { IconButtons } from "./HeaderMenuElements";
@@ -167,7 +167,8 @@ const Header: React.FC = () => {
         resetAllQueries={handleResetAllSearchQueries}
       />
       <LoginModal open={isLoginModalOpen} onClose={handleLoginModalClose} />
-      <AlertLayout
+      <AlertLayout />
+      <NotificationAlerts
         onSpecialtyClose={handleSpecialtyReset}
         onLocationClose={handleLocationReset}
         onEmploymentTypeClose={handleTypeOfEmploymentReset}

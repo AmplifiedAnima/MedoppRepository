@@ -22,7 +22,8 @@ import {
   getHeaderStyles,
 } from "../../../styles/tablesStyles";
 import { deleteOffer } from "./EmployerOffersViewFunctionsHandlers";
-
+import { motion } from "framer-motion";
+import SpinnerComponent from "../Spinner/Spinners";
 interface OfferFetchedForUserView {
   id: string;
   label: string;
@@ -36,13 +37,14 @@ interface OfferFetchedForUserView {
 
 const EmployersOffersView = () => {
   const isMobile = window.innerWidth < 768;
-  const { isLoggedIn } = useContext(IsLoggedInContext);
+  const { isLoggedIn, roles } = useContext(IsLoggedInContext);
   const { themeMode } = useContext(ThemeContext);
   const [userOffers, setUserOffers] = useState<OfferFetchedForUserView[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [dataIsBeingFetched, setDataIsBeingFetched] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedOfferId, setSelectedOfferId] = useState<string>("");
-
+  const isEmployer = isLoggedIn && roles.includes("Employer");
   const handleDeleteModalOpen = (offerId: string) => {
     setIsDeleteModalOpen(true);
     setSelectedOfferId(offerId);
@@ -60,6 +62,7 @@ const EmployersOffersView = () => {
   };
   useEffect(() => {
     const fetchEmployersOffers = async () => {
+      setDataIsBeingFetched(true);
       try {
         const token = localStorage.getItem("token");
 
@@ -80,17 +83,20 @@ const EmployersOffersView = () => {
           console.log(data);
 
           setDataLoaded(true);
+          setDataIsBeingFetched(false);
         } else {
+          setDataIsBeingFetched(false);
           console.log("Error fetching user offers: ", response.status);
         }
       } catch (error) {
+        setDataIsBeingFetched(false);
         console.error("Error: ", error);
       }
     };
     if (!dataLoaded) {
       fetchEmployersOffers();
     }
-  }, [dataLoaded,isLoggedIn]);
+  }, [dataLoaded, isLoggedIn]);
 
   const containerStyles = getContainerStyles(themeMode);
   const innerBoxStyles = getInnerBoxStyles(isMobile);
@@ -100,133 +106,154 @@ const EmployersOffersView = () => {
   return (
     <Box sx={containerStyles}>
       <HeaderForOtherRoutes routeView="My Offers" />
-      <Box sx={innerBoxStyles}>
-        {isLoggedIn ? (
-          <>
-            <Table sx={tableStyles}>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={headerStyles}>
-                    <Typography variant="h5">Job title</Typography>
-                  </TableCell>
-                  <TableCell sx={headerStyles}>
-                    <Typography variant="h5">Profession</Typography>
-                  </TableCell>
-                  <TableCell sx={headerStyles}>
-                    <Typography variant="h5">Specialty</Typography>
-                  </TableCell>
-                  <TableCell sx={headerStyles}>
-                    <Typography variant="h5">Location</Typography>
-                  </TableCell>
-                  <TableCell sx={headerStyles}> </TableCell>
-                </TableRow>
-              </TableHead>
-
-              <TableBody>
-                {userOffers.map((offer) => (
-                  <TableRow
-                    key={offer.id}
-                    sx={{ margin: isMobile ? "45px 0px" : "20px 0px" }}
-                  >
-                    <TableCell sx={cellStyles}>
-                      {isMobile && (
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: themeMode === "dark" ? "#2feb00" : "#679af8",
-                          }}
-                        >
-                          Title
-                        </Typography>
-                      )}
-                      {offer.title}
+      <motion.div
+        className="black"
+        initial={{ opacity: 0 }}
+        animate={{ transition: { duration: 2 }, opacity: 1 }}
+      >
+        <Box sx={innerBoxStyles}>
+          {isLoggedIn && isEmployer ? (
+            <>
+              <Table sx={tableStyles}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={headerStyles}>
+                      <Typography variant="h5">Job title</Typography>
                     </TableCell>
-                    <TableCell sx={cellStyles}>
-                      {isMobile && (
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: themeMode === "dark" ? "#2feb00" : "#679af8",
-                          }}
-                        >
-                          Profession
-                        </Typography>
-                      )}
-                      {offer.label}
+                    <TableCell sx={headerStyles}>
+                      <Typography variant="h5">Profession</Typography>
                     </TableCell>
-                    <TableCell sx={cellStyles}>
-                      {isMobile && (
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: themeMode === "dark" ? "#2feb00" : "#679af8",
-                          }}
-                        >
-                          Specialty:
-                        </Typography>
-                      )}
-                      {offer.specialties}
+                    <TableCell sx={headerStyles}>
+                      <Typography variant="h5">Specialty</Typography>
                     </TableCell>
-                    <TableCell sx={cellStyles}>
-                      {isMobile && (
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: themeMode === "dark" ? "#2feb00" : "#679af8",
-                          }}
-                        >
-                          Location:
-                        </Typography>
-                      )}
-                      {offer.location}
+                    <TableCell sx={headerStyles}>
+                      <Typography variant="h5">Location</Typography>
                     </TableCell>
-                    <TableCell sx={cellStyles}>
-                      <Button
-                        sx={{
-                          color: themeMode === "dark" ? "#2feb00" : "#679af8",
-                        }}
-                      >
-                        Offer Edition
-                      </Button>
-
-                      <Button
-                        onClick={() => handleDeleteModalOpen(offer.id)}
-                        sx={{
-                          color: themeMode === "dark" ? "#2feb00" : "#679af8",
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                    <Box
-                      sx={{
-                        padding: "20px 0px",
-                      }}
-                    />
+                    <TableCell sx={headerStyles}> </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <DeleteOfferModal
-              isOpen={isDeleteModalOpen}
-              onClose={handleDeleteModalClose}
-              handleDelete={() => handleOfferDeletion(selectedOfferId)}
-              offerId={selectedOfferId}
-            />
-          </>
-        ) : (
-          <Box sx={{ height: "634px" }}>
-            <Typography
-              variant="h4"
-              sx={{
-                color: themeMode === "dark" ? "#2feb00" : "black",
-              }}
-            >
-              Please login to access this part of the website
-            </Typography>
-          </Box>
-        )}
-      </Box>
+                </TableHead>
+                {dataIsBeingFetched ? (
+                  <Box sx={{ ...innerBoxStyles, height: "100vh" }}>
+                    <SpinnerComponent />
+                  </Box>
+                ) : (
+                  <TableBody>
+                    {userOffers.map((offer) => (
+                      <TableRow
+                        key={offer.id}
+                        sx={{ margin: isMobile ? "45px 0px" : "20px 0px" }}
+                      >
+                        <TableCell sx={cellStyles}>
+                          {isMobile && (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color:
+                                  themeMode === "dark" ? "#2feb00" : "#679af8",
+                              }}
+                            >
+                              Title
+                            </Typography>
+                          )}
+                          {offer.title}
+                        </TableCell>
+                        <TableCell sx={cellStyles}>
+                          {isMobile && (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color:
+                                  themeMode === "dark" ? "#2feb00" : "#679af8",
+                              }}
+                            >
+                              Profession
+                            </Typography>
+                          )}
+                          {offer.label}
+                        </TableCell>
+                        <TableCell sx={cellStyles}>
+                          {isMobile && (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color:
+                                  themeMode === "dark" ? "#2feb00" : "#679af8",
+                              }}
+                            >
+                              Specialty:
+                            </Typography>
+                          )}
+                          {offer.specialties}
+                        </TableCell>
+                        <TableCell sx={cellStyles}>
+                          {isMobile && (
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color:
+                                  themeMode === "dark" ? "#2feb00" : "#679af8",
+                              }}
+                            >
+                              Location:
+                            </Typography>
+                          )}
+                          {offer.location}
+                        </TableCell>
+                        <TableCell sx={cellStyles}>
+                          {/* <Button
+                            sx={{
+                              color:
+                                themeMode === "dark" ? "#2feb00" : "#679af8",
+                            }}
+                          >
+                            Offer Edition
+                          </Button> */}
+
+                          <Button
+                            onClick={() => handleDeleteModalOpen(offer.id)}
+                            sx={{
+                              color:
+                                themeMode === "dark" ? "#2feb00" : "#679af8",
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        </TableCell>
+                        <Box
+                          sx={{
+                            padding: "20px 0px",
+                          }}
+                        />
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                )}
+              </Table>
+              <DeleteOfferModal
+                isOpen={isDeleteModalOpen}
+                onClose={handleDeleteModalClose}
+                handleDelete={() => handleOfferDeletion(selectedOfferId)}
+                offerId={selectedOfferId}
+              />
+            </>
+          ) : (
+            <Box sx={{ height: "1200px" }}>
+              <Typography
+                variant="h4"
+                sx={{
+                  color:
+                    themeMode === "dark"
+                      ? "#2feb00"
+                      : "linear-gradient(180deg,  #121a26 13%,  #a0bbfa 99%)",
+                }}
+              >
+                Please login to access this part of the website (your type of
+                account has to be employer)
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </motion.div>
     </Box>
   );
 };

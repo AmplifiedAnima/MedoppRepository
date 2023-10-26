@@ -30,7 +30,7 @@ import NewJobCreationFormInputs from "./NewJobCreationFormInputs";
 import { NewJobFormReducer } from "../../../utlis/Form Reducers/FormReducer";
 import { handleSubmit } from "./JobSubmissionFetchingEndpoint";
 import { initialStateNewJobForm } from "../../../utlis/Form Reducers/initialStatesForForms";
-
+import { motion } from "framer-motion";
 import {
   handleInputFieldForNewJobForm,
   validateDescriptionFieldNewJobForm,
@@ -231,6 +231,7 @@ const NewJobCreationForm: React.FC = () => {
 
   const GeoCodingPlaceComponentVariable = (
     <>
+      <Typography variant="subtitle1">Location : </Typography>
       <GeoCodingPlaceComponent
         apiKey={GOOGLE_API_KEY}
         onLocationChanged={handleLocationChange}
@@ -254,6 +255,7 @@ const NewJobCreationForm: React.FC = () => {
       }}
     >
       <HeaderForOtherRoutes routeView={"Create a New Job Offer"} />
+
       <Container
         maxWidth="xl"
         sx={{
@@ -269,6 +271,7 @@ const NewJobCreationForm: React.FC = () => {
         {isEmployer ? (
           <>
             <AlertLayout />
+
             <Box>
               <form onSubmit={handleFormSubmit}>
                 <Paper
@@ -278,8 +281,8 @@ const NewJobCreationForm: React.FC = () => {
                     padding: "25px 30px",
                     width: "685px",
                     "@media (max-width: 800px)": {
-                      width: "auto",
-                      height: "auto",
+                      width: "100hv",
+                      height: "100hv",
                     },
                   }}
                 >
@@ -292,9 +295,13 @@ const NewJobCreationForm: React.FC = () => {
                       marginLeft: "auto",
                       marginRight: "auto",
                       "& .MuiStepIcon-root": {
-                        borderColor: themeMode === "dark" ? "#02f016" : "black",
-                        color: themeMode === "dark" ? "#02f016" : "black",
+                        fill: themeMode === "dark" ? "#02f016" : "black",
+
+                        text: {
+                          fill: themeMode === "dark" ? "black" : "white",
+                        },
                       },
+
                       "& .MuiStepLabel-label": {
                         color: themeMode === "dark" ? "#02f016" : "black",
                       },
@@ -306,40 +313,50 @@ const NewJobCreationForm: React.FC = () => {
                       </Step>
                     ))}
                   </Stepper>
-                  {activeStep === 0 && (
-                    <>
-                      {!isSubmitted && InputsForSteps}
+                  <motion.div
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{
+                      width: "100%",
+                      transition: { duration: 1 },
+                      opacity: 1,
+                    }}
+                  >
+                    {activeStep === 0 && (
+                      <>
+                        {!isSubmitted && InputsForSteps}
 
-                      {!isSubmitted && GeoCodingPlaceComponentVariable}
-                      {stepError && (
-                        <Typography variant="body2" color="error">
-                          {stepError}
-                        </Typography>
-                      )}
-                      <Button
-                        variant="contained"
-                        onClick={() => {
-                          if (!isStep1Complete()) {
-                            setStepError(
-                              "Please fill in all required fields in Step I"
-                            );
-                          } else {
-                            nextStep();
-                            setStepError("");
-                          }
-                        }}
-                        fullWidth
-                        sx={{
-                          ...buttonStyling,
-                          border: themeMode === "dark" ? "white 1px solid" : "",
-                        }}
-                        disabled={onSubmitButtonHide}
-                      >
-                        Next Step
-                      </Button>
-                    </>
-                  )}
+                        {!isSubmitted && GeoCodingPlaceComponentVariable}
+                        {stepError && (
+                          <Typography variant="body2" color="error">
+                            {stepError}
+                          </Typography>
+                        )}
 
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            if (!isStep1Complete()) {
+                              setStepError(
+                                "Please fill in all required fields in Step I"
+                              );
+                            } else {
+                              nextStep();
+                              setStepError("");
+                            }
+                          }}
+                          fullWidth
+                          sx={{
+                            ...buttonStyling,
+                            border:
+                              themeMode === "dark" ? "white 1px solid" : "",
+                          }}
+                          disabled={onSubmitButtonHide}
+                        >
+                          Next Step
+                        </Button>
+                      </>
+                    )}
+                  </motion.div>
                   {activeStep === 1 && (
                     <>
                       <Typography variant="h6">Confirmation</Typography>

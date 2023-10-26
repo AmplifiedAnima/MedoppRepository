@@ -3,7 +3,7 @@ export const getContainerStyles = (themeMode:string) => {
       background:
         themeMode === "dark"
           ? "linear-gradient(20deg, rgb(0, 0, 0) 2%, #263139 69%)"
-          : "#FFFFFF",
+          : "white",
       color: themeMode === "dark" ? "white" : "black",
       maxWidth: "100%",
       "@media (max-width: 768px)": {

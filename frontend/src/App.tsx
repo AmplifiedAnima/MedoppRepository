@@ -24,6 +24,7 @@ const App = () => {
   const { state: filterState, dispatch } = useFilterContext();
 
   UserAlreadyLoggedInHandler();
+  
   useEffect(() => {
     const storedThemeMode = localStorage.getItem("themeMode");
     console.log(storedThemeMode);
@@ -50,7 +51,6 @@ const App = () => {
         const response = await fetch("http://localhost:3000/offers");
         const data = await response.json();
         setFilteredOffers(data);
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -67,7 +67,6 @@ const App = () => {
         const data = await response.json();
         const offersArray = Array.isArray(data) ? data : [data]; // Wrap in an array if it's a single offer
         setFilteredOffers(offersArray as Offer[]);
-        console.log(response);
       } catch (error) {
         console.error(error);
       }
@@ -76,7 +75,6 @@ const App = () => {
 
   useEffect(() => {
     fetchOffers(filterState);
-    console.log(filterState.selectedOffer);
   }, [filterState, dispatch]);
 
   const handleOfferClick = (offer: Offer | null): void => {
@@ -94,7 +92,6 @@ const App = () => {
   const mapComponent = (
     <MapComponent
       offers={filteredOffers}
-      isExpanded={true}
       onOfferClick={handleOfferClick}
       selectedOffer={filterState.selectedOffer}
       mapRef={mapRef}
