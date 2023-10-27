@@ -15,10 +15,10 @@ type IsLoggedInContextType = {
   setFirstName: (value: string) => void;
   lastName: string;
   setLastName: (value: string) => void;
-  phoneNumber: string; // Added phoneNumber
-  setPhoneNumber: (value: string) => void; // Added setPhoneNumber
-  email: string; // Added email
-  setEmail: (value: string) => void; // Added setEmail
+  phoneNumber: string;
+  setPhoneNumber: (value: string) => void;
+  email: string; 
+  setEmail: (value: string) => void;
   address: string;
   setAddress: (value: string) => void;
   city: string;
@@ -42,10 +42,10 @@ export const IsLoggedInContext = createContext<IsLoggedInContextType>({
   setFirstName: () => {},
   lastName: "",
   setLastName: () => {},
-  phoneNumber: "", // Added phoneNumber
-  setPhoneNumber: () => {}, // Added setPhoneNumber
-  email: "", // Added email
-  setEmail: () => {}, // Added setEmail
+  phoneNumber: "",
+  setPhoneNumber: () => {},
+  email: "",
+  setEmail: () => {}, 
   address: "",
   setAddress: () => {},
   city: "",

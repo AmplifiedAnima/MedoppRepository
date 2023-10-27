@@ -51,6 +51,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
         position: "relative",
         fontFamily: "Helvetica",
         height: "auto",
+  
       }}
     >
       <CardContent>

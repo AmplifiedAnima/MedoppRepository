@@ -39,10 +39,24 @@ export const UserAlreadyLoggedInHandler = () => {
         setCv(tokenPayload.cv);
         setIsLoggedIn(true);
       } else {
-        localStorage.removeItem("token");
-        setIsLoggedIn(false);
+        clearUserData();
       }
       return;
     }
   }, [loginToken, !isLoggedIn]);
+
+  const clearUserData = () => {
+    localStorage.removeItem("token");
+    setUsername("");
+    setRoles([]);
+    setAvatarImage("");
+    setFirstName("");
+    setLastName("");
+    setPhoneNumber("");
+    setEmail("");
+    setAddress("");
+    setCity("");
+    setCv("");
+    setIsLoggedIn(false);
+  };
 };

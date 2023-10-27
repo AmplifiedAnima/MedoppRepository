@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { getOffersListStyles } from "./styles/offersListStyle";
 import { useAlertContext } from "./utlis/AlertHandlingContext";
 import { motion } from "framer-motion";
+import { universalHeight } from "./utlis/GoogleMapsApi/MapComponent";
 
 interface OfferWithIdAndMapViewProps {
   mapComponent: React.ReactNode;
@@ -29,7 +30,7 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
   handleToggleOfferCard,
   selectedOffer,
 }) => {
-  const { themeMode } = useContext(ThemeContext);
+  const { themeMode, toggleTheme } = useContext(ThemeContext);
   const { state: filterState, dispatch } = useFilterContext();
   const { dispatch: alertDispatch } = useAlertContext();
   const buttonStyles = getButtonStyles(themeMode);
@@ -115,7 +116,7 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
                 : "linear-gradient(180deg, #001b45 10%,#FFFFFF 99%)",
           }}
         >
-          <LeftColumn sx={offersListStyle}>
+          <LeftColumn sx={{ ...offersListStyle, height: universalHeight }}>
             <motion.div
               className="black"
               initial={{ opacity: 0 }}

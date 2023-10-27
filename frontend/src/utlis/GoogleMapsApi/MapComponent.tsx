@@ -6,6 +6,15 @@ import { FilterContext } from "../FilterContext";
 import { Offer } from "../../components/JobOffers/OfferInterface";
 import { getOfferIconUrl } from "./MapComponentUtils";
 
+export const universalHeight = {
+  height: "100vh", 
+  "@media (min-height: 678px)": {
+    height: "675px", 
+  },
+  "@media (min-height: 800px)": {
+    height:'100vh'
+  }
+};
 interface MapProps {
   offers: Offer[] | [];
   onOfferClick: (offer: Offer) => void;
@@ -27,6 +36,7 @@ const MapComponent: React.FC<MapProps> = ({
   const { state: filterState, dispatch } = useContext(FilterContext);
   const location = useLocation();
   const homeLocation = location.pathname === "/";
+
 
   const onMarkerClick = useCallback(
     (offer: Offer) => {
@@ -92,9 +102,9 @@ const MapComponent: React.FC<MapProps> = ({
     });
 
     return () => {};
-  }, [themeMode, markers]);
+  }, [themeMode, markers, onMarkerClick]);
 
-  return <Box sx={{ height: "100vh" }} ref={mapRef} />;
+  return <Box sx={{ height: universalHeight }} ref={mapRef} />;
 };
 
 export default MapComponent;

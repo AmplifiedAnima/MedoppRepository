@@ -10,7 +10,7 @@ import OfferCard from "./components/JobOffers/OfferCard";
 import { getButtonStyles } from "./styles/buttonStyling";
 import { getOffersListStyles } from "./styles/offersListStyle";
 import { motion } from "framer-motion";
-import SpinnerComponent from "./components/Layout/Spinner/Spinners";
+import { universalHeight } from "./utlis/GoogleMapsApi/MapComponent";
 
 export const Container = styled("div")({
   backgroundColor: "#E0E0F1",
@@ -101,7 +101,13 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
                 : "linear-gradient(180deg, #001b45 10%, #FFFFFF 99%)",
           }}
         >
-          <LeftColumn sx={offersListStyle}>
+          <LeftColumn
+            sx={{
+              ...offersListStyle,
+              height: universalHeight,
+            
+            }}
+          >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

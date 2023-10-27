@@ -77,8 +77,8 @@ export const Switcher: React.FC = () => {
   const { themeMode, toggleTheme } = useContext(ThemeContext);
   const handleThemeToggle = () => {
     toggleTheme();
-    const newThemeMode = themeMode === "light" ? "dark" : "light";
-    localStorage.setItem("themeMode", newThemeMode);
+    // const newThemeMode = themeMode === "light" ? "dark" : "light";
+    // localStorage.setItem("themeMode", newThemeMode);
   };
 
 

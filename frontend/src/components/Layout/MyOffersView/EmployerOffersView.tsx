@@ -247,8 +247,7 @@ const EmployersOffersView = () => {
                       : "linear-gradient(180deg,  #121a26 13%,  #a0bbfa 99%)",
                 }}
               >
-                Please login to access this part of the website (your type of
-                account has to be employer)
+                Please login to access this part of the website (you have to be logged in as employer)
               </Typography>
             </Box>
           )}

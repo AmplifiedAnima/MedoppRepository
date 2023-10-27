@@ -5,7 +5,7 @@ body {
     sans-serif;
   -moz-osx-font-smoothing: grayscale;
   background-color: inherit;
-
+  height: 100hv;
 }
 
 .dark-mode body {
@@ -18,11 +18,13 @@ code {
 
 ::-webkit-scrollbar {
   min-width: 2px;
+  background-color: #293039;
+
 }
 
 ::-webkit-scrollbar-track {
   background-color: #293039;
-  border-radius: 8px;
+border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -24,14 +24,6 @@ const App = () => {
   const { state: filterState, dispatch } = useFilterContext();
 
   UserAlreadyLoggedInHandler();
-  
-  useEffect(() => {
-    const storedThemeMode = localStorage.getItem("themeMode");
-    console.log(storedThemeMode);
-    if (storedThemeMode !== themeMode) {
-      toggleTheme();
-    }
-  }, [themeMode, toggleTheme]);
 
   const navigate = useNavigate();
 

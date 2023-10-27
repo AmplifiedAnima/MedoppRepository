@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode } from "react";
+import React, { createContext, useState, ReactNode, useEffect } from "react";
 
 export type ThemeMode = "light" | "dark";
 
@@ -19,29 +19,37 @@ export const ThemeContext = createContext<ThemeContextProps>({
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [themeMode, setThemeMode] = useState<ThemeMode>("light");
+  const storedTheme = localStorage.getItem("themeMode");
+  const [themeMode, setThemeMode] = useState<ThemeMode>(
+    (storedTheme as ThemeMode) || "light"
+  );
+
+  // Save the theme mode to local storage when it changes
+  useEffect(() => {
+    localStorage.setItem("themeMode", themeMode);
+  }, [themeMode]);
 
   const toggleTheme = () => {
     setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
-  
+
   const darkModeStyle: google.maps.MapTypeStyle[] = [
     {
       elementType: "geometry",
-      stylers: [{ color: "#002b00" }], 
+      stylers: [{ color: "#002b00" }],
     },
     {
       elementType: "labels.text.stroke",
-      stylers: [{ color: "#002b00" }], 
+      stylers: [{ color: "#002b00" }],
     },
     {
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "administrative",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#FFFFFF" }], 
+      stylers: [{ color: "#FFFFFF" }],
     },
     {
       featureType: "administrative.country",
@@ -51,12 +59,12 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     {
       featureType: "administrative.locality",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#FFFFFF" }], 
+      stylers: [{ color: "#FFFFFF" }],
     },
     {
       featureType: "poi",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "poi.park",
@@ -66,7 +74,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     {
       featureType: "poi.park",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "road",
@@ -76,17 +84,17 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     {
       featureType: "road",
       elementType: "geometry.stroke",
-      stylers: [{ color: "#000000" }], 
+      stylers: [{ color: "#000000" }],
     },
     {
       featureType: "road",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "road.highway",
       elementType: "geometry",
-      stylers: [{ color: "#000000" }], 
+      stylers: [{ color: "#000000" }],
     },
     {
       featureType: "road.highway",
@@ -96,32 +104,32 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     {
       featureType: "road.highway",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "transit",
       elementType: "geometry",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "transit.station",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "landscape",
       elementType: "geometry",
-      stylers: [{ color: "#263139" }], 
+      stylers: [{ color: "#263139" }],
     },
     {
       featureType: "landscape",
       elementType: "labels.text.fill",
-      stylers: [{ color: "#00ff00" }], 
+      stylers: [{ color: "#00ff00" }],
     },
     {
       featureType: "water",
       elementType: "geometry",
-      stylers: [{ color: "#00000" }], 
+      stylers: [{ color: "#00000" }],
     },
     {
       featureType: "water",
@@ -131,7 +139,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
     {
       featureType: "water",
       elementType: "labels.text.stroke",
-      stylers: [{ color: "#293039" }], 
+      stylers: [{ color: "#293039" }],
     },
   ];
 
