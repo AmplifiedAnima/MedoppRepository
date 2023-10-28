@@ -21,6 +21,7 @@ const HeaderForOtherRoutes: React.FC<HeaderForOtherRoutesProps> = ({
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const { themeMode } = useContext(ThemeContext);
   const { dispatch } = useAlertContext();
+  
   const handleProfileToggle = () => {
     setIsProfileOpen((prevOpen) => !prevOpen);
   };

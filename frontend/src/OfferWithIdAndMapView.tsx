@@ -116,7 +116,7 @@ const OfferWithIdAndMapView: React.FC<OfferWithIdAndMapViewProps> = ({
                 : "linear-gradient(180deg, #001b45 10%,#FFFFFF 99%)",
           }}
         >
-          <LeftColumn sx={{ ...offersListStyle, height: universalHeight }}>
+          <LeftColumn sx={{ ...offersListStyle, height: universalHeight,  }}>
             <motion.div
               className="black"
               initial={{ opacity: 0 }}

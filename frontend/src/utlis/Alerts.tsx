@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { Box, Alert, Typography } from "@mui/material";
+import { Box, Alert } from "@mui/material";
 import { useAlertContext } from "./AlertHandlingContext";
 import { ThemeContext } from "../styles/ThemeProviderContext";
 import { Close } from "@mui/icons-material";
-import { FilterContext } from "./FilterContext";
+
 
 interface NotificationLayoutSpecialtyProps {
   onSpecialtyClose: () => void;

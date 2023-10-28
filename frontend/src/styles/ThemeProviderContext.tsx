@@ -21,7 +21,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const storedTheme = localStorage.getItem("themeMode");
   const [themeMode, setThemeMode] = useState<ThemeMode>(
-    (storedTheme as ThemeMode) || "light"
+    storedTheme as ThemeMode
   );
 
   // Save the theme mode to local storage when it changes
