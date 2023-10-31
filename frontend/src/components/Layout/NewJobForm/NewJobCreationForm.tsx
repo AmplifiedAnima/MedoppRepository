@@ -36,6 +36,7 @@ import {
   validateDescriptionFieldNewJobForm,
   handleSelectFieldForJobForm,
 } from "./FunctionsToHandleInputNewJobForm";
+import confirmationImage from "../../../static/confrimation.png";
 const steps = ["Step 1", "Step 2"];
 
 const NewJobCreationForm: React.FC = () => {
@@ -98,13 +99,6 @@ const NewJobCreationForm: React.FC = () => {
 
     console.log(lat, lng, location);
   };
-
-  // useEffect(() => {
-  //   if (!isEmployer || !isLoggedIn) {
-  //     setTimeout(())
-  //     setTimeout(() => {}, 4500);
-  //   }
-  // }, [isEmployer, dispatch, navigate]);
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -396,9 +390,17 @@ const NewJobCreationForm: React.FC = () => {
                     </>
                   )}
                   {isSubmitted && (
-                    <Typography variant="h6" sx={{ color: "green" }}>
-                      Job offer has been created
-                    </Typography>
+                    <>
+                      <Typography variant="h6" sx={{ color: "#2feb00" }}>
+                        Job has been Created
+                      </Typography>
+                      <img
+                        src={confirmationImage}
+                        alt=""
+                        width="120px"
+                        height="120px"
+                      />
+                    </>
                   )}
                 </Paper>
               </form>

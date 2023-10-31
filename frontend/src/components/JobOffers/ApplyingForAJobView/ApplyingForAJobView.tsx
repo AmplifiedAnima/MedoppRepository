@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
 import { ThemeContext } from "../../../styles/ThemeProviderContext";
-import { getButtonStyling } from "../../../styles/formStyling";
+import { getButtonStyles } from "../../../styles/buttonStyling";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utlis/AlertHandlingContext";
 import AlertLayout from "../../../utlis/Alerts";
@@ -43,7 +43,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({ offerId }) => {
   const { themeMode } = useContext(ThemeContext);
   const [hideButton, setHideButton] = useState(false);
 
-  const buttonStyling = getButtonStyling(themeMode);
+  const buttonStyling = getButtonStyles(themeMode);
 
   const isEmployee = isLoggedIn && roles.includes("Employee");
   const { dispatch } = useAlertContext();
@@ -266,6 +266,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({ offerId }) => {
                 >
                   <Button
                     variant="contained"
+                    color='success'
                     onClick={handleSubmit}
                     sx={{ ...buttonStyling, width: "auto" }}
                     disabled={IsSubmitted}

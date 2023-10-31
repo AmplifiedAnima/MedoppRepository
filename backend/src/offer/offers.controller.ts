@@ -79,15 +79,15 @@ export class OffersController {
     return this.offersService.createOffer(createOfferDto, request.user);
   }
 
-  @UseGuards(RoleGuard(Role.Employer))
-  @Patch(':id')
-  async updateOffer(
-    @Param('id') id: string,
-    @Body() updateOfferDto: UpdateOfferDto,
-    @Request() request: RequestWithUser,
-  ): Promise<Offer> {
-    return this.offersService.updateOffer(id, updateOfferDto, request.user);
-  }
+  // @UseGuards(RoleGuard(Role.Employer))
+  // @Patch(':id')
+  // async updateOffer(
+  //   @Param('id') id: string,
+  //   @Body() updateOfferDto: UpdateOfferDto,
+  //   @Request() request: RequestWithUser,
+  // ): Promise<Offer> {
+  //   return this.offersService.updateOffer(id, updateOfferDto, request.user);
+  // }
 
   @UseGuards(RoleGuard(Role.Employer))
   @UseGuards(AuthGuard('jwt'))

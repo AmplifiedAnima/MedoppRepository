@@ -19,7 +19,7 @@ export const getContainerStyles = (themeMode:string) => {
     };
   };
   
-  export const getTableStyles = (themeMode: string, isMobile: boolean) => {
+  export const getTableStyles = () => {
     return {
       maxWidth: "100%",
       "@media (max-width: 768px)": {

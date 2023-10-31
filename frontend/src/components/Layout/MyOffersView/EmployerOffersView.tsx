@@ -23,7 +23,6 @@ import {
 } from "../../../styles/tablesStyles";
 import { deleteOffer } from "./EmployerOffersViewFunctionsHandlers";
 import { motion } from "framer-motion";
-import SpinnerComponent from "../Spinner/Spinners";
 interface OfferFetchedForUserView {
   id: string;
   label: string;
@@ -41,7 +40,7 @@ const EmployersOffersView = () => {
   const { themeMode } = useContext(ThemeContext);
   const [userOffers, setUserOffers] = useState<OfferFetchedForUserView[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
-  const [dataIsBeingFetched, setDataIsBeingFetched] = useState(false);
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedOfferId, setSelectedOfferId] = useState<string>("");
   const isEmployer = isLoggedIn && roles.includes("Employer");
@@ -62,7 +61,6 @@ const EmployersOffersView = () => {
   };
   useEffect(() => {
     const fetchEmployersOffers = async () => {
-      setDataIsBeingFetched(true);
       try {
         const token = localStorage.getItem("token");
 
@@ -81,15 +79,11 @@ const EmployersOffersView = () => {
           const data = await response.json();
           setUserOffers(data);
           console.log(data);
-
           setDataLoaded(true);
-          setDataIsBeingFetched(false);
         } else {
-          setDataIsBeingFetched(false);
           console.log("Error fetching user offers: ", response.status);
         }
       } catch (error) {
-        setDataIsBeingFetched(false);
         console.error("Error: ", error);
       }
     };
@@ -100,7 +94,7 @@ const EmployersOffersView = () => {
 
   const containerStyles = getContainerStyles(themeMode);
   const innerBoxStyles = getInnerBoxStyles(isMobile);
-  const tableStyles = getTableStyles(themeMode, isMobile);
+  const tableStyles = getTableStyles();
   const cellStyles = getCellStyles(themeMode);
   const headerStyles = getHeaderStyles(themeMode);
   return (
@@ -132,75 +126,71 @@ const EmployersOffersView = () => {
                     <TableCell sx={headerStyles}> </TableCell>
                   </TableRow>
                 </TableHead>
-                {dataIsBeingFetched ? (
-                  <Box sx={{ ...innerBoxStyles, height: "100vh" }}>
-                    <SpinnerComponent />
-                  </Box>
-                ) : (
-                  <TableBody>
-                    {userOffers.map((offer) => (
-                      <TableRow
-                        key={offer.id}
-                        sx={{ margin: isMobile ? "45px 0px" : "20px 0px" }}
-                      >
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color:
-                                  themeMode === "dark" ? "#2feb00" : "#679af8",
-                              }}
-                            >
-                              Title
-                            </Typography>
-                          )}
-                          {offer.title}
-                        </TableCell>
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color:
-                                  themeMode === "dark" ? "#2feb00" : "#679af8",
-                              }}
-                            >
-                              Profession
-                            </Typography>
-                          )}
-                          {offer.label}
-                        </TableCell>
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color:
-                                  themeMode === "dark" ? "#2feb00" : "#679af8",
-                              }}
-                            >
-                              Specialty:
-                            </Typography>
-                          )}
-                          {offer.specialties}
-                        </TableCell>
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color:
-                                  themeMode === "dark" ? "#2feb00" : "#679af8",
-                              }}
-                            >
-                              Location:
-                            </Typography>
-                          )}
-                          {offer.location}
-                        </TableCell>
-                        <TableCell sx={cellStyles}>
-                          {/* <Button
+
+                <TableBody>
+                  {userOffers.map((offer) => (
+                    <TableRow
+                      key={offer.id}
+                      sx={{ margin: isMobile ? "45px 0px" : "20px 0px" }}
+                    >
+                      <TableCell sx={cellStyles}>
+                        {isMobile && (
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color:
+                                themeMode === "dark" ? "#2feb00" : "#679af8",
+                            }}
+                          >
+                            Title
+                          </Typography>
+                        )}
+                        {offer.title}
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        {isMobile && (
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color:
+                                themeMode === "dark" ? "#2feb00" : "#679af8",
+                            }}
+                          >
+                            Profession
+                          </Typography>
+                        )}
+                        {offer.label}
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        {isMobile && (
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color:
+                                themeMode === "dark" ? "#2feb00" : "#679af8",
+                            }}
+                          >
+                            Specialty:
+                          </Typography>
+                        )}
+                        {offer.specialties}
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        {isMobile && (
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color:
+                                themeMode === "dark" ? "#2feb00" : "#679af8",
+                            }}
+                          >
+                            Location:
+                          </Typography>
+                        )}
+                        {offer.location}
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        {/* <Button
                             sx={{
                               color:
                                 themeMode === "dark" ? "#2feb00" : "#679af8",
@@ -209,25 +199,23 @@ const EmployersOffersView = () => {
                             Offer Edition
                           </Button> */}
 
-                          <Button
-                            onClick={() => handleDeleteModalOpen(offer.id)}
-                            sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
-                            }}
-                          >
-                            Delete
-                          </Button>
-                        </TableCell>
-                        <Box
+                        <Button
+                          onClick={() => handleDeleteModalOpen(offer.id)}
                           sx={{
-                            padding: "20px 0px",
+                            color: themeMode === "dark" ? "#2feb00" : "#679af8",
                           }}
-                        />
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                )}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                      <Box
+                        sx={{
+                          padding: "20px 0px",
+                        }}
+                      />
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
               <DeleteOfferModal
                 isOpen={isDeleteModalOpen}
@@ -247,7 +235,8 @@ const EmployersOffersView = () => {
                       : "linear-gradient(180deg,  #121a26 13%,  #a0bbfa 99%)",
                 }}
               >
-                Please login to access this part of the website (you have to be logged in as employer)
+                Please login to access this part of the website (you have to be
+                logged in as employer)
               </Typography>
             </Box>
           )}

@@ -27,7 +27,6 @@ import {
 } from "../../../styles/tablesStyles";
 import ApplicantsTablePopover from "./ApplicantsTablePopover";
 import { motion } from "framer-motion";
-import SpinnerComponent from "../Spinner/Spinners";
 
 interface JobApplication {
   id: string;
@@ -64,7 +63,7 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
 
   const containerStyles = getContainerStyles(themeMode);
   const innerBoxStyles = getInnerBoxStyles(isMobile);
-  const tableStyles = getTableStyles(themeMode, isMobile);
+  const tableStyles = getTableStyles();
   const cellStyles = getCellStyles(themeMode);
   const headerStyles = getHeaderStyles(themeMode);
 
@@ -128,13 +127,13 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
                 <TableRow>
                   <TableCell sx={headerStyles}>
                     {" "}
-                    <Typography variant="h5">First Name</Typography>
+                    <Typography variant="h5">First Name </Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
-                    <Typography variant="h5">Last Name</Typography>
+                    <Typography variant="h5">Last Name </Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
-                    <Typography variant="h5">E-mail @</Typography>
+                    <Typography variant="h5">E-mail </Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
                     <Typography variant="h5">Phone Number</Typography>

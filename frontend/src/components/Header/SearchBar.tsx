@@ -46,6 +46,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
       padding: "2px 7px",
       fontSize: "14px",
     },
+    "@media (max-width: 280px)": {
+      width: "50px",
+    },
   };
   return (
     <Box
@@ -74,11 +77,19 @@ const SearchBar: React.FC<SearchBarProps> = ({
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
+            "@media (max-width: 280px)": {
+              minWidth:'0px',
+              padding:'0px 6px'
+              },
           }}
           onClick={onHandleSearchSubmit}
         >
           <SearchIcon
-            sx={{ color: "white", fontSize: isMobile ? "25px" : "30px" }}
+            sx={{
+              color: "white",
+              fontSize: isMobile ? "25px" : "30px",
+            
+            }}
           />
         </Button>
       </Box>

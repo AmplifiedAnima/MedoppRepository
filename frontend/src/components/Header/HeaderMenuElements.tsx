@@ -19,7 +19,9 @@ export const IconButtons = (
   <IconButton
     color="inherit"
     onClick={isLoggedIn ? handleProfileToggle : handleLoginModalOpen}
-    sx={{ paddingLeft: "10px" }}
+    sx={{
+      paddingLeft: "10px",
+    }}
   >
     {isLoggedIn ? (
       themeMode === "dark" ? (
@@ -68,6 +70,12 @@ export const HeaderMenuItem: React.FC = () => {
           )
         }
         onClick={handleNavigation}
+        sx={{
+          "@media (max-width: 280px)": {
+            minWidth: "0px",
+            padding: "0px 6px",
+          },
+        }}
       />
     </>
   );
@@ -111,6 +119,7 @@ export const Switcher: React.FC = () => {
             backgroundColor: `${themeMode === "dark" ? "white" : "white"}`,
             border: `1.5px solid ${themeMode === "dark" ? "black" : "white"}`,
           },
+          "@media (max-width: 280px)": {},
         }}
       />
     </>

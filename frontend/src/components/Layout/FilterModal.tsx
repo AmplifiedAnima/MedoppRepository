@@ -50,7 +50,6 @@ const FilterModal: React.FC<FilterModalProps> = ({
 
     onApply(filterOptions);
     onClose();
-
   };
 
   const handlePriceRangeToggle = () => {
@@ -101,7 +100,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
           margin="normal"
           sx={inputPlaceholdersStyling}
         >
-          <MenuItem value="" >All</MenuItem>
+          <MenuItem value="">All</MenuItem>
           <MenuItem value="full-time"> Full-Time </MenuItem>
           <MenuItem value="part-time"> Part-Time </MenuItem>
           <MenuItem value="B2B"> B2B </MenuItem>
@@ -124,6 +123,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
               setPriceRange(newValue as [number, number])
             }
             min={2000}
+            step={100}
             max={30000}
             valueLabelDisplay="auto"
             aria-label="Price Range Slider"
@@ -139,12 +139,22 @@ const FilterModal: React.FC<FilterModalProps> = ({
           Cancel
         </Button>
         <Button
+          color="warning"
           onClick={resetAllQueries}
-          sx={{ ...buttonStyling, padding: "10px 40px", margin: "20px" }}
+          sx={{
+            ...buttonStyling,
+            padding: "10px 40px",
+            margin: "20px",
+            "&:hover": {
+              backgroundColor:  "#gray",
+              color: "black",
+            },
+          }}
         >
           Reset
         </Button>
         <Button
+          color="success"
           onClick={handleApply}
           sx={{ ...buttonStyling, padding: "10px 40px", margin: "20px" }}
         >

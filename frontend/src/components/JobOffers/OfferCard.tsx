@@ -1,14 +1,23 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Offer } from "./OfferInterface";
 import ApplyingForAJobView from "./ApplyingForAJobView/ApplyingForAJobView";
 import DOMPurify from "dompurify";
 import { Link } from "react-router-dom";
-import { IsLoggedInContext } from "../../utlis/IsLoggedInContext";
-import { useAlertContext } from "../../utlis/AlertHandlingContext";
 import { getButtonStyles } from "../../styles/buttonStyling";
-
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import BusinessIcon from "@mui/icons-material/Business";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import { ArrowBack, Description } from "@mui/icons-material";
+import { getOfferIconUrl } from "../../utlis/GoogleMapsApi/MapComponentUtils";
+import { FilterContext } from "../../utlis/FilterContext";
+import {
+  getCardStylingOffersList,
+  gridStylingOffersList,
+  getCommonTextStyling,
+  iconStyling,
+} from "../../styles/offersListStyle";
 interface OfferCardProps {
   offer: Offer;
   onCloseOffer: () => void;
@@ -22,173 +31,129 @@ const OfferCard: React.FC<OfferCardProps> = ({
   isSelected,
   offerId,
 }) => {
-  const { title, company, location, salary, typeOfEmployment, specialties } =
-    offer;
-
+  const { state: filterState } = useContext(FilterContext);
   const { themeMode } = useContext(ThemeContext);
-  const buttonStyles = getButtonStyles(themeMode);
-
-  const { isLoggedIn, roles } = useContext(IsLoggedInContext);
-  const { dispatch: alertDispatch } = useAlertContext();
 
   const sanitizedDescription = DOMPurify.sanitize(offer.description);
+  const offerCardStyling = getCardStylingOffersList(themeMode, isSelected);
+  const commonTextStyling = getCommonTextStyling(isSelected);
+  const buttonStyles = getButtonStyles(themeMode);
+  const iconUrl = getOfferIconUrl(
+    offer.label,
+    themeMode,
+    isSelected,
+    filterState
+  );
 
   const handleClose = () => {
     onCloseOffer();
   };
 
   return (
-    <Card
-      sx={{
-        margin: "10px 20px",
-        borderRadius: "8px",
-        backgroundColor:
-          themeMode === "dark"
-            ? "rgba(0,0,0, 1)"
-            : "rgba(209, 233, 246, 0.055)",
-        display: "grid",
-        width: "auto",
-        position: "relative",
-        fontFamily: "Helvetica",
-        height: "auto",
-  
-      }}
-    >
-      <CardContent>
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
+    <>
+      {isSelected && (
+        <Box
+          sx={{ display: "flex", justifyContent: "start", padding: "0px 20px" }}
+        >
+          <Button
+            variant="contained"
+            color="error"
             sx={{
-              alignSelf: "center",
-              fontSize: "18px",
-              color: "#ffffff",
-              paddingLeft: "0px",
-              "@media (max-width: 768px)": {
-                fontSize: "14px",
+              ...buttonStyles,
+              "&:hover": {
+                color: "white",
               },
             }}
+            onClick={handleClose}
           >
-            {title}
-          </Typography>
-
-          <Typography
-            variant="subtitle1"
-            sx={{
-              color: "#ffffff",
-              fontSize: "16px",
-              "@media (max-width: 768px)": {
-                fontSize: "12px",
-              },
-            }}
-          >
-            {specialties}
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              color: "#ffffff",
-              fontSize: "16px",
-              "@media (max-width: 768px)": {
-                fontSize: "12px",
-              },
-            }}
-          >
-            {company}
-          </Typography>
-        </Box>
-        <Box style={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="h5"
-            sx={{
-              color: themeMode === "dark" ? " #7fee01" : "#21d3ff",
-              borderRadius: "8px",
-              padding: "10px 2px",
-              fontSize: "17px",
-              fontWeight: "bold",
-              "@media (max-width: 768px)": {
-                fontSize: "12px",
-              },
-            }}
-          >
-            {salary} PLN/MONTH
-          </Typography>
-
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            sx={{
-              display: "inline",
-              color: themeMode === "dark" ? "white" : "#21d3ff",
-              borderRadius: "8px",
-              padding: "8px 2px",
-              fontSize: "16px",
-              "@media (max-width: 768px)": {
-                fontSize: "12px",
-              },
-            }}
-          >
-            {location}
-          </Typography>
-
-          <Typography
-            variant="subtitle1"
-            color="text.secondary"
-            sx={{
-              color: themeMode === "dark" ? "#7fee01" : "#21d3ff",
-              marginTop: "12px",
-              fontSize: "16px",
-              "@media (max-width: 768px)": {
-                fontSize: "12px",
-                padding: "0px 10px",
-              },
-            }}
-          >
-            {typeOfEmployment.toUpperCase()}
-          </Typography>
-        </Box>
-        <Box sx={{ fontSize: "16px", color: "white" }}>
-          {isSelected && (
-            <>
-              <Box
-                dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-                sx={{ wordBreak: "break-word" }}
-              />
-              <ApplyingForAJobView offerId={offerId} />
-            </>
-          )}
-        </Box>
-        <Link key={offer.id} to={`/offers/${offer.id}`}>
-          {!isSelected && (
-            <Button variant="contained" color="success" sx={buttonStyles}>
-              VIEW JOB OFFER
-            </Button>
-          )}
-        </Link>
-        {isSelected && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "0px",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="error"
+            <ArrowBack
               sx={{
-                ...buttonStyles,
-                "&:hover": {
-                  color: "white",
+                fontSize: "20px",
+                "@media (max-width: 768px)": {
+                  fontSize: "14px",
                 },
               }}
-              onClick={handleClose}
-            >
-              CLOSE
-            </Button>
+            />
+          </Button>
+        </Box>
+      )}
+      <Card sx={offerCardStyling}>
+        <CardContent>
+          <Link
+            key={offer.id}
+            to={!isSelected ? `/offers/${offer.id}` : "#"}
+            style={{
+              textDecoration: "none",
+              cursor: isSelected ? "auto" : "pointer",
+            }}
+          >
+            <Box sx={gridStylingOffersList}>
+              <Typography sx={commonTextStyling}>{offer.title}</Typography>
+
+              <Typography variant="subtitle1" sx={commonTextStyling}>
+                <img
+                  src={iconUrl}
+                  alt=""
+                  width="16px"
+                  height="16px"
+                  style={{ position: "relative", top: "3px" }}
+                />{" "}
+                {!isSelected ? offer.label : offer.specialties}
+              </Typography>
+              <Typography variant="subtitle1" sx={commonTextStyling}>
+                <BusinessIcon sx={iconStyling} /> {offer.company}
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  ...commonTextStyling,
+                  color: themeMode === "dark" ? " #7fee01" : "#21d3ff",
+                }}
+              >
+                {offer.salary} PLN
+              </Typography>
+
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                sx={{
+                  ...commonTextStyling,
+                  color: themeMode === "dark" ? "#7fee01" : "#21d3ff",
+                }}
+              >
+                <LocationOnIcon sx={iconStyling} /> {offer.location}
+              </Typography>
+              <Typography
+                variant="subtitle1"
+                color="text.secondary"
+                sx={{
+                  ...commonTextStyling,
+                  color: themeMode === "dark" ? "#7fee01" : "#21d3ff",
+                }}
+              >
+                <Description sx={iconStyling} />
+                {offer.typeOfEmployment.toUpperCase()}
+              </Typography>
+            </Box>
+          </Link>
+          <Box sx={{ fontSize: "16px", color: "white" }}>
+            {isSelected && (
+              <>
+                <Box
+                  dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+                  sx={{
+                    wordBreak: "break-word",
+                    placeItems: "center",
+                    marginLeft: "20px",
+                  }}
+                />
+                <ApplyingForAJobView offerId={offerId} />
+              </>
+            )}
           </Box>
-        )}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 
