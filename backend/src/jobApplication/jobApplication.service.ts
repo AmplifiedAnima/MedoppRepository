@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import JobApplication from './jobApplication.entity';
@@ -46,7 +50,10 @@ export class JobApplicationService {
         const applicationDto: ApplicationToBeFetchedToFrontend = {
           ...application,
           offerId: offer.id,
+          offer: offer,
         };
+        console.log(offer);
+        console.log(application);
         applicants.push(applicationDto);
       });
     });
@@ -68,10 +75,15 @@ export class JobApplicationService {
 
     userOffers.forEach((offer) => {
       offer.applications.forEach((application) => {
+        const { user, ...applicationTrimed } = application;
         const applicationDto: ApplicationToBeFetchedToFrontend = {
-          ...application,
+          ...applicationTrimed,
           offerId: offer.id,
+          offer,
         };
+
+        console.log(offer);
+        console.log(application);
         applicants.push(applicationDto);
       });
     });
@@ -107,7 +119,9 @@ export class JobApplicationService {
     });
 
     if (existingJobApplication) {
-      throw new ConflictException('You have already applied for this job offer.');
+      throw new ConflictException(
+        'You have already applied for this job offer.',
+      );
     }
     let cvFilePath = createJobApplicationDto.cvFilePath;
 

@@ -29,7 +29,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
 
   const textStyling = {
     "@media (max-width: 768px)": {
-      fontSize: "14px",
+      fontSize: "12px",
       paddingRight: "60px",
     },
   };
@@ -60,15 +60,18 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              width: '370px',
+              width: "370px",
               "@media (max-width: 768px)": {
-                width: '250px'
-              }
+                width: "250px",
+              },
             }}
           >
             {" "}
             {avatarImage && (
-              <Avatar src={avatarImage} sx={{ width: 70, height: 70 }} />
+              <Avatar
+                src={avatarImage}
+                sx={{ width: 40, height: 40, paddingLeft: "15px" }}
+              />
             )}
             {!avatarImage && firstName && lastName && (
               <Avatar>{`${firstName[0]}${lastName[0].toUpperCase()}`}</Avatar>
@@ -76,12 +79,11 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
             {!avatarImage && username && !firstName && !lastName && (
               <Avatar>{`${username[0].toUpperCase()}`}</Avatar>
             )}
-            <Box>
-              <Typography variant="subtitle1" sx={textStyling}>
-                {username}
-                {"  "} {roles}
-              </Typography>
-            </Box>
+            <Typography variant="subtitle1" sx={textStyling}>
+              {username}
+            </Typography>
+            <Typography sx={{ fontSize: "10px" }}>{roles}</Typography>
+            <Box />
             <IconButton color="inherit" onClick={onClose}>
               <CloseIcon />
             </IconButton>
@@ -109,9 +111,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
             <ListItem>
               <Link to="/job-applications">
                 <Button sx={{ ...textStyling, color: itemTextColor }}>
-                  {isEmployer
-                    ? "WHO APPLIED"
-                    : "WHERE I APPLIED"}
+                  {isEmployer ? "WHO APPLIED" : "WHERE I APPLIED"}
                 </Button>
               </Link>
             </ListItem>

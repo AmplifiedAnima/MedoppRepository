@@ -93,7 +93,7 @@ const EmployersOffersView = () => {
   }, [dataLoaded, isLoggedIn]);
 
   const containerStyles = getContainerStyles(themeMode);
-  const innerBoxStyles = getInnerBoxStyles(isMobile);
+  const innerBoxStyles = getInnerBoxStyles();
   const tableStyles = getTableStyles();
   const cellStyles = getCellStyles(themeMode);
   const headerStyles = getHeaderStyles(themeMode);

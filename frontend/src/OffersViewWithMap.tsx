@@ -56,8 +56,6 @@ const OffersViewWithMap: React.FC<OffersViewWithMapProps> = ({
   const buttonStyles = getButtonStyles(themeMode);
   const offersListStyle = getOffersListStyles(themeMode);
 
-  const [mapIsLoading, setMapIsLoading] = useState(true);
-
   const offerCardVariable = filteredOffers.map((offer) => (
     <OfferCard
       key={offer.id}

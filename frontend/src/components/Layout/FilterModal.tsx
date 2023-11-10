@@ -146,7 +146,7 @@ const FilterModal: React.FC<FilterModalProps> = ({
             padding: "10px 40px",
             margin: "20px",
             "&:hover": {
-              backgroundColor:  "#gray",
+              backgroundColor: themeMode === 'dark' ? 'white': "#gray",
               color: "black",
             },
           }}

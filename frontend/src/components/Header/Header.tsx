@@ -105,9 +105,9 @@ const Header: React.FC = () => {
             padding: isMobile ? "5px 10px" : "2px 20px",
             margin: "0px",
             "@media (max-width: 280px)": {
-              padding:'0px 0px',
-              margin: '0'
-             } 
+              padding: "0px 0px",
+              margin: "0",
+            },
           }}
         >
           <HeaderMenuItem />

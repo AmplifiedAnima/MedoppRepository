@@ -103,7 +103,7 @@ export const validateDescriptionFieldNewJobForm = (
   maxLength: number,
   minLength?: number
 ) => {
-  // Remove HTML tags and trim the value for length check
+
   const plainTextValue = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
 
   if (!plainTextValue) {
@@ -124,6 +124,13 @@ export const validateDescriptionFieldNewJobForm = (
       fieldName: "description",
       fieldValue: value,
     });
+    if(plainTextValue.length < minLength!){
+      dispatch({
+        type: "UPDATE_ERROR_MESSAGE",
+        fieldName: "description",
+        errorMessage: `Description must not be less than ${minLength} characters.`,
+      });
+    }
     dispatch({
       type: "CLEAR_ERROR_MESSAGE",
       fieldName: "description",

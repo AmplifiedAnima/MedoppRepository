@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { getButtonStyles } from "../../styles/buttonStyling";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import BusinessIcon from "@mui/icons-material/Business";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { ArrowBack, Description } from "@mui/icons-material";
 import { getOfferIconUrl } from "../../utlis/GoogleMapsApi/MapComponentUtils";
 import { FilterContext } from "../../utlis/FilterContext";
@@ -18,6 +17,7 @@ import {
   getCommonTextStyling,
   iconStyling,
 } from "../../styles/offersListStyle";
+
 interface OfferCardProps {
   offer: Offer;
   onCloseOffer: () => void;
@@ -94,9 +94,13 @@ const OfferCard: React.FC<OfferCardProps> = ({
                 <img
                   src={iconUrl}
                   alt=""
-                  width="16px"
-                  height="16px"
-                  style={{ position: "relative", top: "3px" }}
+                  width="17px"
+                  height="17px"
+                  style={{
+                    position: "relative",
+                    top: "1.4px",
+                    marginRight: "3px",
+                  }}
                 />{" "}
                 {!isSelected ? offer.label : offer.specialties}
               </Typography>
@@ -131,7 +135,7 @@ const OfferCard: React.FC<OfferCardProps> = ({
                   color: themeMode === "dark" ? "#7fee01" : "#21d3ff",
                 }}
               >
-                <Description sx={iconStyling} />
+                <Description sx={iconStyling} style={{ marginRight: "6px" }} />
                 {offer.typeOfEmployment.toUpperCase()}
               </Typography>
             </Box>
@@ -144,7 +148,8 @@ const OfferCard: React.FC<OfferCardProps> = ({
                   sx={{
                     wordBreak: "break-word",
                     placeItems: "center",
-                    marginLeft: "20px",
+                    margin: "50px 40px",
+                    width: "inherit",
                   }}
                 />
                 <ApplyingForAJobView offerId={offerId} />

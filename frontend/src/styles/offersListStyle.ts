@@ -31,7 +31,7 @@ export const getCardStylingOffersList = (
 
 export const gridStylingOffersList = {
   display: "grid",
-  gridTemplateColumns: "1fr 1fr 1fr",
+  gridTemplateColumns: "2fr 2.5fr 2fr",
   marginLeft: "40px",
   gap: "0px 20px",
   "@media (min-width: 769px) and (max-width: 1200px)": {
@@ -55,7 +55,7 @@ export const gridStylingOffersList = {
 };
 
 export const getCommonTextStyling = (isSelected: boolean) => ({
-  fontSize: "16px",
+  fontSize: "17px",
   color: "#ffffff",
   overflow: "hidden",
   whiteSpace: "nowrap",
@@ -66,8 +66,8 @@ export const getCommonTextStyling = (isSelected: boolean) => ({
   },
 });
 export const iconStyling = {
-  fontSize: "16px",
-  paddingRight: "4px",
+  fontSize: "18px",
+  paddingRight: "3.8px",
   position: "relative",
   top: "2px",
 };

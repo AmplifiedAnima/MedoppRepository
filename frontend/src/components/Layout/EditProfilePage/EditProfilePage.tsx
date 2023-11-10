@@ -210,26 +210,63 @@ export const EditProfilePage = () => {
           }}
         >
           {isLoggedIn ? (
-            <Paper elevation={3} sx={{ ...paperStyling, padding: "20px 40px" }}>
+            <Paper
+              elevation={3}
+              sx={{
+                ...paperStyling,
+                padding: "20px 40px",
+              }}
+            >
               <form onSubmit={handleProfileUpdate}>
                 {!isSubmitted && (
                   <>
-                    <Typography variant="body1">Current image</Typography>
-                    <br />
-                    <Avatar
-                      src={avatarImage}
-                      sx={{ width: "60px", height: "60px" }}
-                      alt="other image"
-                    />
-                    <Typography
-                      variant="h5"
+                    <Box
                       sx={{
-                        color: themeMode === "dark" ? "#2feb00" : "black",
+                        display: "grid",
+                        gridTemplateColumns: "2.5fr 1fr 2.5fr",
                       }}
                     >
-                      Change avatar
-                    </Typography>
-                    <br></br>
+                      <Box />
+                      <Box>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            margin: "0px 0px",
+                            fontSize: "18px",
+                            wordBreak: "keep-all",
+                 
+                          }}
+                        >
+                          Current image
+                        </Typography>
+                        <br />
+                        <Avatar
+                          src={avatarImage}
+                          sx={{
+                            width: "60px",
+                            height: "60px",
+                            padding: "0px 30px",
+                          }}
+                          alt="other image"
+                        />
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: themeMode === "dark" ? "#2feb00" : "black",
+                            fontSize: "19px",
+                            wordBreak: "keep-all",
+                            paddingTop: "20px",
+                            "@media (max-width: 768px)": {
+                              fontSize: "18px",
+                            },
+                          }}
+                        >
+                          Change avatar
+                        </Typography>
+                        <br></br>
+                      </Box>
+                      <Box />
+                    </Box>
                     <MyDropzoneForAvatarImage
                       setSelectedFiles={setSelectedImage}
                     />

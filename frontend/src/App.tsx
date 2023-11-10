@@ -18,7 +18,6 @@ import { ThemeContext } from "./styles/ThemeProviderContext";
 const App = () => {
   const [filteredOffers, setFilteredOffers] = useState<Offer[]>([]);
   const [showJobBoard, setShowJobBoard] = useState(true);
-  const { themeMode, toggleTheme } = useContext(ThemeContext);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const mapRef = useRef(null);
   const { state: filterState, dispatch } = useFilterContext();

@@ -4,19 +4,17 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableContainer,
   TableHead,
   TableRow,
-  Paper,
   Box,
   IconButton,
-  Popover,
-  useMediaQuery,
   Link,
+  Button,
 } from "@mui/material";
 import { ThemeContext } from "../../../styles/ThemeProviderContext";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
 import HeaderForOtherRoutes from "../../Header/HeaderForOtherRoutes";
+import { Description } from "@mui/icons-material";
 import { InfoOutlined } from "@mui/icons-material";
 import {
   getContainerStyles,
@@ -27,8 +25,10 @@ import {
 } from "../../../styles/tablesStyles";
 import ApplicantsTablePopover from "./ApplicantsTablePopover";
 import { motion } from "framer-motion";
+import { Offer } from "../../JobOffers/OfferInterface";
+import { getButtonStyles } from "../../../styles/buttonStyling";
 
-interface JobApplication {
+export interface JobApplication {
   id: string;
   firstName: string;
   lastName: string;
@@ -37,6 +37,7 @@ interface JobApplication {
   coverLetter: string;
   cvFilePath: string;
   offerId: string;
+  offer?: Offer;
 }
 
 const ApplicantsWhoAppliedForOfferView: React.FC = () => {
@@ -49,27 +50,42 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
   const isEmployee = isLoggedIn && roles.includes("Employee");
 
   const [popoverAnchorEl, setPopoverAnchorEl] = useState(null);
-  const [selectedCoverLetter, setSelectedCoverLetter] = useState("");
+  const [contentOfPopover, setcontentOfPopover] = useState<string | Offer>("");
+  const [LinkToPopover, setLinkToPopover] = useState("");
 
-  const handlePopoverOpen = (coverLetter: string) => (event: any) => {
+  const handlePopoverOpen = (content: string | Offer) => (event: any) => {
     setPopoverAnchorEl(event.currentTarget);
-    setSelectedCoverLetter(coverLetter);
+    setcontentOfPopover(content);
   };
 
+  const handleLinkSpilling = (string: string) => (event: any) => {
+    setLinkToPopover(string);
+  };
   const handlePopoverClose = () => {
     setPopoverAnchorEl(null);
-    setSelectedCoverLetter("");
   };
 
   const containerStyles = getContainerStyles(themeMode);
-  const innerBoxStyles = getInnerBoxStyles(isMobile);
+  const innerBoxStyles = getInnerBoxStyles();
   const tableStyles = getTableStyles();
   const cellStyles = getCellStyles(themeMode);
   const headerStyles = getHeaderStyles(themeMode);
 
+  const additionalIsMobileStyling = {
+    color: themeMode === "dark" ? "#2feb00" : "#679af8",
+    display: "none",
+    "@media (max-width: 768px)": {
+      paddingBottom: "10px",
+      display: "block",
+      fontSize: "17px",
+    },
+  };
+
+  const buttonStyling = getButtonStyles(themeMode);
+
   useEffect(() => {
     if (!isLoggedIn) setApplications([]);
-    setDataIsBeingFetched(true)
+    setDataIsBeingFetched(true);
     const fetchJobApplications = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -90,13 +106,13 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setApplications(data);
-          setDataIsBeingFetched(false)
+          setDataIsBeingFetched(false);
         } else {
-          setDataIsBeingFetched(false)
+          setDataIsBeingFetched(false);
           console.log("Error fetching job applications:", response.status);
         }
       } catch (error) {
-        setDataIsBeingFetched(false)
+        setDataIsBeingFetched(false);
         console.error("Error fetching job applications:", error);
       }
     };
@@ -112,7 +128,7 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
         }
       />
       {!isLoggedIn ? (
-        <Box sx={{height: "100vh"  }}>
+        <Box sx={{ height: "100vh" }}>
           <Typography variant="h5">SIGN UP TO SEE THIS CONTENT</Typography>
         </Box>
       ) : (
@@ -133,165 +149,168 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
                     <Typography variant="h5">Last Name </Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
-                    <Typography variant="h5">E-mail </Typography>
+                    <Typography variant="h5"> Email Adress </Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
-                    <Typography variant="h5">Phone Number</Typography>
+                    <Typography variant="h5">Telephone</Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
-                    <Typography variant="h5">Cover letter</Typography>
+                    <Typography variant="h5">Cover Letter</Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
-                    <Typography variant="h5"></Typography>
+                    <Typography variant="h5">Curriculum Vitae </Typography>
                   </TableCell>
                   <TableCell sx={headerStyles}>
-                    <Typography variant="h5"></Typography>
+                    <Typography variant="h5"> Offer </Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
-           
-                <TableBody sx={{ padding: "20px 10px" }}>
-                  {applications.map((application) => (
-                    <>
-                      <TableRow key={application.id}>
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <>
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  color:
-                                    themeMode === "dark"
-                                      ? "#2feb00"
-                                      : "#679af8",
-                                }}
-                              >
-                                First Name
-                              </Typography>
-                            </>
-                          )}
-                          <Typography> {application.firstName}</Typography>
-                        </TableCell>
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color:
-                                  themeMode === "dark" ? "#2feb00" : "#679af8",
-                              }}
-                            >
-                              First Name
-                            </Typography>
-                          )}
-                          <Typography> {application.lastName}</Typography>
-                        </TableCell>
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <>
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  color:
-                                    themeMode === "dark"
-                                      ? "#2feb00"
-                                      : "#679af8",
-                                }}
-                              >
-                                First Name
-                              </Typography>
-                            </>
-                          )}
-                          <Typography> {application.email}</Typography>
-                        </TableCell>
-                        <TableCell sx={cellStyles}>
-                          {isMobile && (
-                            <>
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  color:
-                                    themeMode === "dark"
-                                      ? "#2feb00"
-                                      : "#679af8",
-                                }}
-                              >
-                                First Name
-                              </Typography>
-                            </>
-                          )}
-                          <Typography> {application.phoneNumber}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          {isMobile && (
-                            <>
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  color:
-                                    themeMode === "dark"
-                                      ? "#2feb00"
-                                      : "#679af8",
-                                }}
-                              >
-                                Cover letter{" "}
-                              </Typography>
-                            </>
-                          )}
-                          <IconButton
+
+              <TableBody sx={{ padding: "10px 10px" }}>
+                {applications.map((application) => (
+                  <>
+                    <TableRow key={application.id}>
+                      <TableCell sx={cellStyles}>
+                        <>
+                          <Typography
+                            variant="body2"
+                            sx={additionalIsMobileStyling}
+                          >
+                            First Name
+                          </Typography>
+                        </>
+
+                        <Typography> {application.firstName}</Typography>
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        <Typography
+                          variant="body2"
+                          sx={additionalIsMobileStyling}
+                        >
+                          First Name
+                        </Typography>
+
+                        <Typography> {application.lastName}</Typography>
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        <>
+                          <Typography
+                            variant="body2"
+                            sx={additionalIsMobileStyling}
+                          >
+                            First Name
+                          </Typography>
+                        </>
+
+                        <Typography> {application.email}</Typography>
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        <>
+                          <Typography
+                            variant="body1"
+                            sx={additionalIsMobileStyling}
+                          >
+                            First Name
+                          </Typography>
+                        </>
+
+                        <Typography> {application.phoneNumber}</Typography>
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        <>
+                          <Typography
+                            variant="body2"
+                            sx={additionalIsMobileStyling}
+                          >
+                            {" "}
+                            Cover Letter
+                          </Typography>
+                          <Button
                             onClick={handlePopoverOpen(application.coverLetter)}
                             sx={{
-                              color: themeMode === "dark" ? "white" : "black",
+                              ...buttonStyling,
+                              width: "20px",
+                              "@media (max-width: 768px)": {
+                                width: "100%",
+                              },
+                              color:
+                                themeMode === "dark" ? "#2feb00" : "#679af8",
                             }}
                           >
                             <InfoOutlined />
-                          </IconButton>
-                          <ApplicantsTablePopover
-                            content={selectedCoverLetter}
-                            themeMode={themeMode}
-                            anchorEl={popoverAnchorEl}
-                            onClose={handlePopoverClose}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Typography
-                            sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
-                            }}
-                          >
-                            <Link
-                              href={application.cvFilePath}
-                              color="inherit"
-                              underline="hover"
-                            >
-                              CV
-                            </Link>
-                          </Typography>
-                        </TableCell>
-                        <TableCell
-                          sx={{ ...cellStyles, justifyContentz: "center" }}
+                          </Button>
+                        </>
+
+                        <ApplicantsTablePopover
+                          content={contentOfPopover}
+                          themeMode={themeMode}
+                          anchorEl={popoverAnchorEl}
+                          onClose={handlePopoverClose}
+                        />
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        <Typography
+                          variant="body2"
+                          sx={additionalIsMobileStyling}
                         >
-                          <Typography
+                          CV
+                        </Typography>
+                        <Link
+                          href={application.cvFilePath}
+                          color="inherit"
+                          underline="hover"
+                        >
+                          <Button
                             sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
+                              ...buttonStyling,
+                              width: "20px",
+                              "@media (max-width: 768px)": {
+                                width: "100%",
+                              },
+                              padding: "7px 20px",
                             }}
                           >
-                            <Link
-                              href={`/offers/${application.offerId}`}
-                              color="inherit"
-                              underline="hover"
-                            >
-                              Check offer
-                            </Link>
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                      <Box sx={{ padding: isMobile ? "20px 0px" : "" }} />
-                    </>
-                  ))}
-                </TableBody>
+                            <Description />
+                          </Button>
+                        </Link>
+                      </TableCell>
+                      <TableCell sx={cellStyles}>
+                        <Typography
+                          variant="body2"
+                          sx={additionalIsMobileStyling}
+                        >
+                          Offer
+                        </Typography>
+                        <Button
+                          onClick={handlePopoverOpen(application.offer!)}
+                          onMouseEnter={handleLinkSpilling(
+                            `/offers/${application.offerId}`
+                          )}
+                          sx={{
+                            ...buttonStyling,
+                            width: "20px",
+                            "@media (max-width: 768px)": {
+                              width: "100%",
+                            },
+                            color: themeMode === "dark" ? "#2feb00" : "#679af8",
+                          }}
+                        >
+                          <InfoOutlined />
+                        </Button>
+
+                        <ApplicantsTablePopover
+                          content={contentOfPopover}
+                          themeMode={themeMode}
+                          anchorEl={popoverAnchorEl}
+                          onClose={handlePopoverClose}
+                          LinkString={LinkToPopover}
+                        />
+                      </TableCell>
+                    </TableRow>
+                    <Box sx={{ padding: isMobile ? "20px 0px" : "" }} />
+                  </>
+                ))}
+              </TableBody>
             </Table>
           </motion.div>
         </Box>

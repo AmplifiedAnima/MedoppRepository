@@ -15,6 +15,7 @@ export const universalHeight = {
     height:'100vh'
   }
 };
+
 interface MapProps {
   offers: Offer[] | [];
   onOfferClick: (offer: Offer) => void;

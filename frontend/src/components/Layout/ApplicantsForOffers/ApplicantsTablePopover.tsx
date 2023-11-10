@@ -1,23 +1,83 @@
 import React from "react";
-import IconButton from "@mui/material/IconButton";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { Offer } from "../../JobOffers/OfferInterface";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  Link,
+  Button,
+} from "@mui/material";
+import { getButtonStyles } from "../../../styles/buttonStyling";
 
-interface  ApplicantsTablePopoverProps {
-  content: string;
+interface ApplicantsTablePopoverProps {
+  content: Offer | string;
   themeMode: string;
   anchorEl: HTMLElement | null;
   onClose: () => void;
+  LinkString?: string;
 }
 
-const ApplicantsTablePopover: React.FC< ApplicantsTablePopoverProps> = ({
-  content,
+const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
   themeMode,
   anchorEl,
   onClose,
+  content,
+  LinkString,
 }) => {
+  const colorSx = {
+    color: themeMode === "dark" ? "white" : "black",
+    "@media (max-width: 768px)": {
+      padding: "10px 0px",
+      display: "block",
+    },
+  };
+  const buttonStyling = getButtonStyles(themeMode);
+
+  const stringChecker = (content: Offer | string) => {
+    if (typeof content === "string") {
+      if (content === "") {
+        return (
+          <>
+            <Typography variant="body1">
+              The cover letter was not submitted...
+            </Typography>
+          </>
+        );
+      }
+      return content;
+    } else {
+      return (
+        <Table>
+          <TableHead>
+            <TableCell sx={colorSx}>Company</TableCell>
+            <TableCell sx={colorSx}>Profession</TableCell>
+            <TableCell sx={colorSx}>Specialty</TableCell>
+            <TableCell sx={colorSx}>Location</TableCell>
+            <TableCell sx={colorSx}>Salary</TableCell>
+            <TableCell sx={colorSx}>Page </TableCell>
+          </TableHead>
+          <TableBody>
+            <TableCell sx={colorSx}>{content.company}</TableCell>
+            <TableCell sx={colorSx}> {content.label}</TableCell>
+            <TableCell sx={colorSx}>{content.specialties}</TableCell>
+            <TableCell sx={colorSx}>{content.location}</TableCell>
+            <TableCell sx={colorSx}>{content.salary}</TableCell>
+            <TableCell sx={colorSx}>
+              <Button sx={buttonStyling}>
+                <Link href={LinkString} color="inherit" underline="hover">
+                  Visit
+                </Link>
+              </Button>
+            </TableCell>
+          </TableBody>
+        </Table>
+      );
+    }
+  };
   return (
     <Popover
       open={Boolean(anchorEl)}
@@ -25,37 +85,32 @@ const ApplicantsTablePopover: React.FC< ApplicantsTablePopoverProps> = ({
       onClose={onClose}
       anchorOrigin={{
         vertical: "top",
-        horizontal: "left",
+        horizontal: "center",
+      }}
+      sx={{
+        width: "auto",
+        height: "auto",
       }}
     >
       <Box
         sx={{
-          width: "350px",
-          height: "400px",
+          width: "auto",
+          height: "auto",
           color: themeMode === "dark" ? "white" : "black",
           background:
             themeMode === "dark"
               ? "linear-gradient(20deg, rgb(0, 0, 0) 2%, #263139 69%)"
               : "#FFFFFF",
-          borderRadius: "0",
         }}
       >
         <Box
           style={{
-            whiteSpace: "pre-wrap",
             wordWrap: "break-word",
             padding: "40px",
             color: themeMode === "dark" ? "white" : "black",
-            borderRadius: "0",
           }}
         >
-          <Typography
-            sx={{
-              color: themeMode === "dark" ? "white" : "black",
-            }}
-          >
-            {content}
-          </Typography>
+          <Box>{stringChecker(content)}</Box>
         </Box>
       </Box>
     </Popover>

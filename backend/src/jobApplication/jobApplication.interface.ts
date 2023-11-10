@@ -8,4 +8,6 @@ export interface ApplicationToBeFetchedToFrontend {
     coverLetter: string;
     cvFilePath: string;
     offerId: string;
+    offer?: {}
+    user?: {}
   }
