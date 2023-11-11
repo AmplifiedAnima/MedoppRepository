@@ -18,10 +18,11 @@ import {
 import { ThemeContext } from "../../../styles/ThemeProviderContext";
 import HeaderForOtherRoutes from "../../Header/HeaderForOtherRoutes";
 import { getPaperStyling, getButtonStyling } from "../../../styles/formStyling";
-import { EditProfileFormInput } from "./EditProfilePageInputFields";
+import { getButtonStyles } from "../../../styles/buttonStyling";
+import { EditProfileFormInput } from "./EditProfilePageComponents/EditProfilePageInputFields";
 import { EditProfileFormReducer } from "../../../utlis/Form Reducers/FormReducer";
 import { initialEditProfileState } from "../../../utlis/Form Reducers/initialStatesForForms";
-import { handleInputForEditProfileForm } from "./FunctionToHandleInputEditProfilePage";
+import { handleInputForEditProfileForm } from "./EditProfilePageComponents/FunctionToHandleInputEditProfilePage";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
 import MyDropzoneForCV, {
   MyDropzoneForAvatarImage,
@@ -29,7 +30,9 @@ import MyDropzoneForCV, {
 import { useAlertContext } from "../../../utlis/AlertHandlingContext";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
-export const EditProfilePage = () => {
+import confirmationImage from "../../../static/confrimation.png";
+
+export const EditProfilePageView = () => {
   const {
     isLoggedIn,
     username,
@@ -54,6 +57,7 @@ export const EditProfilePage = () => {
   const { themeMode } = useContext(ThemeContext);
   const paperStyling = getPaperStyling(themeMode);
   const buttonStyling = getButtonStyling(themeMode);
+  const uploadedCvButtonStyle = getButtonStyles(themeMode);
   const navigate = useNavigate();
   const [formState, formDispatch] = useReducer(
     EditProfileFormReducer,
@@ -231,10 +235,10 @@ export const EditProfilePage = () => {
                         <Typography
                           variant="body1"
                           sx={{
-                            margin: "0px 0px",
                             fontSize: "18px",
                             wordBreak: "keep-all",
-                 
+                            padding: "10px 0px",
+                            margin: "10px 0px",
                           }}
                         >
                           Current image
@@ -253,11 +257,12 @@ export const EditProfilePage = () => {
                           variant="body2"
                           sx={{
                             color: themeMode === "dark" ? "#2feb00" : "black",
-                            fontSize: "19px",
+                            fontSize: "18px",
                             wordBreak: "keep-all",
-                            paddingTop: "20px",
+                            padding: "10px 0px",
+                            margin: "10px 0px",
                             "@media (max-width: 768px)": {
-                              fontSize: "18px",
+                              fontSize: "17px",
                             },
                           }}
                         >
@@ -370,36 +375,42 @@ export const EditProfilePage = () => {
                   onSubmit={isSubmitted}
                   formState={formState}
                 />
-                <br></br>
-                <br></br>
+
                 {!isSubmitted && (
                   <>
-                    <Typography
-                      variant="h5"
+                    <Box
                       sx={{
-                        color: themeMode === "dark" ? "#2feb00" : "black",
+                        display: "grid",
+                        gridTemplateColumns: "2.5fr 1fr 2.5fr",
                       }}
                     >
-                      Upload CV
-                    </Typography>
-                    <MyDropzoneForCV setSelectedFiles={setSelectedFilesCv} />
-                    <br></br>
-                    {cv !== "" ? (
-                      <Typography variant="body1">
-                        <Link
-                          href={cv}
-                          color="inherit"
-                          underline="hover"
+                      <Box />
+                      {cv !== "" ? (
+                        <Button
                           sx={{
-                            color: themeMode === "dark" ? "#2feb00" : "black",
+                            ...uploadedCvButtonStyle,
+                            padding: "10px 0px",
+                            margin: "10px 0px",
                           }}
                         >
-                          Current CV
-                        </Link>
-                      </Typography>
-                    ) : (
-                      "no Cv uploaded"
-                    )}
+                          <Link
+                            href={cv}
+                            color="inherit"
+                            underline="none"
+                            sx={{
+                              color: themeMode === "dark" ? "#2feb00" : "white",
+                            }}
+                          >
+                            Current CV
+                          </Link>
+                        </Button>
+                      ) : (
+                        "no CV uploaded"
+                      )}
+                      <Box />
+                    </Box>
+                    <MyDropzoneForCV setSelectedFiles={setSelectedFilesCv} />
+                    <br></br>
                   </>
                 )}
                 <Button
@@ -415,7 +426,18 @@ export const EditProfilePage = () => {
                 >
                   Update Profile
                 </Button>
+          
               </form>
+              {isSubmitted && (
+                  <>
+                    <img
+                      src={confirmationImage}
+                      alt=""
+                      width="120px"
+                      height="120px"
+                    />
+                  </>
+                )}
             </Paper>
           ) : (
             <Box sx={{ height: "100vh" }}>

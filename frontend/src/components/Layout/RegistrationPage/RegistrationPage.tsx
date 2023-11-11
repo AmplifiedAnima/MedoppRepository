@@ -11,11 +11,11 @@ import MyDropzoneForCV, {
 } from "../../../utlis/MyDropzone";
 import { registrationFormReducer } from "../../../utlis/Form Reducers/FormReducer";
 import { initialRegistrationState } from "../../../utlis/Form Reducers/initialStatesForForms";
-import { NewRegistrationFormInput } from "./RegistrationPageInputFields";
+import { NewRegistrationFormInput } from "./RegistrationPageComponents/RegistrationPageInputFields";
 import {
   handleInputForRegistrationForm,
   handleSelectFieldForRegistrationForm,
-} from "./FunctionToHandleInputRegistrationPage";
+} from "./RegistrationPageComponents/FunctionToHandleInputRegistrationPage";
 import { motion } from "framer-motion";
 const RegistrationPage = () => {
   const [formState, formDispatch] = useReducer(

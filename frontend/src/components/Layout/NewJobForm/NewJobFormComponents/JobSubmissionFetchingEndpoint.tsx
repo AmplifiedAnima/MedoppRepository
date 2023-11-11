@@ -1,4 +1,4 @@
-import { Offer } from "../../JobOffers/OfferInterface";
+import { OfferInterface } from "../../../JobOffers/Offer.Interface";
 import { v4 as uuidv4 } from "uuid";
 import { Dispatch } from "react";
 import { NavigateFunction } from "react-router";
@@ -34,7 +34,7 @@ export const handleSubmit: HandleSubmitFunction = async (
   dispatch,
 
 ) => {
-  const offer: Offer = {
+  const offer: OfferInterface = {
     id: uuidv4(),
     label: selectedLabel,
     specialties: selectedSpecialty,

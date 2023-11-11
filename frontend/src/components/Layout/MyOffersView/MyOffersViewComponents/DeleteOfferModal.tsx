@@ -9,9 +9,9 @@ import {
   DialogActions,
   Typography,
 } from "@mui/material";
-import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
-import { ThemeContext } from "../../../styles/ThemeProviderContext";
-import { getButtonStyling } from "../../../styles/formStyling";
+import { IsLoggedInContext } from "../../../../utlis/IsLoggedInContext";
+import { ThemeContext } from "../../../../styles/ThemeProviderContext";
+import { getButtonStyling } from "../../../../styles/formStyling";
 import { useNavigate } from "react-router-dom";
 
 interface DeleteOfferModalProps {

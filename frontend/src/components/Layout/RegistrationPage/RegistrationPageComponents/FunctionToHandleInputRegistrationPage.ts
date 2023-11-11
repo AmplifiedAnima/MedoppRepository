@@ -1,8 +1,8 @@
 import {
   RegistrationFormAction,
   RegistrationFormState,
-} from "../../../utlis/Form Reducers/initialStatesForForms";
-import { formatFieldName } from "../../JobOffers/ApplyingForAJobView/FunctionToHandleInputJobApplication";
+} from "../../../../utlis/Form Reducers/initialStatesForForms";
+import { formatFieldName } from "../../../JobOffers/ApplyingForAJobView/FunctionToHandleInputJobApplication";
 
 export const handleInputForRegistrationForm = (
   state: RegistrationFormState,
@@ -13,7 +13,7 @@ export const handleInputForRegistrationForm = (
   regexPattern: RegExp,
   customErrorMessage?: string
 ) => {
-  const formattedFieldName = formatFieldName(fieldName)
+  const formattedFieldName = formatFieldName(fieldName);
 
   if (value.trim().length === 0) {
     dispatch({
@@ -72,9 +72,9 @@ export const handleSelectFieldForRegistrationForm = (
   dispatch: React.Dispatch<RegistrationFormAction>,
   fieldName: keyof RegistrationFormState,
   value: string,
-  customErrorMessage?: string 
+  customErrorMessage?: string
 ) => {
-  const formattedFieldName = formatFieldName(fieldName)
+  const formattedFieldName = formatFieldName(fieldName);
   if (!value) {
     const errorMessage = customErrorMessage
       ? customErrorMessage // Use the custom error message if provided

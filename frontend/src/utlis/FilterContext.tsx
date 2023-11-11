@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { Offer } from "../components/JobOffers/OfferInterface";
+import { OfferInterface } from "../components/JobOffers/Offer.Interface";
 
 export interface FilterState {
   query: string;
@@ -7,7 +7,7 @@ export interface FilterState {
   priceRange: { min: string; max: string };
   location: string;
   typeOfEmployment: string;
-  selectedOffer: Offer | null;
+  selectedOffer: OfferInterface | null;
 }
 
 export interface FilterOptions {
@@ -44,7 +44,7 @@ type FilterAction =
     }
   | {
       type: "SET_SELECTED_OFFER";
-      payload: Offer | null;
+      payload: OfferInterface | null;
     }
   | { type: "SET_INITIAL_FILTER_STATE" };
 

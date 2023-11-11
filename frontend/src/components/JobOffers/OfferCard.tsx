@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Card, CardContent, Typography, Button, Box } from "@mui/material";
 import { ThemeContext } from "../../styles/ThemeProviderContext";
-import { Offer } from "./OfferInterface";
+import { OfferInterface } from "./Offer.Interface";
 import ApplyingForAJobView from "./ApplyingForAJobView/ApplyingForAJobView";
 import DOMPurify from "dompurify";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ import {
 } from "../../styles/offersListStyle";
 
 interface OfferCardProps {
-  offer: Offer;
+  offer: OfferInterface;
   onCloseOffer: () => void;
   isSelected: boolean;
   offerId: string;

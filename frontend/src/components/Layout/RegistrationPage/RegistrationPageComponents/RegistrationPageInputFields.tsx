@@ -2,11 +2,11 @@ import { FormHelperText, MenuItem, TextField } from "@mui/material";
 import {
   RegistrationFormState,
   initialRegistrationState,
-} from "../../../utlis/Form Reducers/initialStatesForForms";
+} from "../../../../utlis/Form Reducers/initialStatesForForms";
 import { useContext, useReducer, useState } from "react";
-import { ThemeContext } from "../../../styles/ThemeProviderContext";
-import { getInputPlaceholdersStyling } from "../../../styles/formStyling";
-import { registrationFormReducer } from "../../../utlis/Form Reducers/FormReducer";
+import { ThemeContext } from "../../../../styles/ThemeProviderContext";
+import { getInputPlaceholdersStyling } from "../../../../styles/formStyling";
+import { registrationFormReducer } from "../../../../utlis/Form Reducers/FormReducer";
 
 interface NewRegistrationFormInputProps {
   onUserNameChange: (value: string) => void;

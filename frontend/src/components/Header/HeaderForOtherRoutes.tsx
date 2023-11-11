@@ -73,7 +73,7 @@ const HeaderForOtherRoutes: React.FC<HeaderForOtherRoutesProps> = ({
                 color: themeMode === "dark" ? "#2feb00" : "#679af8",
                 alignItems: "center",
                 flexWrap: "wrap",
-                fontSize: isMobile ? "12px" : "15px",
+                fontSize: isMobile ? "12px" : "16px",
                 padding: isMobile ? "0px 10px" : "0px 5px",
               }}
             >

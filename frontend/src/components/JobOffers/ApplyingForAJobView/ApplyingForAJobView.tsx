@@ -247,8 +247,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({ offerId }) => {
                 sx={{ color: themeMode === "dark" ? "#2feb00" : "white" }}
                 underline="none"
               >
-                <br></br>
-                View CV
+                <Button sx={buttonStyling}>Uploaded CV</Button>
               </Link>
             ) : (
               <MyDropzoneForCV setSelectedFiles={setSelectedFiles} />
@@ -266,7 +265,7 @@ const ApplyingForAJobView: React.FC<ApplicationViewProps> = ({ offerId }) => {
                 >
                   <Button
                     variant="contained"
-                    color='success'
+                    color="success"
                     onClick={handleSubmit}
                     sx={{ ...buttonStyling, width: "auto" }}
                     disabled={IsSubmitted}

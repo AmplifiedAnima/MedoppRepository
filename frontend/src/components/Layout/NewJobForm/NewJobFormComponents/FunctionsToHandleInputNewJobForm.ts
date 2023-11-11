@@ -1,7 +1,7 @@
 import {
   NewJobFormState,
   NewJobFormAction,
-} from "../../../utlis/Form Reducers/initialStatesForForms";
+} from "../../../../utlis/Form Reducers/initialStatesForForms";
 
 export const handleInputFieldForNewJobForm = (
   state: NewJobFormState,

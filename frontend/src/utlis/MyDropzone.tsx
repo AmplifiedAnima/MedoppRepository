@@ -25,6 +25,7 @@ const StyledDropzoneContainer = styled.section`
   border-width: 2px;
   border-radius: 2px;
   border-style: dashed;
+  cursor: grab;
   outline: none;
   transition: border 0.24s ease-in-out;
 `;
@@ -47,7 +48,7 @@ const MyDropzoneForCV = ({ setSelectedFiles }: MyDropzoneProps) => {
           {...getRootProps()}
         >
           <input {...getInputProps()} />
-          <Typography variant="h5">
+          <Typography variant="h5" >
             You can drag CV here, or select it
           </Typography>
         </StyledDropzoneContainer>

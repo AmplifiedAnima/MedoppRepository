@@ -15,10 +15,8 @@ import { UsersService } from 'src/user/user.service';
 import { SigninDto } from './dto/signin.dto';
 import { SignupDto } from './dto/signup.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RequestWithUser} from 'src/user/user.interface';
-import {
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
+import { RequestWithUser } from 'src/user/user.interface';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { multerConfig } from 'src/fileUploadService/multerConfig';
 import { EditProfileDto } from './dto/editProfile.dto';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
@@ -80,12 +78,12 @@ export class AuthController {
     @UploadedFiles()
     files: { cv?: Express.Multer.File[]; avatarImage?: Express.Multer.File[] },
     @Request() request: RequestWithUser,
-  ):Promise<User> {
+  ): Promise<User> {
     const currentPassword = request.body.currentPassword;
 
     const user = await this.authService.validateUser({
       username: request.user.username,
-      password: currentPassword
+      password: currentPassword,
     });
 
     const userId = request.user.id;
@@ -95,16 +93,24 @@ export class AuthController {
       user.password,
     );
 
-    console.log(`is valid ? ${oldPasswordIsValid}`, currentPassword, user.password );
+    console.log(
+      `is valid ? ${oldPasswordIsValid}`,
+      currentPassword,
+      user.password,
+    );
 
     if (!oldPasswordIsValid) {
       throw new UnauthorizedException('Old password is incorrect');
     }
 
     if (currentPassword === editProfileDto.password) {
-      throw new UnauthorizedException('Old and new password cannot be the same ')
+      throw new UnauthorizedException(
+        'Old and new password cannot be the same ',
+      );
     }
-    
+    if (editProfileDto.password === '') {
+      editProfileDto.password = currentPassword;
+    }
     if (files.cv) {
       const cv = files.cv[0];
       editProfileDto.cvFileName = cv.originalname;

@@ -11,7 +11,7 @@ import { Hash } from 'src/utils/hash.util';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
 import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
-import { ConflictException } from '@nestjs/common/exceptions';
+import { ConflictException, UnauthorizedException } from '@nestjs/common/exceptions';
 
 type FileData = {
   [fieldName: string]: Express.Multer.File;
@@ -111,9 +111,9 @@ export class UsersService {
       }
     }
 
-    if (updatedInfo.password === '') {
-      throw new Error('Password cannot be empty');
-    }
+    // if (updatedInfo.password === '') {
+    //   throw new UnauthorizedException('Password cannot be empty');
+    // }
 
     if (files.cv) {
       updatedInfo.cv = await this.fileUploadService.uploadFileCv(

@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { ThemeContext } from "./styles/ThemeProviderContext";
 import { Box, Button } from "@mui/material";
 import HeaderForOtherRoutes from "./components/Header/HeaderForOtherRoutes";
-import { Offer } from "./components/JobOffers/OfferInterface";
+import { OfferInterface } from "./components/JobOffers/Offer.Interface";
 import { getButtonStyles } from "./styles/buttonStyling";
 import OfferCard from "./components/JobOffers/OfferCard";
 import { FlexContainer, LeftColumn, RightColumn } from "./OffersViewWithMap";
@@ -18,7 +18,7 @@ interface OfferWithIdAndMapViewProps {
   handleCloseOffer: () => void;
   isMobile: boolean;
   showOfferCard: boolean;
-  selectedOffer: Offer | null;
+  selectedOffer: OfferInterface | null;
   handleToggleOfferCard: () => void;
 }
 

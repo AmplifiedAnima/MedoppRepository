@@ -2,7 +2,7 @@ import React from "react";
 import Popover from "@mui/material/Popover";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { Offer } from "../../JobOffers/OfferInterface";
+import { OfferInterface } from "../../../JobOffers/Offer.Interface";
 import {
   Table,
   TableBody,
@@ -11,10 +11,10 @@ import {
   Link,
   Button,
 } from "@mui/material";
-import { getButtonStyles } from "../../../styles/buttonStyling";
+import { getButtonStyles } from "../../../../styles/buttonStyling";
 
 interface ApplicantsTablePopoverProps {
-  content: Offer | string;
+  content: OfferInterface | string;
   themeMode: string;
   anchorEl: HTMLElement | null;
   onClose: () => void;
@@ -37,7 +37,7 @@ const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
   };
   const buttonStyling = getButtonStyles(themeMode);
 
-  const stringChecker = (content: Offer | string) => {
+  const stringChecker = (content: OfferInterface | string) => {
     if (typeof content === "string") {
       if (content === "") {
         return (
@@ -48,7 +48,15 @@ const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
           </>
         );
       }
-      return content;
+
+      return (
+        <>
+          <Typography variant="h5">Cover letter</Typography>
+          <Typography variant="body2" sx={{ maxWidth: "400px" }}>
+            {content}
+          </Typography>
+        </>
+      );
     } else {
       return (
         <Table>
@@ -68,7 +76,7 @@ const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
             <TableCell sx={colorSx}>{content.salary}</TableCell>
             <TableCell sx={colorSx}>
               <Button sx={buttonStyling}>
-                <Link href={LinkString} color="inherit" underline="hover">
+                <Link href={LinkString} color="inherit" underline="none">
                   Visit
                 </Link>
               </Button>
@@ -94,13 +102,24 @@ const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
     >
       <Box
         sx={{
-          width: "auto",
+          width: "100%",
           height: "auto",
           color: themeMode === "dark" ? "white" : "black",
           background:
             themeMode === "dark"
               ? "linear-gradient(20deg, rgb(0, 0, 0) 2%, #263139 69%)"
               : "#FFFFFF",
+          "@media (max-width: 768px)": {
+            padding: "10px 0px",
+            display: "block",
+            width: "auto",
+            height: "auto",
+          },
+          "@media (max-width: 280px)": {
+            padding: "10px 0px",
+            display: "block",
+            height: "auto",
+          },
         }}
       >
         <Box

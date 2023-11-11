@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "./styles/ThemeProviderContext";
 import { Backdrop, Box, Button } from "@mui/material";
 import Header from "./components/Header/Header";
-import { Offer } from "./components/JobOffers/OfferInterface";
+import { OfferInterface } from "./components/JobOffers/Offer.Interface";
 import appStyle from "./App.module.css";
 import { styled } from "@mui/material/styles";
 import { useFilterContext } from "./utlis/FilterContext";
@@ -33,11 +33,11 @@ export const RightColumn = styled("div")({
 });
 
 interface OffersViewWithMapProps {
-  filteredOffers: Offer[];
+  filteredOffers: OfferInterface[];
   isMobile: boolean;
   showJobBoard: boolean;
   handleToggleJobBoard: () => void;
-  handleOfferClick: (offer: Offer | null) => void; // Update the function type
+  handleOfferClick: (offer: OfferInterface | null) => void; // Update the function type
   handleOfferClose: () => void;
   mapComponent: React.ReactNode;
 }

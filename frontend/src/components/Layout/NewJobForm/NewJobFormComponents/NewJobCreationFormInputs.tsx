@@ -13,15 +13,15 @@ import {
   getCustomMenuItemStyles,
   getInputPlaceholdersStyling,
   getReactQuillStyling,
-} from "../../../styles/formStyling";
-import { ThemeContext } from "../../../styles/ThemeProviderContext";
-import { NewJobFormReducer } from "../../../utlis/Form Reducers/FormReducer";
+} from "../../../../styles/formStyling";
+import { ThemeContext } from "../../../../styles/ThemeProviderContext";
+import { NewJobFormReducer } from "../../../../utlis/Form Reducers/FormReducer";
 import {
   NewJobFormState,
   initialStateNewJobForm,
-} from "../../../utlis/Form Reducers/initialStatesForForms";
+} from "../../../../utlis/Form Reducers/initialStatesForForms";
 import { useLocation } from "react-router";
-import specialties from "../../Specialities";
+import specialties from "../../../Specialities";
 
 interface NewJobCreationFormInputsProps {
   onJobTitleChange: (value: string) => void;

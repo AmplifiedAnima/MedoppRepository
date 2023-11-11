@@ -3,7 +3,7 @@ import { ThemeContext } from "../../styles/ThemeProviderContext";
 import { Box } from "@mui/material";
 import { useLocation, useNavigate } from "react-router";
 import { FilterContext } from "../FilterContext";
-import { Offer } from "../../components/JobOffers/OfferInterface";
+import { OfferInterface } from "../../components/JobOffers/Offer.Interface";
 import { getOfferIconUrl } from "./MapComponentUtils";
 
 export const universalHeight = {
@@ -17,9 +17,9 @@ export const universalHeight = {
 };
 
 interface MapProps {
-  offers: Offer[] | [];
-  onOfferClick: (offer: Offer) => void;
-  selectedOffer: Offer | null;
+  offers: OfferInterface[] | [];
+  onOfferClick: (offer: OfferInterface) => void;
+  selectedOffer: OfferInterface | null;
   mapRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -40,7 +40,7 @@ const MapComponent: React.FC<MapProps> = ({
 
 
   const onMarkerClick = useCallback(
-    (offer: Offer) => {
+    (offer: OfferInterface) => {
       onOfferClick(offer);
       const offerId = offer.id;
       navigate(`/offers/${offerId}`);

@@ -1,41 +1,19 @@
 import HeaderForOtherRoutes from "../../Header/HeaderForOtherRoutes";
 import { useEffect, useContext, useState } from "react";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
-import {
-  Box,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ThemeContext } from "../../../styles/ThemeProviderContext";
-import DeleteOfferModal from "./DeleteOfferModal";
+import DeleteOfferModal from "./MyOffersViewComponents/DeleteOfferModal";
 import {
   getContainerStyles,
   getInnerBoxStyles,
-  getTableStyles,
-  getCellStyles,
-  getHeaderStyles,
 } from "../../../styles/tablesStyles";
-import { deleteOffer } from "./EmployerOffersViewFunctionsHandlers";
+import { deleteOffer } from "./MyOffersViewComponents/EmployerOffersViewFunctionsHandlers";
 import { motion } from "framer-motion";
-interface OfferFetchedForUserView {
-  id: string;
-  label: string;
-  title: string;
-  company: string;
-  location: string;
-  typeOfEmployment: string;
-  description: string;
-  specialties: string;
-}
+import { TableHeaderOffersViewComponents } from "./MyOffersViewComponents/TableHeaderOffersViewComponents";
+import { OfferFetchedForUserView } from "./OfferFetchedForUserView.interface";
 
 const EmployersOffersView = () => {
-  const isMobile = window.innerWidth < 768;
   const { isLoggedIn, roles } = useContext(IsLoggedInContext);
   const { themeMode } = useContext(ThemeContext);
   const [userOffers, setUserOffers] = useState<OfferFetchedForUserView[]>([]);
@@ -44,10 +22,12 @@ const EmployersOffersView = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedOfferId, setSelectedOfferId] = useState<string>("");
   const isEmployer = isLoggedIn && roles.includes("Employer");
+
   const handleDeleteModalOpen = (offerId: string) => {
     setIsDeleteModalOpen(true);
     setSelectedOfferId(offerId);
   };
+
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
   };
@@ -59,6 +39,7 @@ const EmployersOffersView = () => {
       handleDeleteModalClose();
     }
   };
+
   useEffect(() => {
     const fetchEmployersOffers = async () => {
       try {
@@ -94,9 +75,7 @@ const EmployersOffersView = () => {
 
   const containerStyles = getContainerStyles(themeMode);
   const innerBoxStyles = getInnerBoxStyles();
-  const tableStyles = getTableStyles();
-  const cellStyles = getCellStyles(themeMode);
-  const headerStyles = getHeaderStyles(themeMode);
+
   return (
     <Box sx={containerStyles}>
       <HeaderForOtherRoutes routeView="My Offers" />
@@ -108,115 +87,10 @@ const EmployersOffersView = () => {
         <Box sx={innerBoxStyles}>
           {isLoggedIn && isEmployer ? (
             <>
-              <Table sx={tableStyles}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={headerStyles}>
-                      <Typography variant="h5">Job title</Typography>
-                    </TableCell>
-                    <TableCell sx={headerStyles}>
-                      <Typography variant="h5">Profession</Typography>
-                    </TableCell>
-                    <TableCell sx={headerStyles}>
-                      <Typography variant="h5">Specialty</Typography>
-                    </TableCell>
-                    <TableCell sx={headerStyles}>
-                      <Typography variant="h5">Location</Typography>
-                    </TableCell>
-                    <TableCell sx={headerStyles}> </TableCell>
-                  </TableRow>
-                </TableHead>
-
-                <TableBody>
-                  {userOffers.map((offer) => (
-                    <TableRow
-                      key={offer.id}
-                      sx={{ margin: isMobile ? "45px 0px" : "20px 0px" }}
-                    >
-                      <TableCell sx={cellStyles}>
-                        {isMobile && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
-                            }}
-                          >
-                            Title
-                          </Typography>
-                        )}
-                        {offer.title}
-                      </TableCell>
-                      <TableCell sx={cellStyles}>
-                        {isMobile && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
-                            }}
-                          >
-                            Profession
-                          </Typography>
-                        )}
-                        {offer.label}
-                      </TableCell>
-                      <TableCell sx={cellStyles}>
-                        {isMobile && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
-                            }}
-                          >
-                            Specialty:
-                          </Typography>
-                        )}
-                        {offer.specialties}
-                      </TableCell>
-                      <TableCell sx={cellStyles}>
-                        {isMobile && (
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
-                            }}
-                          >
-                            Location:
-                          </Typography>
-                        )}
-                        {offer.location}
-                      </TableCell>
-                      <TableCell sx={cellStyles}>
-                        {/* <Button
-                            sx={{
-                              color:
-                                themeMode === "dark" ? "#2feb00" : "#679af8",
-                            }}
-                          >
-                            Offer Edition
-                          </Button> */}
-
-                        <Button
-                          onClick={() => handleDeleteModalOpen(offer.id)}
-                          sx={{
-                            color: themeMode === "dark" ? "#2feb00" : "#679af8",
-                          }}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
-                      <Box
-                        sx={{
-                          padding: "20px 0px",
-                        }}
-                      />
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+              <TableHeaderOffersViewComponents
+                userOffers={userOffers}
+                handleDeleteModalOpen={handleDeleteModalOpen}
+              />
               <DeleteOfferModal
                 isOpen={isDeleteModalOpen}
                 onClose={handleDeleteModalClose}

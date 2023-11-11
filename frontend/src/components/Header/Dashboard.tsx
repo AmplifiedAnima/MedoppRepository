@@ -80,10 +80,8 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
               <Avatar>{`${username[0].toUpperCase()}`}</Avatar>
             )}
             <Typography variant="subtitle1" sx={textStyling}>
-              {username}
+              {username.toUpperCase()}
             </Typography>
-            <Typography sx={{ fontSize: "10px" }}>{roles}</Typography>
-            <Box />
             <IconButton color="inherit" onClick={onClose}>
               <CloseIcon />
             </IconButton>

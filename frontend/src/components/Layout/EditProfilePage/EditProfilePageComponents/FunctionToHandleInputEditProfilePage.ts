@@ -1,10 +1,10 @@
 import {
   EditProfileFormAction,
   EditProfileFormState,
-} from "../../../utlis/Form Reducers/initialStatesForForms";
+} from "../../../../utlis/Form Reducers/initialStatesForForms";
 import {
   formatFieldName,
-} from "../../JobOffers/ApplyingForAJobView/FunctionToHandleInputJobApplication";
+} from "../../../JobOffers/ApplyingForAJobView/FunctionToHandleInputJobApplication";
 export const handleInputForEditProfileForm = (
   state: EditProfileFormState,
   dispatch: React.Dispatch<EditProfileFormAction>,

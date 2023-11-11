@@ -26,20 +26,20 @@ import GeoCodingPlaceComponent from "../../../utlis/GoogleMapsApi/GeoCodingPlace
 import { GOOGLE_API_KEY } from "../../..";
 import { IsLoggedInContext } from "../../../utlis/IsLoggedInContext";
 
-import NewJobCreationFormInputs from "./NewJobCreationFormInputs";
+import NewJobCreationFormInputs from "./NewJobFormComponents/NewJobCreationFormInputs";
 import { NewJobFormReducer } from "../../../utlis/Form Reducers/FormReducer";
-import { handleSubmit } from "./JobSubmissionFetchingEndpoint";
+import { handleSubmit } from "./NewJobFormComponents/JobSubmissionFetchingEndpoint";
 import { initialStateNewJobForm } from "../../../utlis/Form Reducers/initialStatesForForms";
 import { motion } from "framer-motion";
 import {
   handleInputFieldForNewJobForm,
   validateDescriptionFieldNewJobForm,
   handleSelectFieldForJobForm,
-} from "./FunctionsToHandleInputNewJobForm";
+} from "./NewJobFormComponents/FunctionsToHandleInputNewJobForm";
 import confirmationImage from "../../../static/confrimation.png";
 const steps = ["Step 1", "Step 2"];
 
-const NewJobCreationForm: React.FC = () => {
+const NewJobCreationFormView: React.FC = () => {
   const [formState, formDispatch] = useReducer(
     NewJobFormReducer,
     initialStateNewJobForm
@@ -425,4 +425,4 @@ const NewJobCreationForm: React.FC = () => {
   );
 };
 
-export default NewJobCreationForm;
+export default NewJobCreationFormView;

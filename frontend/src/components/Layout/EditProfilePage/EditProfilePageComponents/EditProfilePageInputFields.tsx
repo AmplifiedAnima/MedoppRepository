@@ -1,8 +1,8 @@
-import { EditProfileFormState } from "../../../utlis/Form Reducers/initialStatesForForms";
+import { EditProfileFormState } from "../../../../utlis/Form Reducers/initialStatesForForms";
 import { TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
-import { ThemeContext } from "../../../styles/ThemeProviderContext";
-import { getInputPlaceholdersStyling } from "../../../styles/formStyling";
+import { ThemeContext } from "../../../../styles/ThemeProviderContext";
+import { getInputPlaceholdersStyling } from "../../../../styles/formStyling";
 
 interface EditProfileFormInputProps {
   onUserNameChange: (value: string) => void;
@@ -90,7 +90,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         helperText={formState.errorMessages.password}
         disabled={onSubmit}
       />
-     <TextField
+     {/* <TextField
         label="Confirm password"
         fullWidth
         type="password"
@@ -102,7 +102,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         error={passwordMatchError}
         helperText={passwordMatchError ? "Passwords do not match" : ""}
         disabled={onSubmit}
-      />
+      /> */}
       <TextField
         label="First name"
         fullWidth

@@ -2,21 +2,21 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import MapComponent from "./utlis/GoogleMapsApi/MapComponent";
 import { useMediaQuery } from "@mui/material";
-import { Offer } from "./components/JobOffers/OfferInterface";
+import { OfferInterface } from "./components/JobOffers/Offer.Interface";
 import { FilterState, useFilterContext } from "./utlis/FilterContext";
 import ApplicantsWhoAppliedForOfferView from "./components/Layout/ApplicantsForOffers/ApplicantsWhoAppliedForOfferView";
 import RegistrationPage from "./components/Layout/RegistrationPage/RegistrationPage";
 import OffersViewWithMap from "./OffersViewWithMap";
 import OfferWithIdAndMapView from "./OfferWithIdAndMapView";
-import { EditProfilePage } from "./components/Layout/EditProfilePage/EditProfilePage";
+import { EditProfilePageView } from "./components/Layout/EditProfilePage/EditProfilePageView";
 import { initialFilterState } from "./utlis/FilterContext";
-import NewJobCreationForm from "./components/Layout/NewJobForm/NewJobCreationForm";
+import NewJobCreationFormView from "./components/Layout/NewJobForm/NewJobCreationFormView";
 import { UserAlreadyLoggedInHandler } from "./utlis/UserAlreadyLoggedInHandler";
 import EmployersOffersView from "./components/Layout/MyOffersView/EmployerOffersView";
 import { ThemeContext } from "./styles/ThemeProviderContext";
 
 const App = () => {
-  const [filteredOffers, setFilteredOffers] = useState<Offer[]>([]);
+  const [filteredOffers, setFilteredOffers] = useState<OfferInterface[]>([]);
   const [showJobBoard, setShowJobBoard] = useState(true);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const mapRef = useRef(null);
@@ -57,7 +57,7 @@ const App = () => {
         const response = await fetch(`http://localhost:3000/offers?${params}`);
         const data = await response.json();
         const offersArray = Array.isArray(data) ? data : [data]; // Wrap in an array if it's a single offer
-        setFilteredOffers(offersArray as Offer[]);
+        setFilteredOffers(offersArray as OfferInterface[]);
       } catch (error) {
         console.error(error);
       }
@@ -68,7 +68,7 @@ const App = () => {
     fetchOffers(filterState);
   }, [filterState, dispatch]);
 
-  const handleOfferClick = (offer: Offer | null): void => {
+  const handleOfferClick = (offer: OfferInterface | null): void => {
     dispatch({ type: "SET_SELECTED_OFFER", payload: offer });
   };
 
@@ -96,7 +96,7 @@ const App = () => {
           path="/new-job-offer"
           element={
             <>
-              <NewJobCreationForm />
+              <NewJobCreationFormView />
             </>
           }
         />
@@ -128,7 +128,7 @@ const App = () => {
           path="/edit-user-profile"
           element={
             <>
-              <EditProfilePage />
+              <EditProfilePageView />
             </>
           }
         />
