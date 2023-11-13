@@ -53,6 +53,7 @@ export const EditProfilePageView = () => {
     setCv,
     avatarImage,
     setAvatarImage,
+    roles,
   } = useContext(IsLoggedInContext);
   const { themeMode } = useContext(ThemeContext);
   const paperStyling = getPaperStyling(themeMode);
@@ -69,7 +70,7 @@ export const EditProfilePageView = () => {
   const { dispatch } = useAlertContext();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const isEmployee = roles.includes("Employee");
   useEffect(() => {
     if (isLoggedIn) {
       formDispatch({
@@ -376,7 +377,7 @@ export const EditProfilePageView = () => {
                   formState={formState}
                 />
 
-                {!isSubmitted && (
+                {!isSubmitted && isEmployee && (
                   <>
                     <Box
                       sx={{
@@ -426,18 +427,17 @@ export const EditProfilePageView = () => {
                 >
                   Update Profile
                 </Button>
-          
               </form>
               {isSubmitted && (
-                  <>
-                    <img
-                      src={confirmationImage}
-                      alt=""
-                      width="120px"
-                      height="120px"
-                    />
-                  </>
-                )}
+                <>
+                  <img
+                    src={confirmationImage}
+                    alt=""
+                    width="120px"
+                    height="120px"
+                  />
+                </>
+              )}
             </Paper>
           ) : (
             <Box sx={{ height: "100vh" }}>

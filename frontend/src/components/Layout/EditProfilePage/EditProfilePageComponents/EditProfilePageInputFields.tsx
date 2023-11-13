@@ -3,10 +3,12 @@ import { TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { ThemeContext } from "../../../../styles/ThemeProviderContext";
 import { getInputPlaceholdersStyling } from "../../../../styles/formStyling";
+import confirmationImage from "../../../static/confrimation.png";
+
 
 interface EditProfileFormInputProps {
   onUserNameChange: (value: string) => void;
-  onCurrentPasswordChange: (value: string) =>void;
+  onCurrentPasswordChange: (value: string) => void;
   onPasswordChange: (value: string) => void;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
@@ -62,9 +64,9 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         helperText={formState.errorMessages.username}
         disabled={onSubmit}
       />
-        <TextField
+      <TextField
         label="Current password"
-        type='password'
+        type="password"
         fullWidth
         variant="outlined"
         margin="normal"
@@ -78,7 +80,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
       />
       <TextField
         label="Password"
-        type='password'
+        type="password"
         fullWidth
         variant="outlined"
         margin="normal"
@@ -90,7 +92,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         helperText={formState.errorMessages.password}
         disabled={onSubmit}
       />
-     {/* <TextField
+      {/* <TextField
         label="Confirm password"
         fullWidth
         type="password"
@@ -107,7 +109,7 @@ export const EditProfileFormInput: React.FC<EditProfileFormInputProps> = ({
         label="First name"
         fullWidth
         variant="outlined"
-        margin="normal" 
+        margin="normal"
         sx={inputPlaceholdersStyling}
         onChange={(e) => onFirstNameChange(e.target.value)}
         onBlur={() => onFirstNameChange(formState.firstName)}

@@ -74,7 +74,6 @@ export class AuthController {
   )
   async editProfile(
     @Body() editProfileDto: EditProfileDto,
-
     @UploadedFiles()
     files: { cv?: Express.Multer.File[]; avatarImage?: Express.Multer.File[] },
     @Request() request: RequestWithUser,

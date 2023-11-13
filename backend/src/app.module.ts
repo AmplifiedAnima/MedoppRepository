@@ -10,6 +10,7 @@ import { JobApplicationModule } from './jobApplication/jobApplication.module';
 import JobApplication from './jobApplication/jobApplication.entity';
 import { MulterModule } from '@nestjs/platform-express'; // Import MulterModule
 // import { FileUploadModule } from './fileUploadModule';
+import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -17,15 +18,18 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     OfferModule,
     MulterModule,
-    ConfigModule.forRoot({isGlobal: true}),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     JobApplicationModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5432,
-      username: 'czupa',
-      password: 'razielInTheShell',
-      database: 'MedOppDatabase',
+      port: Number(process.env.port),
+      username: process.env. medOppUsername,
+      password: process.env.medOpPass,
+      database: process.env.MedOpDb,
       entities: [User, Offer, JobApplication],
       autoLoadEntities: true,
       synchronize: true,

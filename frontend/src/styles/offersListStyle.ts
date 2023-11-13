@@ -35,22 +35,23 @@ export const gridStylingOffersList = {
   marginLeft: "40px",
   gap: "0px 20px",
   "@media (min-width: 769px) and (max-width: 1200px)": {
-    gridTemplateColumns: "1fr 1fr",
-    margin: "0px 0px",
-    gap: "0px 70px",
+    gridTemplateColumns: "2fr 1.5fr",
+    margin: "0px 20px",
+    gap: "0px 20px",
   },
 
   "@media (max-width: 768px)": {
     gridTemplateColumns: "1fr 1fr",
-    gap: "0px 70px",
-    margin: "0px 10px",
-    marginLeft: "40px",
+    margin: "0px 20px",
+  },
+  "@media (max-width: 540px)": {
+    gridTemplateColumns: "2.5fr 1.5fr",
+    margin: "0px 20px",
   },
   "@media (max-width: 280px)": {
     display: "block",
-    margin: "0px 0px",
-    gap: "0px",
-    marginLeft: "30px",
+    margin: "0px 20px",
+    marginLeft: "25px",
   },
 };
 
@@ -60,9 +61,17 @@ export const getCommonTextStyling = (isSelected: boolean) => ({
   overflow: "hidden",
   whiteSpace: "nowrap",
   textOverflow: "ellipsis",
-  maxWidth: !isSelected ? "200px" : "auto",
+
+  "@media (min-width: 769px) and (max-width: 1200px)": {
+    overflow: "",
+    whiteSpace: "",
+    textOverflow: "",
+    fontSize: "13px",
+  },
+
   "@media (max-width: 768px)": {
     fontSize: "14px",
+    margin: "3px 0px",
   },
 });
 export const iconStyling = {

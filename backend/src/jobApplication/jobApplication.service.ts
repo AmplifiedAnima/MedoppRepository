@@ -13,6 +13,7 @@ import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config/dist';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
 import { ApplicationToBeFetchedToFrontend } from './jobApplication.interface';
+import { UsersService } from 'src/user/user.service';
 
 @Injectable()
 export class JobApplicationService {
@@ -124,6 +125,8 @@ export class JobApplicationService {
       );
     }
     let cvFilePath = createJobApplicationDto.cvFilePath;
+    
+    const { cv, ...userData } = user;
 
     if (!cvFilePath) {
       cvFilePath = await this.fileUploadService.uploadFileCv(

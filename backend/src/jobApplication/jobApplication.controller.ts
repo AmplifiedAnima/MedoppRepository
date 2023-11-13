@@ -67,20 +67,14 @@ export class JobApplicationController {
 
       if (cv) {
         if (!cv) {
-          throw new ConflictException('You need  to attach cv to apply for the offer.');
+          throw new ConflictException(
+            'You need  to attach cv to apply for the offer.',
+          );
         }
         createJobApplicationDto.cvFileBuffer = cv.buffer;
         createJobApplicationDto.cvFileName = cv.originalname;
-
-        createJobApplicationDto.cvFilePath =
-          await this.fileUploadService.uploadFileCv(
-            createJobApplicationDto.cvFileName,
-            createJobApplicationDto.cvFileBuffer,
-          );
-        console.log('CV Buffer:', cv.buffer); 
-        console.log('CV Original Name:', cv.originalname);
       }
-      
+
       console.log(request.user);
 
       return this.jobApplicationService.createJobApplication(

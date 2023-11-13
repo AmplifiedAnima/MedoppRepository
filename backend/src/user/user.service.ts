@@ -132,8 +132,7 @@ export class UsersService {
     if (updatedInfo.password !== null) {
       updatedInfo.password = Hash.make(updatedInfo.password);
     }
-    console.log(updatedInfo);
-
+    
     Object.assign(user, updatedInfo);
 
     return await this.userRepository.save(user);

@@ -52,7 +52,6 @@ export const ApplicantsWhoAppliedForOfferViewComponents: React.FC<
   const headerStyles = getHeaderStyles(themeMode);
 
   const additionalIsMobileStyling = getadditionalIsMobileStyling(themeMode);
-
   const buttonStyling = getButtonStyles(themeMode);
 
   const handleLinkSpilling = (args: string) => () => {
