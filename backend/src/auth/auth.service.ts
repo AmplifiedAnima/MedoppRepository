@@ -12,7 +12,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async createToken(user: User) {
+  userDataFunction = (user: User) => {
     const userData = {
       username: user.username,
       id: user.id,
@@ -26,6 +26,11 @@ export class AuthService {
       city: user.city,
       cv: user.cv,
     };
+    return userData;
+  };
+
+  async createToken(user: User) {
+    const userData = this.userDataFunction(user);
     return {
       expiresIn: '3600',
       accessToken: this.jwtService.sign(userData),
@@ -33,6 +38,28 @@ export class AuthService {
     };
   }
 
+  async validateToken(accessToken: string): Promise<User> {
+    try {
+      const decoded = this.jwtService.verify(accessToken);
+      const user = await this.userService.get(decoded.user.id);
+
+      if (!user) {
+        throw new UnauthorizedException('User not found');
+      }
+      console.log(`auth ${user}`);
+      return user;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
+  }
+  async refreshToken(user: User) {
+    const userData = this.userDataFunction(user);
+    return {
+      expiresIn: '3600',
+      accessToken: this.jwtService.sign(userData),
+      user: userData,
+    };
+  }
   async validateUser(signinDto: SigninDto): Promise<User> {
     const user = await this.userService.getByUsername(signinDto.username);
     const passwordMatch = await Hash.compare(signinDto.password, user.password);

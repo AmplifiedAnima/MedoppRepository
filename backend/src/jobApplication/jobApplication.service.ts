@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config/dist';
 import { FileUploadService } from 'src/fileUploadService/file-upload-service';
 import { ApplicationToBeFetchedToFrontend } from './jobApplication.interface';
 import { UsersService } from 'src/user/user.service';
+import { EditProfileDto } from 'src/auth/dto/editProfile.dto';
 
 @Injectable()
 export class JobApplicationService {
@@ -26,6 +27,9 @@ export class JobApplicationService {
     @InjectRepository(Offer)
     private readonly offerRepository: Repository<Offer>,
     private readonly fileUploadService: FileUploadService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private readonly usersService: UsersService,
   ) {
     this.s3Client = new S3Client({
       region: this.configService.getOrThrow('AWS_S3_REGION'),
@@ -53,8 +57,6 @@ export class JobApplicationService {
           offerId: offer.id,
           offer: offer,
         };
-        console.log(offer);
-        console.log(application);
         applicants.push(applicationDto);
       });
     });
@@ -62,6 +64,7 @@ export class JobApplicationService {
     return applicants;
   }
 
+  // for applicants who applied
   async getApplicantsForUserOffers(
     user: User,
   ): Promise<ApplicationToBeFetchedToFrontend[]> {
@@ -82,9 +85,6 @@ export class JobApplicationService {
           offerId: offer.id,
           offer,
         };
-
-        console.log(offer);
-        console.log(application);
         applicants.push(applicationDto);
       });
     });
@@ -125,8 +125,6 @@ export class JobApplicationService {
       );
     }
     let cvFilePath = createJobApplicationDto.cvFilePath;
-    
-    const { cv, ...userData } = user;
 
     if (!cvFilePath) {
       cvFilePath = await this.fileUploadService.uploadFileCv(
@@ -135,6 +133,7 @@ export class JobApplicationService {
       );
     }
 
+    await this.userRepository.save(user);
     const newJobApplication = this.jobApplicationRepository.create({
       ...createJobApplicationDto,
       user,
@@ -143,6 +142,9 @@ export class JobApplicationService {
     });
 
     await this.jobApplicationRepository.save(newJobApplication);
+
+    console.log(cvFilePath);
+    this.usersService.updateCv(user.id, cvFilePath);
 
     return newJobApplication;
   }

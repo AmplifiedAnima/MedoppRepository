@@ -250,7 +250,7 @@ export const EditProfilePageView = () => {
                           sx={{
                             width: "60px",
                             height: "60px",
-                            padding: "0px 30px",
+                            marginLeft:'30px'
                           }}
                           alt="other image"
                         />

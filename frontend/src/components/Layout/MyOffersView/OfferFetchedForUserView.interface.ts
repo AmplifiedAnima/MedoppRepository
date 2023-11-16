@@ -1,3 +1,5 @@
+import { JobApplicationInterface } from "../ApplicantsForOffers/JobApplication.interface";
+
 export interface OfferFetchedForUserView {
     id: string;
     label: string;

@@ -5,12 +5,11 @@ import {
   Param,
   Post,
   Request,
-  Patch,
   Query,
   BadRequestException,
   NotFoundException,
-  UnauthorizedException,
   Delete,
+  Patch,
 } from '@nestjs/common';
 import { OffersService } from './offers.service';
 import { Offer } from './offer.entity';
@@ -39,7 +38,7 @@ export class OffersController {
   @UseGuards(RoleGuard(Role.Employer))
   @UseGuards(AuthGuard('jwt'))
   @Get('employer-offers')
-  async getUserOffers(@Request() request: RequestWithUser): Promise<Offer[]> {
+  async getUserOffers(@Request() request: RequestWithUser): Promise<any> {
     const user = request.user;
     return this.offersService.getAllUserOffers(user.id);
   }
@@ -79,15 +78,15 @@ export class OffersController {
     return this.offersService.createOffer(createOfferDto, request.user);
   }
 
-  // @UseGuards(RoleGuard(Role.Employer))
-  // @Patch(':id')
-  // async updateOffer(
-  //   @Param('id') id: string,
-  //   @Body() updateOfferDto: UpdateOfferDto,
-  //   @Request() request: RequestWithUser,
-  // ): Promise<Offer> {
-  //   return this.offersService.updateOffer(id, updateOfferDto, request.user);
-  // }
+  @UseGuards(RoleGuard(Role.Employer))
+  @Patch(':id')
+  async updateOffer(
+    @Param('id') id: string,
+    @Body() updateOfferDto: UpdateOfferDto,
+    @Request() request: RequestWithUser,
+  ): Promise<Offer> {
+    return this.offersService.updateOffer(id, updateOfferDto, request.user);
+  }
 
   @UseGuards(RoleGuard(Role.Employer))
   @UseGuards(AuthGuard('jwt'))
@@ -102,7 +101,7 @@ export class OffersController {
       throw new NotFoundException('Offer not found');
     }
 
-    await this.offersService.deleteOffer(id, request.user);
+    await this.offersService.deleteOffer(id);
     console.log(`offer ${id} has been deleted `)
   }
 }

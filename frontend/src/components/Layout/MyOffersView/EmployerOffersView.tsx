@@ -12,12 +12,20 @@ import { deleteOffer } from "./MyOffersViewComponents/EmployerOffersViewFunction
 import { motion } from "framer-motion";
 import { TableHeaderOffersViewComponents } from "./MyOffersViewComponents/TableHeaderOffersViewComponents";
 import { OfferFetchedForUserView } from "./OfferFetchedForUserView.interface";
+import { JobApplicationInterface } from "../ApplicantsForOffers/JobApplication.interface";
+import { fetchJobApplications } from "../ApplicantsForOffers/ApplicantsForOffersComponents/JobApplicationFetchingLogic";
 
 const EmployersOffersView = () => {
   const { isLoggedIn, roles } = useContext(IsLoggedInContext);
   const { themeMode } = useContext(ThemeContext);
   const [userOffers, setUserOffers] = useState<OfferFetchedForUserView[]>([]);
-  const [dataLoaded, setDataLoaded] = useState(false);
+  const [offersDataLoaded, setOffersDataLoaded] = useState(false);
+
+  const [userOffersApplications, setUserOffersApplications] = useState<
+    JobApplicationInterface[]
+  >([]);
+  const [userOffersApplicationsAreLoaded, setUserOffersApplicationsAreLoaded] =
+    useState(false);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedOfferId, setSelectedOfferId] = useState<string>("");
@@ -35,43 +43,50 @@ const EmployersOffersView = () => {
   const handleOfferDeletion = async (offerId: string) => {
     const deletionResult = await deleteOffer(offerId);
     if (deletionResult) {
-      setDataLoaded(false);
+      setOffersDataLoaded(false);
       handleDeleteModalClose();
     }
   };
+  const fetchEmployersOffers = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  useEffect(() => {
-    const fetchEmployersOffers = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const response = await fetch(
-          `http://localhost:3000/offers/employer-offers`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setUserOffers(data);
-          console.log(data);
-          setDataLoaded(true);
-        } else {
-          console.log("Error fetching user offers: ", response.status);
+      const response = await fetch(
+        `http://localhost:3000/offers/employer-offers`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (error) {
-        console.error("Error: ", error);
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserOffers(data);
+        console.log(data);
+        setOffersDataLoaded(true);
+      } else {
+        console.log("Error fetching user offers: ", response.status);
       }
-    };
-    if (!dataLoaded) {
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+  useEffect(() => {
+    if (!offersDataLoaded) {
       fetchEmployersOffers();
     }
-  }, [dataLoaded, isLoggedIn]);
+    //fetching data for applications count
+    if (!userOffersApplicationsAreLoaded) {
+      fetchJobApplications(
+        false,
+        setUserOffersApplications,
+        setUserOffersApplicationsAreLoaded
+      );
+    }
+  }, [offersDataLoaded]);
 
   const containerStyles = getContainerStyles(themeMode);
   const innerBoxStyles = getInnerBoxStyles();
@@ -80,26 +95,33 @@ const EmployersOffersView = () => {
     <Box sx={containerStyles}>
       <HeaderForOtherRoutes routeView="My Offers" />
       <motion.div
-        className="black"
         initial={{ opacity: 0 }}
         animate={{ transition: { duration: 2 }, opacity: 1 }}
       >
-        <Box sx={innerBoxStyles}>
-          {isLoggedIn && isEmployer ? (
-            <>
-              <TableHeaderOffersViewComponents
-                userOffers={userOffers}
-                handleDeleteModalOpen={handleDeleteModalOpen}
-              />
-              <DeleteOfferModal
-                isOpen={isDeleteModalOpen}
-                onClose={handleDeleteModalClose}
-                handleDelete={() => handleOfferDeletion(selectedOfferId)}
-                offerId={selectedOfferId}
-              />
-            </>
-          ) : (
-            <Box sx={{ height: "1200px" }}>
+        <>
+          <Box>
+            {offersDataLoaded ? (
+              <>
+                <TableHeaderOffersViewComponents
+                  userOffers={userOffers}
+                  applicationsForUserOffers={userOffersApplications!}
+                  handleDeleteModalOpen={handleDeleteModalOpen}
+                />
+                <DeleteOfferModal
+                  isOpen={isDeleteModalOpen}
+                  onClose={handleDeleteModalClose}
+                  handleDelete={() => handleOfferDeletion(selectedOfferId)}
+                  offerId={selectedOfferId}
+                />
+              </>
+            ) : (
+              <Box sx={{ height: "100vh" }}>
+                <Typography variant="h5">Loading...</Typography>
+              </Box>
+            )}
+          </Box>
+          {!isLoggedIn && !isEmployer && (
+            <Box sx={{ height: "100vh" }}>
               <Typography
                 variant="h4"
                 sx={{
@@ -114,7 +136,7 @@ const EmployersOffersView = () => {
               </Typography>
             </Box>
           )}
-        </Box>
+        </>
       </motion.div>
     </Box>
   );

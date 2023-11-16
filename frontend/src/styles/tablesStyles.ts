@@ -6,6 +6,7 @@ export const getContainerStyles = (themeMode: string) => {
         : "white",
     color: themeMode === "dark" ? "white" : "black",
     maxWidth: "100%",
+
     "@media (max-width: 768px)": {
       width: "100%",
     },
@@ -24,6 +25,7 @@ export const getInnerBoxStyles = () => {
 export const getTableStyles = () => {
   return {
     maxWidth: "100%",
+
     "& td": {
       padding: "22px 5px",
     },
@@ -48,9 +50,14 @@ export const getHeaderStyles = (themeMode: string) => {
     padding: "10px 20px",
     textAlign: "center",
     textTransform: "capitalize",
-    "& h5": {
+    "& body1": {
       color: themeMode === "dark" ? "#2feb00" : "#679af8",
       fontSize: "24px",
+      textTransform: "none",
+    },
+    "& h5": {
+      color: themeMode === "dark" ? "#2feb00" : "#679af8",
+      fontSize: "20px",
       "@media (max-width: 1248px)": {
         fontSize: "20px",
         overflow: "hidden",

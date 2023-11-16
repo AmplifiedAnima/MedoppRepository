@@ -1,10 +1,14 @@
-import { Body, Injectable, NotFoundException } from '@nestjs/common';
+import { Body, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Offer } from './offer.entity';
 import { CreateOfferDto } from './dto/createOffer.dto';
 import { User } from 'src/user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateOfferDto } from './dto/updateOfferDto';
+import JobApplication from 'src/jobApplication/jobApplication.entity';
+import { JobApplicationService } from 'src/jobApplication/jobApplication.service';
+import { UsersService } from 'src/user/user.service';
+import { ApplicationToBeFetchedToFrontend } from 'src/jobApplication/jobApplication.interface';
 
 export default interface FilterOptions {
   minPrice: string;
@@ -20,6 +24,10 @@ export class OffersService {
   constructor(
     @InjectRepository(Offer)
     private readonly offersRepository: Repository<Offer>,
+
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+    private readonly userService: UsersService,
   ) {}
 
   async getAllOffers(): Promise<Offer[]> {
@@ -78,8 +86,11 @@ export class OffersService {
 
     return queryBuilder.getMany();
   }
-  async getAllUserOffers(userId: string): Promise<Offer[]> {
-    return this.offersRepository.find({ where: { user: { id: userId } } });
+  async getAllUserOffers(
+    userId: string,
+  ): Promise<(Offer | ApplicationToBeFetchedToFrontend[])[]> {
+    const offers = await this.offersRepository.find({where: { user: { id: userId } }});
+  return offers;
   }
 
   async getOfferById(id: string): Promise<Offer> {
@@ -110,11 +121,11 @@ export class OffersService {
       user,
     });
     await this.offersRepository.save(updatedOffer);
+
     return updatedOffer;
   }
 
-  async deleteOffer(id: string, user: User): Promise<void> {
-  
+  async deleteOffer(id: string): Promise<void> {
     const offer = await this.getOfferById(id);
 
     if (!offer) {

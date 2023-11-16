@@ -11,6 +11,7 @@ import {
 import {
   getCellStyles,
   getHeaderStyles,
+  getInnerBoxStyles,
   getTableStyles,
   getadditionalIsMobileStyling,
 } from "../../../../styles/tablesStyles";
@@ -18,21 +19,41 @@ import { useContext } from "react";
 import { ThemeContext } from "../../../../styles/ThemeProviderContext";
 import { OfferFetchedForUserView } from "../OfferFetchedForUserView.interface";
 import { getButtonStyles } from "../../../../styles/buttonStyling";
+import { JobApplicationInterface } from "../../ApplicantsForOffers/JobApplication.interface";
 
 interface TableOffersViewProps {
   userOffers: OfferFetchedForUserView[];
+  applicationsForUserOffers: JobApplicationInterface[];
   handleDeleteModalOpen: (argument: string) => void;
 }
 
 export const TableHeaderOffersViewComponents: React.FC<
   TableOffersViewProps
-> = ({ userOffers, handleDeleteModalOpen }) => {
+> = ({ userOffers, handleDeleteModalOpen, applicationsForUserOffers }) => {
   const { themeMode } = useContext(ThemeContext);
+
   const tableStyles = getTableStyles();
   const headerStyles = getHeaderStyles(themeMode);
   const cellStyles = getCellStyles(themeMode);
   const additionalIsMobileStyling = getadditionalIsMobileStyling(themeMode);
   const buttonStyling = getButtonStyles(themeMode);
+  const innerBoxStyles = getInnerBoxStyles();
+
+  const countUserAppliedOffers = (offerId: string) => {
+    let count = 0;
+
+    for (const application of applicationsForUserOffers) {
+      const matchingOffer = userOffers.find(
+        (offer: OfferFetchedForUserView) => offerId === application.offerId
+      );
+
+      if (matchingOffer) {
+        count++;
+      }
+    }
+
+    return count;
+  };
 
   return (
     <>
@@ -51,11 +72,19 @@ export const TableHeaderOffersViewComponents: React.FC<
             <TableCell sx={headerStyles}>
               <Typography variant="h5">Location</Typography>
             </TableCell>
-            <TableCell sx={headerStyles}> </TableCell>
+            <TableCell
+              sx={{
+                ...headerStyles,
+              }}
+            >
+              {" "}
+              <Typography variant="h5">Applicants nr.</Typography>
+            </TableCell>
+            <TableCell sx={headerStyles}></TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {userOffers.map((offer) => (
+        <TableBody >
+          {userOffers.map((offer, index) => (
             <TableRow
               key={offer.id}
               sx={{
@@ -67,7 +96,6 @@ export const TableHeaderOffersViewComponents: React.FC<
                 <Typography variant="body2" sx={additionalIsMobileStyling}>
                   Title
                 </Typography>
-
                 {offer.title}
               </TableCell>
               <TableCell sx={cellStyles}>
@@ -92,15 +120,13 @@ export const TableHeaderOffersViewComponents: React.FC<
                 {offer.location}
               </TableCell>
               <TableCell sx={cellStyles}>
-                {/* <Button
-              sx={{
-                color:
-                  themeMode === "dark" ? "#2feb00" : "#679af8",
-              }}
-            >
-              Offer Edition
-            </Button> */}
+                <Typography variant="body2" sx={additionalIsMobileStyling}>
+                  Applications
+                </Typography>
 
+                {countUserAppliedOffers(offer.id)}
+              </TableCell>
+              <TableCell sx={cellStyles}>
                 <Button
                   onClick={() => handleDeleteModalOpen(offer.id)}
                   sx={buttonStyling}

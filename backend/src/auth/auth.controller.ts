@@ -17,9 +17,7 @@ import { SignupDto } from './dto/signup.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RequestWithUser } from 'src/user/user.interface';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { multerConfig } from 'src/fileUploadService/multerConfig';
 import { EditProfileDto } from './dto/editProfile.dto';
-import { FileUploadService } from 'src/fileUploadService/file-upload-service';
 import { User } from 'src/user/user.entity';
 
 @Controller('auth')
@@ -32,8 +30,15 @@ export class AuthController {
   @Post('signin')
   async signIn(@Body() signinDto: SigninDto): Promise<{ accessToken: string }> {
     const user = await this.authService.validateUser(signinDto);
-    console.log(user.roles);
     return await this.authService.createToken(user);
+  }
+
+  @Post('refresh-token')
+  async refreshToken(@Request() user: RequestWithUser) {
+    const refreshedToken = await this.authService.refreshToken(user.body);
+    console.log(refreshedToken);
+    console.log(user);
+    return refreshedToken;
   }
 
   @Post('signup')
@@ -59,9 +64,25 @@ export class AuthController {
       signupDto.avatarImageName = avatarImage.originalname;
       signupDto.avatarImageFileBuffer = avatarImage.buffer;
     }
+    if (signupDto.firstName) console.log(files.cv, files.avatarImage);
 
-    console.log(files.cv, files.avatarImage);
-    return this.userService.createUser(signupDto);
+    if (signupDto.email === '') {
+      throw new UnauthorizedException('Email cannot be empty');
+    }
+
+    if (signupDto.firstName === '') {
+      throw new UnauthorizedException('First name cannot be empty');
+    }
+
+    if (signupDto.lastName === '') {
+      throw new UnauthorizedException('Last name cannot be empty');
+    }
+    if (signupDto.password === '') {
+      throw new UnauthorizedException('Last name cannot be null');
+    }
+    const user = await this.userService.createUser(signupDto);
+
+    return this.authService.createToken(user);
   }
 
   @UseGuards(AuthGuard())

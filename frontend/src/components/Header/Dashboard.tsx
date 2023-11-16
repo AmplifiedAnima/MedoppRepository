@@ -70,7 +70,7 @@ const Dashboard: React.FC<DashboardProps> = ({ isOpen, onClose, onLogout }) => {
             {avatarImage && (
               <Avatar
                 src={avatarImage}
-                sx={{ width: 40, height: 40, paddingLeft: "15px" }}
+                sx={{ width: 40, height: 40, marginLeft: "15px" }}
               />
             )}
             {!avatarImage && firstName && lastName && (

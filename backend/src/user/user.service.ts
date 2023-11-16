@@ -13,9 +13,6 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { ConflictException, UnauthorizedException } from '@nestjs/common/exceptions';
 
-type FileData = {
-  [fieldName: string]: Express.Multer.File;
-};
 @Injectable()
 export class UsersService {
   private s3Client: S3Client;
@@ -46,8 +43,9 @@ export class UsersService {
     const user = await this.getByUsername(signupDto.username);
 
     if (user) {
-      throw new ConflictException('Username already exists.');
+      throw new UnauthorizedException('Username Exists');
     }
+   
     if (signupDto.cvFileBuffer) {
       signupDto.cv = await this.fileUploadService.uploadFileCv(
         signupDto.cvFileName,
@@ -65,6 +63,8 @@ export class UsersService {
     } else {
       signupDto.avatarImage = '';
     }
+ 
+  
     const newUser = this.userRepository.create({
       avatarImage: signupDto.avatarImage,
       username: signupDto.username,
@@ -88,9 +88,9 @@ export class UsersService {
     userId: string,
     updatedInfo: Partial<User>,
     files: {
-      cv?: Express.Multer.File[]; 
+      cv?: Express.Multer.File[];
       avatarImage?: Express.Multer.File[];
-    }
+    },
   ): Promise<User> {
     const user = await this.get(userId);
 
@@ -106,6 +106,7 @@ export class UsersService {
       const existingUserWithUsername = await this.getByUsername(
         updatedInfo.username,
       );
+
       if (existingUserWithUsername) {
         throw new Error('Username already exists');
       }
@@ -132,8 +133,29 @@ export class UsersService {
     if (updatedInfo.password !== null) {
       updatedInfo.password = Hash.make(updatedInfo.password);
     }
-    
+
     Object.assign(user, updatedInfo);
+
+    return await this.userRepository.save(user);
+  }
+
+  async updateCv(userId: string, updatedCv: string): Promise<User> {
+    const user = await this.get(userId);
+    user.cv = updatedCv;
+    console.log(`user service `, updatedCv);
+    console.log(`user service `, user.username);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!user.cv) {
+      user.cv = updatedCv;
+    }
+
+    console.log(`user service `, user);
+
+    Object.assign(user, updatedCv);
 
     return await this.userRepository.save(user);
   }

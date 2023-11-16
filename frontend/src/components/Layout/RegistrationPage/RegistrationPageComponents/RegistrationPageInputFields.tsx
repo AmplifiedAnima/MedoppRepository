@@ -1,12 +1,8 @@
-import { FormHelperText, MenuItem, TextField } from "@mui/material";
-import {
-  RegistrationFormState,
-  initialRegistrationState,
-} from "../../../../utlis/Form Reducers/initialStatesForForms";
-import { useContext, useReducer, useState } from "react";
+import { MenuItem, TextField } from "@mui/material";
+import { RegistrationFormState } from "../../../../utlis/Form Reducers/initialStatesForForms";
+import { useContext } from "react";
 import { ThemeContext } from "../../../../styles/ThemeProviderContext";
 import { getInputPlaceholdersStyling } from "../../../../styles/formStyling";
-import { registrationFormReducer } from "../../../../utlis/Form Reducers/FormReducer";
 
 interface NewRegistrationFormInputProps {
   onUserNameChange: (value: string) => void;
@@ -19,8 +15,10 @@ interface NewRegistrationFormInputProps {
   onPhoneNumberChange: (value: string) => void;
   onAddressChange: (value: string) => void;
   onRoleChange: (value: string) => void;
-  onSubmit: boolean,
+  confirmPassword: string;
+  onSubmit: boolean;
   formState: RegistrationFormState;
+  arePasswordsMatching: boolean;
 }
 
 export const NewRegistrationFormInput: React.FC<
@@ -31,34 +29,18 @@ export const NewRegistrationFormInput: React.FC<
   onLastNameChange,
   onPasswordChange,
   onConfirmPasswordChange,
+  confirmPassword,
   onEmailChange,
   onCitychange,
   onPhoneNumberChange,
   onAddressChange,
   onRoleChange,
   formState,
-  onSubmit
+  arePasswordsMatching,
+  onSubmit,
 }) => {
   const { themeMode } = useContext(ThemeContext);
   const inputPlaceholdersStyling = getInputPlaceholdersStyling(themeMode);
-
-  const [state, formDispatch] = useReducer(
-    registrationFormReducer,
-    initialRegistrationState
-  );
-
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordMatchError, setPasswordMatchError] = useState(false);
-
-  const handleConfirmPasswordChange = (value: string) => {
-    setConfirmPassword(value);
-
-    if (formState.password !== value) {
-      setPasswordMatchError(true);
-    } else {
-      setPasswordMatchError(false);
-    }
-  };
 
   return (
     <>
@@ -123,9 +105,9 @@ export const NewRegistrationFormInput: React.FC<
         variant="outlined"
         margin="normal"
         sx={inputPlaceholdersStyling}
-        onChange={(e) => handleConfirmPasswordChange(e.target.value)}
-        error={passwordMatchError}
-        helperText={passwordMatchError ? "Passwords do not match" : ""}
+        onChange={(e) => onConfirmPasswordChange(e.target.value)}
+        error={arePasswordsMatching}
+        helperText={arePasswordsMatching ? "Passwords do not match" : ""}
         disabled={onSubmit}
       />
 

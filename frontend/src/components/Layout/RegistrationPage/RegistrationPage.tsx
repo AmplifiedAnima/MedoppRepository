@@ -23,6 +23,19 @@ const RegistrationPage = () => {
     initialRegistrationState
   );
 
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState(false);
+
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value);
+
+    if (formState.password !== value) {
+      setPasswordMatchError(true);
+    } else {
+      setPasswordMatchError(false);
+    }
+  };
+
   const [selectedCvFile, setSelectedCvFile] = useState<File[]>([]);
   const [selectedImagesForAvatar, setSelectedImagesForAvatar] = useState<
     File[]
@@ -99,7 +112,7 @@ const RegistrationPage = () => {
         setIsLoggedIn(true);
       } else {
         dispatch({ type: "SHOW_ERROR", payload: response.statusText });
-        console.error("Registration failed:", response.statusText, response);
+        console.log("Registration failed:", response.statusText, response);
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -183,16 +196,7 @@ const RegistrationPage = () => {
                     /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
                   )
                 }
-                onConfirmPasswordChange={(value) =>
-                  handleInputForRegistrationForm(
-                    formState,
-                    formDispatch,
-                    "confirmPassword",
-                    value,
-                    25,
-                    /[^a-zA-Z0-9\s._/-żźćńół&()'"-]/
-                  )
-                }
+                onConfirmPasswordChange={handleConfirmPasswordChange}
                 onEmailChange={(value) =>
                   handleInputForRegistrationForm(
                     formState,
@@ -246,7 +250,9 @@ const RegistrationPage = () => {
                   )
                 }
                 formState={formState}
+                confirmPassword={confirmPassword}
                 onSubmit={isSubmitted}
+                arePasswordsMatching={passwordMatchError}
               />
 
               {formState.role !== "Employer" && (
@@ -268,7 +274,7 @@ const RegistrationPage = () => {
                   marginBottom: "20px",
                 }}
                 fullWidth
-                disabled={isSubmitted}
+                disabled={isSubmitted || passwordMatchError}
               >
                 Register
               </Button>

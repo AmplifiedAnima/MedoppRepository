@@ -12,6 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { getButtonStyles } from "../../../../styles/buttonStyling";
+import { JobApplicationInterface } from "../JobApplication.interface";
 
 interface ApplicantsTablePopoverProps {
   content: OfferInterface | string;
@@ -35,7 +36,32 @@ const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
       display: "block",
     },
   };
+  const headerStyles = {
+    color: themeMode === "dark" ? "white" : "black",
+    "@media (max-width: 768px)": {
+      padding: "10px 0px",
+      display: "none",
+    },
+  };
   const buttonStyling = getButtonStyles(themeMode);
+
+  const mobileHeaders = (content: string) => {
+    return (
+      <Typography
+        sx={{
+          color: themeMode === "dark" ? "#2feb00" : "#679af8",
+          display: "none",
+          "@media (max-width:768px)": {
+            display: "block",
+            marginBottom: "6px",
+            fontSize: "13px",
+          },
+        }}
+      >
+        {content} :
+      </Typography>
+    );
+  };
 
   const stringChecker = (content: OfferInterface | string) => {
     if (typeof content === "string") {
@@ -51,7 +77,8 @@ const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
 
       return (
         <>
-          <Typography variant="h5">Cover letter</Typography>
+          <Typography variant="body2">Cover letter</Typography>
+          <br></br>
           <Typography variant="body2" sx={{ maxWidth: "400px" }}>
             {content}
           </Typography>
@@ -61,19 +88,34 @@ const ApplicantsTablePopover: React.FC<ApplicantsTablePopoverProps> = ({
       return (
         <Table>
           <TableHead>
-            <TableCell sx={colorSx}>Company</TableCell>
-            <TableCell sx={colorSx}>Profession</TableCell>
-            <TableCell sx={colorSx}>Specialty</TableCell>
-            <TableCell sx={colorSx}>Location</TableCell>
-            <TableCell sx={colorSx}>Salary</TableCell>
-            <TableCell sx={colorSx}>Page </TableCell>
+            {<TableCell sx={headerStyles}>Company</TableCell>}
+            <TableCell sx={headerStyles}>Profession</TableCell>
+            <TableCell sx={headerStyles}>Specialty</TableCell>
+            <TableCell sx={headerStyles}>Location</TableCell>
+            <TableCell sx={headerStyles}>Salary</TableCell>
+            <TableCell sx={headerStyles}>Page </TableCell>
           </TableHead>
           <TableBody>
-            <TableCell sx={colorSx}>{content.company}</TableCell>
-            <TableCell sx={colorSx}> {content.label}</TableCell>
-            <TableCell sx={colorSx}>{content.specialties}</TableCell>
-            <TableCell sx={colorSx}>{content.location}</TableCell>
-            <TableCell sx={colorSx}>{content.salary}</TableCell>
+            <TableCell sx={colorSx}>
+              {mobileHeaders("Company")}
+              {content.company}
+            </TableCell>
+            <TableCell sx={colorSx}>
+              {mobileHeaders("Profession")}
+              {content.label}
+            </TableCell>
+            <TableCell sx={colorSx}>
+              {mobileHeaders("Specialty")}
+              {content.specialties}
+            </TableCell>
+            <TableCell sx={colorSx}>
+              {mobileHeaders("Location")}
+              {content.location}
+            </TableCell>
+            <TableCell sx={colorSx}>
+              {mobileHeaders("Salary")}
+              {content.salary}
+            </TableCell>
             <TableCell sx={colorSx}>
               <Button sx={buttonStyling}>
                 <Link href={LinkString} color="inherit" underline="none">

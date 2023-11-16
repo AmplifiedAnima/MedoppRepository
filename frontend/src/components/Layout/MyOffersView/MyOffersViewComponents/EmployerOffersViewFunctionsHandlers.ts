@@ -2,13 +2,11 @@ export const deleteOffer = async (offerId: string) => {
   try {
     const token = localStorage.getItem("token");
 
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
     const response = await fetch(`http://localhost:3000/offers/${offerId}`, {
       method: "DELETE",
-      headers: headers,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (response.ok) {
@@ -16,11 +14,11 @@ export const deleteOffer = async (offerId: string) => {
       return true;
     } else {
       console.error("Error deleting offer: ", response.status);
-      return false; 
+      return false;
     }
   } catch (error) {
     console.error("Error: ", error);
-    return false; 
+    return false;
   }
 };
 

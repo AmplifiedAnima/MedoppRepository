@@ -12,12 +12,15 @@ import { motion } from "framer-motion";
 import { OfferInterface } from "../../JobOffers/Offer.Interface";
 import { JobApplicationInterface } from "./JobApplication.interface";
 import { ApplicantsWhoAppliedForOfferViewComponents } from "./ApplicantsForOffersComponents/ApplicantsWhoAppliedForOfferViewComponents";
+import { fetchJobApplications } from "./ApplicantsForOffersComponents/JobApplicationFetchingLogic";
 
 const ApplicantsWhoAppliedForOfferView: React.FC = () => {
   const [applications, setApplications] = useState<JobApplicationInterface[]>(
     []
   );
   const [dataIsBeingFetched, setDataIsBeingFetched] = useState(false);
+  const [showDelayedContent, setShowDelayedContent] = useState(false);
+
   const { themeMode } = useContext(ThemeContext);
 
   const { isLoggedIn, roles } = useContext(IsLoggedInContext);
@@ -40,74 +43,62 @@ const ApplicantsWhoAppliedForOfferView: React.FC = () => {
   };
 
   const containerStyles = getContainerStyles(themeMode);
-  const innerBoxStyles = getInnerBoxStyles();
+
+  const displayAfterAWhile = (
+    <Typography variant="h5">SIGN UP TO SEE THIS CONTENT</Typography>
+  );
 
   useEffect(() => {
-    if (!isLoggedIn) setApplications([]);
     setDataIsBeingFetched(true);
-    const fetchJobApplications = async () => {
-      try {
-        const token = localStorage.getItem("token");
+    fetchJobApplications(isEmployee, setApplications, setDataIsBeingFetched);
 
-        const response = await fetch(
-          `http://localhost:3000/job-applications/${
-            isEmployee ? "offers-applied-for" : "applications-for-user-offers"
-          }`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    // Set a timeout to show delayed content after 2 seconds
+    const timeoutId = setTimeout(() => {
+      setShowDelayedContent(true);
+    }, 2000);
 
-        if (response.ok) {
-          const data = await response.json();
-          setApplications(data);
-          setDataIsBeingFetched(false);
-        } else {
-          setDataIsBeingFetched(false);
-          console.log("Error fetching job applications:", response.status);
-        }
-      } catch (error) {
-        setDataIsBeingFetched(false);
-        console.error("Error fetching job applications:", error);
-      }
-    };
-
-    fetchJobApplications();
+    // Clear the timeout if the component unmounts or when the data is fetched
+    return () => clearTimeout(timeoutId);
   }, [isLoggedIn]);
 
   return (
-    <Box sx={{ ...containerStyles, height: "auto" }}>
+    <Box sx={{ ...containerStyles, height: "100vh" }}>
       <HeaderForOtherRoutes
         routeView={isEmployee ? "Where I Applied" : "Who Applied"}
       />
-      {!isLoggedIn ? (
-        <Box sx={{ height: "100vh" }}>
-          <Typography variant="h5">SIGN UP TO SEE THIS CONTENT</Typography>
-        </Box>
-      ) : (
-        <Box sx={innerBoxStyles}>
+
+      <Box>
+        {isLoggedIn && (
           <motion.div
             className="black"
             initial={{ opacity: 0 }}
             animate={{ transition: { duration: 2 }, opacity: 1 }}
           >
-            <ApplicantsWhoAppliedForOfferViewComponents
-              applications={applications}
-              setLinkToPopover={setLinkToPopover}
-              handlePopoverOpen={handlePopoverOpen}
-              content={contentOfPopover}
-              themeMode={themeMode}
-              anchorEl={popoverAnchorEl}
-              onClose={handlePopoverClose}
-              LinkString={LinkToPopover}
-            />
+            {!dataIsBeingFetched ? (
+              <ApplicantsWhoAppliedForOfferViewComponents
+                applications={applications}
+                setLinkToPopover={setLinkToPopover}
+                handlePopoverOpen={handlePopoverOpen}
+                content={contentOfPopover}
+                themeMode={themeMode}
+                anchorEl={popoverAnchorEl}
+                onClose={handlePopoverClose}
+                LinkString={LinkToPopover}
+              />
+            ) : (
+              <Box sx={{ height: "100vh" }}>
+                <Typography variant="h5">Loading...</Typography>
+              </Box>
+            )}
           </motion.div>
-        </Box>
-      )}
+        )}
+        {!isLoggedIn && (
+          <Box sx={{ height: "100vh" }}>
+            {" "}
+            {showDelayedContent && displayAfterAWhile}
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };
